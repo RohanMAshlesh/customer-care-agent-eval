@@ -1,22 +1,22 @@
 import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./styles.css";
+import OverviewPage from "./pages/Overview";
 import JourneyPage from "./pages/Journey";
-import LabPage from "./pages/Lab";
-import GatePage from "./pages/Gate";
-import OnboardingPage from "./pages/Onboarding";
-import HowPage from "./pages/How";
+import CatchesPage from "./pages/Catches";
+import ShipPage from "./pages/Ship";
+import SetupPage from "./pages/Setup";
 
 const ROUTES = [
-  { id: "journey", label: "Refund journey", page: JourneyPage },
-  { id: "lab", label: "Edge-case lab", page: LabPage },
-  { id: "release", label: "Release gate", page: GatePage },
-  { id: "onboarding", label: "Client onboarding", page: OnboardingPage },
-  { id: "how", label: "How it works", page: HowPage },
+  { id: "overview", label: "Overview", page: OverviewPage },
+  { id: "journey", label: "1 · One refund", page: JourneyPage },
+  { id: "catches", label: "2 · What it catches", page: CatchesPage },
+  { id: "ship", label: "3 · Ship or not", page: ShipPage },
+  { id: "setup", label: "4 · Getting started", page: SetupPage },
 ];
 
 function useRoute() {
-  const read = () => ROUTES.find((r) => `#${r.id}` === window.location.hash)?.id ?? "journey";
+  const read = () => ROUTES.find((r) => `#${r.id}` === window.location.hash)?.id ?? "overview";
   const [route, setRoute] = useState(read);
   useEffect(() => {
     const on = () => { setRoute(read()); window.scrollTo({ top: 0 }); };
@@ -33,7 +33,7 @@ function ThemeToggle() {
   useEffect(() => {
     if (theme) document.documentElement.dataset.theme = theme;
     else delete document.documentElement.dataset.theme;
-    try { theme ? localStorage.setItem("theme", theme) : localStorage.removeItem("theme"); } catch { /* ignore */ }
+    try { if (theme) localStorage.setItem("theme", theme); else localStorage.removeItem("theme"); } catch { /* ignore */ }
   }, [theme]);
   const dark = theme ? theme === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
   return (
@@ -50,13 +50,13 @@ function App() {
     <>
       <header className="topbar">
         <div className="topbar-inner">
-          <a className="brand" href="#journey">
+          <a className="brand" href="#overview">
             <span className="brand-mark" aria-hidden>
               <svg width="18" height="18" viewBox="0 0 32 32"><path d="M8 17l5 5L24 10" stroke="#73e0c4" strokeWidth="3.4" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </span>
             <span>
               <span className="brand-name">Evidence Desk</span>
-              <span className="brand-sub">Customer-care agent evaluation</span>
+              <span className="brand-sub">Did the AI agent really fix it?</span>
             </span>
           </a>
           <nav className="nav" aria-label="Sections">
@@ -70,8 +70,8 @@ function App() {
       <main className="page">
         <Page />
         <footer className="footer">
-          <span>Every verdict on this page was computed by the open-source evaluation engine, then exported as static data.</span>
-          <span>Amounts, policies and thresholds are illustrative examples, not any marketplace's real rules.</span>
+          <span>Interactive prototype. Every verdict shown was produced by the real evaluation engine and saved as data.</span>
+          <span>Customer, amounts and policies are illustrative, not any company’s real data or rules.</span>
         </footer>
       </main>
     </>
