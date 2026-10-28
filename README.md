@@ -6,6 +6,10 @@ It implements the first vertical slice of the *Enterprise Customer Care Evals Bl
 
 > Every amount, rule, deadline and threshold in the starter contract and the release policy is an illustrative example. None of them describes any real marketplace's policy or systems. The client's policy owner must approve real values.
 
+## Interactive demo
+
+`demo/` is a static web app (Vite + React) that walks through the refund journey, the edge cases, the release gate and client onboarding, using data exported from this engine. To host it on Vercel, import the repository and set the root directory to `demo`. See [demo/README.md](demo/README.md).
+
 ## What it does
 
 | Blueprint capability | Where it lives |
