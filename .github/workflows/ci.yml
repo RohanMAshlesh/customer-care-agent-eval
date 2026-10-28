@@ -1,0 +1,35 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ccevals
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev,postgres]"
+      - run: ruff check src tests migrations
+      - name: Tests on SQLite
+        run: pytest
+      - name: Migrations and tests on PostgreSQL
+        env:
+          CCEVALS_DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/ccevals
+          CCEVALS_TEST_DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/ccevals
+        run: |
+          ccevals db upgrade
+          pytest
