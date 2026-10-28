@@ -1,0 +1,2828 @@
+{
+ "steps": [
+  {
+   "title": "Tenant created",
+   "actor": "Platform admin",
+   "did": "A tenant and role-scoped API keys exist. Nothing is connected yet.",
+   "readiness": {
+    "as_of": "2026-10-28T15:18:34.261143+00:00",
+    "indicators": {
+     "conversations_connected": {
+      "complete": false,
+      "missing": [
+       {
+        "field": "conversation.message events (last 7 days)",
+        "owner": "integration_engineer",
+        "sample": null
+       },
+       {
+        "field": "census.task_assigned events from an independent task census",
+        "owner": "integration_engineer",
+        "sample": null
+       }
+      ],
+      "detail": {
+       "messages_7d": 0,
+       "census_tasks": 0,
+       "census_tasks_with_conversation": 0
+      }
+     },
+     "policies_approved": {
+      "complete": false,
+      "missing": [
+       {
+        "field": "an approved intent contract",
+        "owner": "refund_policy_owner",
+        "sample": "POST /v1/contracts:validate with the starter contract"
+       }
+      ],
+      "detail": {
+       "approved": []
+      }
+     },
+     "business_outcomes_verifiable": {
+      "complete": false,
+      "missing": [
+       {
+        "field": "an approved contract naming the evidence sources",
+        "owner": "refund_policy_owner",
+        "sample": null
+       }
+      ],
+      "detail": {
+       "verified_sources": []
+      }
+     },
+     "evaluators_calibrated": {
+      "complete": false,
+      "missing": [
+       {
+        "field": "an approved contract that defines the semantic criteria to calibrate",
+        "owner": "refund_policy_owner",
+        "sample": null
+       }
+      ],
+      "detail": {
+       "evaluator_bundle": "anthropic:claude-opus-5-5@judge-prompt-v1"
+      }
+     }
+    },
+    "note": "Indicators are reported separately on purpose; there is no combined readiness score."
+   },
+   "onboarding": {
+    "as_of": "2026-10-28T15:18:34.280715+00:00",
+    "current_stage": 1,
+    "stages": [
+     {
+      "stage": 1,
+      "name": "Qualify the pilot",
+      "owner": "Support and AI leads",
+      "complete": false,
+      "exit_evidence": "Signed scope and exclusions",
+      "evidence_ref": null,
+      "attested_by": null
+     },
+     {
+      "stage": 2,
+      "name": "Establish trust",
+      "owner": "Security and platform",
+      "complete": false,
+      "exit_evidence": "Approved data flow, credentials, retention and permitted model endpoints",
+      "evidence_ref": null,
+      "attested_by": null
+     },
+     {
+      "stage": 3,
+      "name": "Connect observations",
+      "owner": "Integration engineer",
+      "complete": false,
+      "exit_evidence": "Conformance, source freshness and census reconciliation",
+      "missing": [
+       {
+        "field": "conversation.message events (last 7 days)",
+        "owner": "integration_engineer",
+        "sample": null
+       },
+       {
+        "field": "census.task_assigned events from an independent task census",
+        "owner": "integration_engineer",
+        "sample": null
+       },
+       {
+        "field": "an approved contract naming the evidence sources",
+        "owner": "refund_policy_owner",
+        "sample": null
+       }
+      ]
+     },
+     {
+      "stage": 4,
+      "name": "Map business entities",
+      "owner": "Domain and data owners",
+      "complete": false,
+      "exit_evidence": "Reviewed joins and unmatched-event report",
+      "detail": {
+       "events": 0,
+       "unmatched_or_ambiguous": 0
+      }
+     },
+     {
+      "stage": 5,
+      "name": "Define success",
+      "owner": "Policy owner",
+      "complete": false,
+      "exit_evidence": "Versioned intent contract",
+      "missing": [
+       {
+        "field": "an approved intent contract",
+        "owner": "refund_policy_owner",
+        "sample": "POST /v1/contracts:validate with the starter contract"
+       }
+      ]
+     },
+     {
+      "stage": 6,
+      "name": "Validate evaluation",
+      "owner": "QA and domain experts",
+      "complete": false,
+      "exit_evidence": "Adjudicated labels and calibration report",
+      "missing": [
+       {
+        "field": "an approved contract that defines the semantic criteria to calibrate",
+        "owner": "refund_policy_owner",
+        "sample": null
+       }
+      ]
+     },
+     {
+      "stage": 7,
+      "name": "Run in shadow",
+      "owner": "Operations and release owner",
+      "complete": false,
+      "exit_evidence": "Measured coverage, cost, false alarms and drift",
+      "detail": {
+       "finalized_production_tasks": 0
+      }
+     },
+     {
+      "stage": 8,
+      "name": "Activate release gates",
+      "owner": "Release and support leads",
+      "complete": false,
+      "exit_evidence": "Approved gate thresholds, rollback authority and review rota",
+      "evidence_ref": null,
+      "attested_by": null,
+      "practised_override": false,
+      "release_decisions": 0
+     },
+     {
+      "stage": 9,
+      "name": "Expand coverage",
+      "owner": "Joint product team",
+      "complete": false,
+      "exit_evidence": "Next intent, market or channel agreed",
+      "evidence_ref": null,
+      "attested_by": null
+     }
+    ],
+    "milestones": {
+     "conversation_audit": true,
+     "verified_outcome_claims": false
+    },
+    "note": "Verified-outcome claims stay disabled until business mappings pass conformance."
+   }
+  },
+  {
+   "title": "Pilot scoped and trusted",
+   "actor": "Support, AI and security leads",
+   "did": "One workflow, region and channel are signed off; the data flow and model endpoints are approved.",
+   "readiness": {
+    "as_of": "2026-10-28T15:18:34.323191+00:00",
+    "indicators": {
+     "conversations_connected": {
+      "complete": false,
+      "missing": [
+       {
+        "field": "conversation.message events (last 7 days)",
+        "owner": "integration_engineer",
+        "sample": null
+       },
+       {
+        "field": "census.task_assigned events from an independent task census",
+        "owner": "integration_engineer",
+        "sample": null
+       }
+      ],
+      "detail": {
+       "messages_7d": 0,
+       "census_tasks": 0,
+       "census_tasks_with_conversation": 0
+      }
+     },
+     "policies_approved": {
+      "complete": false,
+      "missing": [
+       {
+        "field": "an approved intent contract",
+        "owner": "refund_policy_owner",
+        "sample": "POST /v1/contracts:validate with the starter contract"
+       }
+      ],
+      "detail": {
+       "approved": []
+      }
+     },
+     "business_outcomes_verifiable": {
+      "complete": false,
+      "missing": [
+       {
+        "field": "an approved contract naming the evidence sources",
+        "owner": "refund_policy_owner",
+        "sample": null
+       }
+      ],
+      "detail": {
+       "verified_sources": []
+      }
+     },
+     "evaluators_calibrated": {
+      "complete": false,
+      "missing": [
+       {
+        "field": "an approved contract that defines the semantic criteria to calibrate",
+        "owner": "refund_policy_owner",
+        "sample": null
+       }
+      ],
+      "detail": {
+       "evaluator_bundle": "anthropic:claude-opus-5-5@judge-prompt-v1"
+      }
+     }
+    },
+    "note": "Indicators are reported separately on purpose; there is no combined readiness score."
+   },
+   "onboarding": {
+    "as_of": "2026-10-28T15:18:34.335460+00:00",
+    "current_stage": 3,
+    "stages": [
+     {
+      "stage": 1,
+      "name": "Qualify the pilot",
+      "owner": "Support and AI leads",
+      "complete": true,
+      "exit_evidence": "Signed scope and exclusions",
+      "evidence_ref": "pilot-scope-v1.pdf",
+      "attested_by": "key:all"
+     },
+     {
+      "stage": 2,
+      "name": "Establish trust",
+      "owner": "Security and platform",
+      "complete": true,
+      "exit_evidence": "Approved data flow, credentials, retention and permitted model endpoints",
+      "evidence_ref": "dpa-and-dataflow-v2",
+      "attested_by": "key:all"
+     },
+     {
+      "stage": 3,
+      "name": "Connect observations",
+      "owner": "Integration engineer",
+      "complete": false,
+      "exit_evidence": "Conformance, source freshness and census reconciliation",
+      "missing": [
+       {
+        "field": "conversation.message events (last 7 days)",
+        "owner": "integration_engineer",
+        "sample": null
+       },
+       {
+        "field": "census.task_assigned events from an independent task census",
+        "owner": "integration_engineer",
+        "sample": null
+       },
+       {
+        "field": "an approved contract naming the evidence sources",
+        "owner": "refund_policy_owner",
+        "sample": null
+       }
+      ]
+     },
+     {
+      "stage": 4,
+      "name": "Map business entities",
+      "owner": "Domain and data owners",
+      "complete": false,
+      "exit_evidence": "Reviewed joins and unmatched-event report",
+      "detail": {
+       "events": 0,
+       "unmatched_or_ambiguous": 0
+      }
+     },
+     {
+      "stage": 5,
+      "name": "Define success",
+      "owner": "Policy owner",
+      "complete": false,
+      "exit_evidence": "Versioned intent contract",
+      "missing": [
+       {
+        "field": "an approved intent contract",
+        "owner": "refund_policy_owner",
+        "sample": "POST /v1/contracts:validate with the starter contract"
+       }
+      ]
+     },
+     {
+      "stage": 6,
+      "name": "Validate evaluation",
+      "owner": "QA and domain experts",
+      "complete": false,
+      "exit_evidence": "Adjudicated labels and calibration report",
+      "missing": [
+       {
+        "field": "an approved contract that defines the semantic criteria to calibrate",
+        "owner": "refund_policy_owner",
+        "sample": null
+       }
+      ]
+     },
+     {
+      "stage": 7,
+      "name": "Run in shadow",
+      "owner": "Operations and release owner",
+      "complete": false,
+      "exit_evidence": "Measured coverage, cost, false alarms and drift",
+      "detail": {
+       "finalized_production_tasks": 0
+      }
+     },
+     {
+      "stage": 8,
+      "name": "Activate release gates",
+      "owner": "Release and support leads",
+      "complete": false,
+      "exit_evidence": "Approved gate thresholds, rollback authority and review rota",
+      "evidence_ref": null,
+      "attested_by": null,
+      "practised_override": false,
+      "release_decisions": 0
+     },
+     {
+      "stage": 9,
+      "name": "Expand coverage",
+      "owner": "Joint product team",
+      "complete": false,
+      "exit_evidence": "Next intent, market or channel agreed",
+      "evidence_ref": null,
+      "attested_by": null
+     }
+    ],
+    "milestones": {
+     "conversation_audit": true,
+     "verified_outcome_claims": false
+    },
+    "note": "Verified-outcome claims stay disabled until business mappings pass conformance."
+   }
+  },
+  {
+   "title": "Success defined",
+   "actor": "Refund policy owner",
+   "did": "The policy author drafts the contract; a different policy owner approves it after reviewing four executable examples.",
+   "readiness": {
+    "as_of": "2026-10-28T15:18:34.402775+00:00",
+    "indicators": {
+     "conversations_connected": {
+      "complete": false,
+      "missing": [
+       {
+        "field": "conversation.message events (last 7 days)",
+        "owner": "integration_engineer",
+        "sample": null
+       },
+       {
+        "field": "census.task_assigned events from an independent task census",
+        "owner": "integration_engineer",
+        "sample": null
+       }
+      ],
+      "detail": {
+       "messages_7d": 0,
+       "census_tasks": 0,
+       "census_tasks_with_conversation": 0
+      }
+     },
+     "policies_approved": {
+      "complete": true,
+      "missing": [],
+      "detail": {
+       "approved": [
+        "missing_item_refund@v1"
+       ]
+      }
+     },
+     "business_outcomes_verifiable": {
+      "complete": false,
+      "missing": [
+       {
+        "field": "connector conformance for identity_service (identity)",
+        "owner": "integration_engineer",
+        "sample": "GET /v1/connectors/identity_service/conformance-kit"
+       },
+       {
+        "field": "connector conformance for order_service (order)",
+        "owner": "integration_engineer",
+        "sample": "GET /v1/connectors/order_service/conformance-kit"
+       },
+       {
+        "field": "connector conformance for wallet_ledger (leg)",
+        "owner": "integration_engineer",
+        "sample": "GET /v1/connectors/wallet_ledger/conformance-kit"
+       },
+       {
+        "field": "connector conformance for payment_adapter (leg)",
+        "owner": "integration_engineer",
+        "sample": "GET /v1/connectors/payment_adapter/conformance-kit"
+       }
+      ],
+      "detail": {
+       "verified_sources": []
+      }
+     },
+     "evaluators_calibrated": {
+      "complete": false,
+      "missing": [
+       {
+        "field": "validation calibration for issue_understanding in en",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/en"
+       },
+       {
+        "field": "validation calibration for issue_understanding in hi",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/hi"
+       },
+       {
+        "field": "validation calibration for issue_understanding in hi-en",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/hi-en"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in en",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/en"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in hi",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/hi"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in hi-en",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/hi-en"
+       }
+      ],
+      "detail": {
+       "evaluator_bundle": "anthropic:claude-opus-5-5@judge-prompt-v1"
+      }
+     }
+    },
+    "note": "Indicators are reported separately on purpose; there is no combined readiness score."
+   },
+   "onboarding": {
+    "as_of": "2026-10-28T15:18:34.413213+00:00",
+    "current_stage": 3,
+    "stages": [
+     {
+      "stage": 1,
+      "name": "Qualify the pilot",
+      "owner": "Support and AI leads",
+      "complete": true,
+      "exit_evidence": "Signed scope and exclusions",
+      "evidence_ref": "pilot-scope-v1.pdf",
+      "attested_by": "key:all"
+     },
+     {
+      "stage": 2,
+      "name": "Establish trust",
+      "owner": "Security and platform",
+      "complete": true,
+      "exit_evidence": "Approved data flow, credentials, retention and permitted model endpoints",
+      "evidence_ref": "dpa-and-dataflow-v2",
+      "attested_by": "key:all"
+     },
+     {
+      "stage": 3,
+      "name": "Connect observations",
+      "owner": "Integration engineer",
+      "complete": false,
+      "exit_evidence": "Conformance, source freshness and census reconciliation",
+      "missing": [
+       {
+        "field": "conversation.message events (last 7 days)",
+        "owner": "integration_engineer",
+        "sample": null
+       },
+       {
+        "field": "census.task_assigned events from an independent task census",
+        "owner": "integration_engineer",
+        "sample": null
+       },
+       {
+        "field": "connector conformance for identity_service (identity)",
+        "owner": "integration_engineer",
+        "sample": "GET /v1/connectors/identity_service/conformance-kit"
+       },
+       {
+        "field": "connector conformance for order_service (order)",
+        "owner": "integration_engineer",
+        "sample": "GET /v1/connectors/order_service/conformance-kit"
+       },
+       {
+        "field": "connector conformance for wallet_ledger (leg)",
+        "owner": "integration_engineer",
+        "sample": "GET /v1/connectors/wallet_ledger/conformance-kit"
+       },
+       {
+        "field": "connector conformance for payment_adapter (leg)",
+        "owner": "integration_engineer",
+        "sample": "GET /v1/connectors/payment_adapter/conformance-kit"
+       }
+      ]
+     },
+     {
+      "stage": 4,
+      "name": "Map business entities",
+      "owner": "Domain and data owners",
+      "complete": false,
+      "exit_evidence": "Reviewed joins and unmatched-event report",
+      "detail": {
+       "events": 0,
+       "unmatched_or_ambiguous": 0
+      }
+     },
+     {
+      "stage": 5,
+      "name": "Define success",
+      "owner": "Policy owner",
+      "complete": true,
+      "exit_evidence": "Versioned intent contract",
+      "missing": []
+     },
+     {
+      "stage": 6,
+      "name": "Validate evaluation",
+      "owner": "QA and domain experts",
+      "complete": false,
+      "exit_evidence": "Adjudicated labels and calibration report",
+      "missing": [
+       {
+        "field": "validation calibration for issue_understanding in en",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/en"
+       },
+       {
+        "field": "validation calibration for issue_understanding in hi",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/hi"
+       },
+       {
+        "field": "validation calibration for issue_understanding in hi-en",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/hi-en"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in en",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/en"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in hi",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/hi"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in hi-en",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/hi-en"
+       }
+      ]
+     },
+     {
+      "stage": 7,
+      "name": "Run in shadow",
+      "owner": "Operations and release owner",
+      "complete": false,
+      "exit_evidence": "Measured coverage, cost, false alarms and drift",
+      "detail": {
+       "finalized_production_tasks": 0
+      }
+     },
+     {
+      "stage": 8,
+      "name": "Activate release gates",
+      "owner": "Release and support leads",
+      "complete": false,
+      "exit_evidence": "Approved gate thresholds, rollback authority and review rota",
+      "evidence_ref": null,
+      "attested_by": null,
+      "practised_override": false,
+      "release_decisions": 0
+     },
+     {
+      "stage": 9,
+      "name": "Expand coverage",
+      "owner": "Joint product team",
+      "complete": false,
+      "exit_evidence": "Next intent, market or channel agreed",
+      "evidence_ref": null,
+      "attested_by": null
+     }
+    ],
+    "milestones": {
+     "conversation_audit": true,
+     "verified_outcome_claims": false
+    },
+    "note": "Verified-outcome claims stay disabled until business mappings pass conformance."
+   },
+   "validation": {
+    "valid": true,
+    "schema_errors": [],
+    "fixtures": [
+     {
+      "name": "positive",
+      "builtin": true,
+      "passed": true,
+      "mismatches": [],
+      "result_summary": {
+       "business_outcome": "verified_complete",
+       "disposition": "resolution",
+       "critical_violation": false,
+       "unknown_reasons": [],
+       "criteria": {
+        "action_within_limits": "pass",
+        "allocation_matches_policy": "pass",
+        "amount_within_entitlement": "pass",
+        "authorized_customer": "pass",
+        "claims_supported_by_evidence": "pass",
+        "correct_disposition": "pass",
+        "correct_item_and_quantity": "pass",
+        "estimate_within_policy": "pass",
+        "issue_understanding": "not_evaluated",
+        "no_duplicate_refund": "pass",
+        "no_misleading_promise": "not_evaluated",
+        "no_sensitive_disclosure": "pass"
+       }
+      }
+     },
+     {
+      "name": "forbidden_action",
+      "builtin": true,
+      "passed": true,
+      "mismatches": [],
+      "result_summary": {
+       "business_outcome": "pending",
+       "disposition": "resolution",
+       "critical_violation": true,
+       "unknown_reasons": [],
+       "criteria": {
+        "action_within_limits": "fail",
+        "allocation_matches_policy": "pass",
+        "amount_within_entitlement": "pass",
+        "authorized_customer": "pass",
+        "claims_supported_by_evidence": "not_evaluated",
+        "correct_disposition": "fail",
+        "correct_item_and_quantity": "pass",
+        "estimate_within_policy": "not_evaluated",
+        "issue_understanding": "not_evaluated",
+        "no_duplicate_refund": "pass",
+        "no_misleading_promise": "not_evaluated",
+        "no_sensitive_disclosure": "not_evaluated"
+       }
+      }
+     },
+     {
+      "name": "boundary",
+      "builtin": true,
+      "passed": true,
+      "mismatches": [],
+      "result_summary": {
+       "business_outcome": "verified_complete",
+       "disposition": "resolution",
+       "critical_violation": false,
+       "unknown_reasons": [],
+       "criteria": {
+        "action_within_limits": "pass",
+        "allocation_matches_policy": "pass",
+        "amount_within_entitlement": "pass",
+        "authorized_customer": "pass",
+        "claims_supported_by_evidence": "pass",
+        "correct_disposition": "pass",
+        "correct_item_and_quantity": "pass",
+        "estimate_within_policy": "pass",
+        "issue_understanding": "not_evaluated",
+        "no_duplicate_refund": "pass",
+        "no_misleading_promise": "not_evaluated",
+        "no_sensitive_disclosure": "pass"
+       }
+      }
+     },
+     {
+      "name": "missing_evidence",
+      "builtin": true,
+      "passed": true,
+      "mismatches": [],
+      "result_summary": {
+       "business_outcome": "pending",
+       "disposition": "resolution",
+       "critical_violation": false,
+       "unknown_reasons": [
+        "missing_identity_event"
+       ],
+       "criteria": {
+        "action_within_limits": "pass",
+        "allocation_matches_policy": "pass",
+        "amount_within_entitlement": "pass",
+        "authorized_customer": "unknown",
+        "claims_supported_by_evidence": "not_evaluated",
+        "correct_disposition": "pass",
+        "correct_item_and_quantity": "pass",
+        "estimate_within_policy": "not_evaluated",
+        "issue_understanding": "not_evaluated",
+        "no_duplicate_refund": "pass",
+        "no_misleading_promise": "not_evaluated",
+        "no_sensitive_disclosure": "not_evaluated"
+       }
+      }
+     }
+    ],
+    "coverage_gaps": [
+     "language calibration required per language: ['en', 'hi', 'hi-en']"
+    ],
+    "contract_ref": "missing_item_refund@v1"
+   }
+  },
+  {
+   "title": "A broken adapter is caught",
+   "actor": "Integration engineer",
+   "did": "The first payment adapter maps a provider failure to 'completed'. Conformance fails and says exactly where.",
+   "readiness": {
+    "as_of": "2026-10-28T15:18:34.462523+00:00",
+    "indicators": {
+     "conversations_connected": {
+      "complete": false,
+      "missing": [
+       {
+        "field": "conversation.message events (last 7 days)",
+        "owner": "integration_engineer",
+        "sample": null
+       },
+       {
+        "field": "census.task_assigned events from an independent task census",
+        "owner": "integration_engineer",
+        "sample": null
+       }
+      ],
+      "detail": {
+       "messages_7d": 0,
+       "census_tasks": 0,
+       "census_tasks_with_conversation": 0
+      }
+     },
+     "policies_approved": {
+      "complete": true,
+      "missing": [],
+      "detail": {
+       "approved": [
+        "missing_item_refund@v1"
+       ]
+      }
+     },
+     "business_outcomes_verifiable": {
+      "complete": false,
+      "missing": [
+       {
+        "field": "connector conformance for identity_service (identity)",
+        "owner": "integration_engineer",
+        "sample": "GET /v1/connectors/identity_service/conformance-kit"
+       },
+       {
+        "field": "connector conformance for order_service (order)",
+        "owner": "integration_engineer",
+        "sample": "GET /v1/connectors/order_service/conformance-kit"
+       },
+       {
+        "field": "connector conformance for wallet_ledger (leg)",
+        "owner": "integration_engineer",
+        "sample": "GET /v1/connectors/wallet_ledger/conformance-kit"
+       },
+       {
+        "field": "connector conformance for payment_adapter (leg)",
+        "owner": "integration_engineer",
+        "sample": "known_failure"
+       }
+      ],
+      "detail": {
+       "verified_sources": []
+      }
+     },
+     "evaluators_calibrated": {
+      "complete": false,
+      "missing": [
+       {
+        "field": "validation calibration for issue_understanding in en",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/en"
+       },
+       {
+        "field": "validation calibration for issue_understanding in hi",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/hi"
+       },
+       {
+        "field": "validation calibration for issue_understanding in hi-en",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/hi-en"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in en",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/en"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in hi",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/hi"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in hi-en",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/hi-en"
+       }
+      ],
+      "detail": {
+       "evaluator_bundle": "anthropic:claude-opus-5-5@judge-prompt-v1"
+      }
+     }
+    },
+    "note": "Indicators are reported separately on purpose; there is no combined readiness score."
+   },
+   "onboarding": {
+    "as_of": "2026-10-28T15:18:34.471924+00:00",
+    "current_stage": 3,
+    "stages": [
+     {
+      "stage": 1,
+      "name": "Qualify the pilot",
+      "owner": "Support and AI leads",
+      "complete": true,
+      "exit_evidence": "Signed scope and exclusions",
+      "evidence_ref": "pilot-scope-v1.pdf",
+      "attested_by": "key:all"
+     },
+     {
+      "stage": 2,
+      "name": "Establish trust",
+      "owner": "Security and platform",
+      "complete": true,
+      "exit_evidence": "Approved data flow, credentials, retention and permitted model endpoints",
+      "evidence_ref": "dpa-and-dataflow-v2",
+      "attested_by": "key:all"
+     },
+     {
+      "stage": 3,
+      "name": "Connect observations",
+      "owner": "Integration engineer",
+      "complete": false,
+      "exit_evidence": "Conformance, source freshness and census reconciliation",
+      "missing": [
+       {
+        "field": "conversation.message events (last 7 days)",
+        "owner": "integration_engineer",
+        "sample": null
+       },
+       {
+        "field": "census.task_assigned events from an independent task census",
+        "owner": "integration_engineer",
+        "sample": null
+       },
+       {
+        "field": "connector conformance for identity_service (identity)",
+        "owner": "integration_engineer",
+        "sample": "GET /v1/connectors/identity_service/conformance-kit"
+       },
+       {
+        "field": "connector conformance for order_service (order)",
+        "owner": "integration_engineer",
+        "sample": "GET /v1/connectors/order_service/conformance-kit"
+       },
+       {
+        "field": "connector conformance for wallet_ledger (leg)",
+        "owner": "integration_engineer",
+        "sample": "GET /v1/connectors/wallet_ledger/conformance-kit"
+       },
+       {
+        "field": "connector conformance for payment_adapter (leg)",
+        "owner": "integration_engineer",
+        "sample": "known_failure"
+       }
+      ]
+     },
+     {
+      "stage": 4,
+      "name": "Map business entities",
+      "owner": "Domain and data owners",
+      "complete": false,
+      "exit_evidence": "Reviewed joins and unmatched-event report",
+      "detail": {
+       "events": 0,
+       "unmatched_or_ambiguous": 0
+      }
+     },
+     {
+      "stage": 5,
+      "name": "Define success",
+      "owner": "Policy owner",
+      "complete": true,
+      "exit_evidence": "Versioned intent contract",
+      "missing": []
+     },
+     {
+      "stage": 6,
+      "name": "Validate evaluation",
+      "owner": "QA and domain experts",
+      "complete": false,
+      "exit_evidence": "Adjudicated labels and calibration report",
+      "missing": [
+       {
+        "field": "validation calibration for issue_understanding in en",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/en"
+       },
+       {
+        "field": "validation calibration for issue_understanding in hi",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/hi"
+       },
+       {
+        "field": "validation calibration for issue_understanding in hi-en",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/hi-en"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in en",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/en"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in hi",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/hi"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in hi-en",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/hi-en"
+       }
+      ]
+     },
+     {
+      "stage": 7,
+      "name": "Run in shadow",
+      "owner": "Operations and release owner",
+      "complete": false,
+      "exit_evidence": "Measured coverage, cost, false alarms and drift",
+      "detail": {
+       "finalized_production_tasks": 0
+      }
+     },
+     {
+      "stage": 8,
+      "name": "Activate release gates",
+      "owner": "Release and support leads",
+      "complete": false,
+      "exit_evidence": "Approved gate thresholds, rollback authority and review rota",
+      "evidence_ref": null,
+      "attested_by": null,
+      "practised_override": false,
+      "release_decisions": 0
+     },
+     {
+      "stage": 9,
+      "name": "Expand coverage",
+      "owner": "Joint product team",
+      "complete": false,
+      "exit_evidence": "Next intent, market or channel agreed",
+      "evidence_ref": null,
+      "attested_by": null
+     }
+    ],
+    "milestones": {
+     "conversation_audit": true,
+     "verified_outcome_claims": false
+    },
+    "note": "Verified-outcome claims stay disabled until business mappings pass conformance."
+   },
+   "conformance": {
+    "source": "payment_adapter",
+    "role": "leg",
+    "passed": false,
+    "fixtures": {
+     "known_success": {
+      "passed": true,
+      "message": "behaved as specified",
+      "rejected": []
+     },
+     "known_failure": {
+      "passed": false,
+      "message": "expected leg status failed, got complete",
+      "rejected": []
+     },
+     "missing_key": {
+      "passed": true,
+      "message": "behaved as specified",
+      "rejected": [
+       "cf-missing_key-e10: missing_logical_action_id"
+      ]
+     },
+     "duplicate_delivery": {
+      "passed": true,
+      "message": "behaved as specified",
+      "rejected": []
+     },
+     "out_of_order": {
+      "passed": true,
+      "message": "behaved as specified",
+      "rejected": []
+     },
+     "late_correction": {
+      "passed": true,
+      "message": "behaved as specified",
+      "rejected": []
+     },
+     "source_outage": {
+      "passed": true,
+      "message": "behaved as specified",
+      "rejected": []
+     }
+    },
+    "not_covered": [
+     "source-census reconciliation and checkpoint backfill are demonstrated in shadow mode"
+    ]
+   }
+  },
+  {
+   "title": "Outcomes verifiable",
+   "actor": "Integration engineer",
+   "did": "All four evidence sources pass conformance. Verified-outcome claims switch on.",
+   "readiness": {
+    "as_of": "2026-10-28T15:18:34.699132+00:00",
+    "indicators": {
+     "conversations_connected": {
+      "complete": false,
+      "missing": [
+       {
+        "field": "conversation.message events (last 7 days)",
+        "owner": "integration_engineer",
+        "sample": null
+       },
+       {
+        "field": "census.task_assigned events from an independent task census",
+        "owner": "integration_engineer",
+        "sample": null
+       }
+      ],
+      "detail": {
+       "messages_7d": 0,
+       "census_tasks": 0,
+       "census_tasks_with_conversation": 0
+      }
+     },
+     "policies_approved": {
+      "complete": true,
+      "missing": [],
+      "detail": {
+       "approved": [
+        "missing_item_refund@v1"
+       ]
+      }
+     },
+     "business_outcomes_verifiable": {
+      "complete": true,
+      "missing": [],
+      "detail": {
+       "verified_sources": [
+        "identity_service",
+        "order_service",
+        "payment_adapter",
+        "wallet_ledger"
+       ]
+      }
+     },
+     "evaluators_calibrated": {
+      "complete": false,
+      "missing": [
+       {
+        "field": "validation calibration for issue_understanding in en",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/en"
+       },
+       {
+        "field": "validation calibration for issue_understanding in hi",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/hi"
+       },
+       {
+        "field": "validation calibration for issue_understanding in hi-en",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/hi-en"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in en",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/en"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in hi",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/hi"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in hi-en",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/hi-en"
+       }
+      ],
+      "detail": {
+       "evaluator_bundle": "anthropic:claude-opus-5-5@judge-prompt-v1"
+      }
+     }
+    },
+    "note": "Indicators are reported separately on purpose; there is no combined readiness score."
+   },
+   "onboarding": {
+    "as_of": "2026-10-28T15:18:34.710312+00:00",
+    "current_stage": 3,
+    "stages": [
+     {
+      "stage": 1,
+      "name": "Qualify the pilot",
+      "owner": "Support and AI leads",
+      "complete": true,
+      "exit_evidence": "Signed scope and exclusions",
+      "evidence_ref": "pilot-scope-v1.pdf",
+      "attested_by": "key:all"
+     },
+     {
+      "stage": 2,
+      "name": "Establish trust",
+      "owner": "Security and platform",
+      "complete": true,
+      "exit_evidence": "Approved data flow, credentials, retention and permitted model endpoints",
+      "evidence_ref": "dpa-and-dataflow-v2",
+      "attested_by": "key:all"
+     },
+     {
+      "stage": 3,
+      "name": "Connect observations",
+      "owner": "Integration engineer",
+      "complete": false,
+      "exit_evidence": "Conformance, source freshness and census reconciliation",
+      "missing": [
+       {
+        "field": "conversation.message events (last 7 days)",
+        "owner": "integration_engineer",
+        "sample": null
+       },
+       {
+        "field": "census.task_assigned events from an independent task census",
+        "owner": "integration_engineer",
+        "sample": null
+       }
+      ]
+     },
+     {
+      "stage": 4,
+      "name": "Map business entities",
+      "owner": "Domain and data owners",
+      "complete": false,
+      "exit_evidence": "Reviewed joins and unmatched-event report",
+      "detail": {
+       "events": 0,
+       "unmatched_or_ambiguous": 0
+      }
+     },
+     {
+      "stage": 5,
+      "name": "Define success",
+      "owner": "Policy owner",
+      "complete": true,
+      "exit_evidence": "Versioned intent contract",
+      "missing": []
+     },
+     {
+      "stage": 6,
+      "name": "Validate evaluation",
+      "owner": "QA and domain experts",
+      "complete": false,
+      "exit_evidence": "Adjudicated labels and calibration report",
+      "missing": [
+       {
+        "field": "validation calibration for issue_understanding in en",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/en"
+       },
+       {
+        "field": "validation calibration for issue_understanding in hi",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/hi"
+       },
+       {
+        "field": "validation calibration for issue_understanding in hi-en",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/hi-en"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in en",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/en"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in hi",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/hi"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in hi-en",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/hi-en"
+       }
+      ]
+     },
+     {
+      "stage": 7,
+      "name": "Run in shadow",
+      "owner": "Operations and release owner",
+      "complete": false,
+      "exit_evidence": "Measured coverage, cost, false alarms and drift",
+      "detail": {
+       "finalized_production_tasks": 0
+      }
+     },
+     {
+      "stage": 8,
+      "name": "Activate release gates",
+      "owner": "Release and support leads",
+      "complete": false,
+      "exit_evidence": "Approved gate thresholds, rollback authority and review rota",
+      "evidence_ref": null,
+      "attested_by": null,
+      "practised_override": false,
+      "release_decisions": 0
+     },
+     {
+      "stage": 9,
+      "name": "Expand coverage",
+      "owner": "Joint product team",
+      "complete": false,
+      "exit_evidence": "Next intent, market or channel agreed",
+      "evidence_ref": null,
+      "attested_by": null
+     }
+    ],
+    "milestones": {
+     "conversation_audit": true,
+     "verified_outcome_claims": true
+    },
+    "note": "Verified-outcome claims stay disabled until business mappings pass conformance."
+   },
+   "sources": {
+    "identity_service": true,
+    "order_service": true,
+    "wallet_ledger": true,
+    "payment_adapter": true
+   }
+  },
+  {
+   "title": "Shadow mode",
+   "actor": "Operations reviewer",
+   "did": "Production traffic is evaluated silently. Metrics reconcile against the census; unknowns and critical failures land in owned queues.",
+   "readiness": {
+    "as_of": "2026-10-28T15:18:37.099946+00:00",
+    "indicators": {
+     "conversations_connected": {
+      "complete": false,
+      "missing": [
+       {
+        "field": "conversations for 2 census tasks",
+        "owner": "integration_engineer",
+        "sample": "lost0-task"
+       }
+      ],
+      "detail": {
+       "messages_7d": 120,
+       "census_tasks": 42,
+       "census_tasks_with_conversation": 40
+      }
+     },
+     "policies_approved": {
+      "complete": true,
+      "missing": [],
+      "detail": {
+       "approved": [
+        "missing_item_refund@v1"
+       ]
+      }
+     },
+     "business_outcomes_verifiable": {
+      "complete": true,
+      "missing": [],
+      "detail": {
+       "verified_sources": [
+        "identity_service",
+        "order_service",
+        "payment_adapter",
+        "wallet_ledger"
+       ]
+      }
+     },
+     "evaluators_calibrated": {
+      "complete": false,
+      "missing": [
+       {
+        "field": "validation calibration for issue_understanding in en",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/en"
+       },
+       {
+        "field": "validation calibration for issue_understanding in hi",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/hi"
+       },
+       {
+        "field": "validation calibration for issue_understanding in hi-en",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/hi-en"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in en",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/en"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in hi",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/hi"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in hi-en",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/hi-en"
+       }
+      ],
+      "detail": {
+       "evaluator_bundle": "anthropic:claude-opus-5-5@judge-prompt-v1"
+      }
+     }
+    },
+    "note": "Indicators are reported separately on purpose; there is no combined readiness score."
+   },
+   "onboarding": {
+    "as_of": "2026-10-28T15:18:37.113015+00:00",
+    "current_stage": 3,
+    "stages": [
+     {
+      "stage": 1,
+      "name": "Qualify the pilot",
+      "owner": "Support and AI leads",
+      "complete": true,
+      "exit_evidence": "Signed scope and exclusions",
+      "evidence_ref": "pilot-scope-v1.pdf",
+      "attested_by": "key:all"
+     },
+     {
+      "stage": 2,
+      "name": "Establish trust",
+      "owner": "Security and platform",
+      "complete": true,
+      "exit_evidence": "Approved data flow, credentials, retention and permitted model endpoints",
+      "evidence_ref": "dpa-and-dataflow-v2",
+      "attested_by": "key:all"
+     },
+     {
+      "stage": 3,
+      "name": "Connect observations",
+      "owner": "Integration engineer",
+      "complete": false,
+      "exit_evidence": "Conformance, source freshness and census reconciliation",
+      "missing": [
+       {
+        "field": "conversations for 2 census tasks",
+        "owner": "integration_engineer",
+        "sample": "lost0-task"
+       }
+      ]
+     },
+     {
+      "stage": 4,
+      "name": "Map business entities",
+      "owner": "Domain and data owners",
+      "complete": true,
+      "exit_evidence": "Reviewed joins and unmatched-event report",
+      "detail": {
+       "events": 684,
+       "unmatched_or_ambiguous": 0
+      }
+     },
+     {
+      "stage": 5,
+      "name": "Define success",
+      "owner": "Policy owner",
+      "complete": true,
+      "exit_evidence": "Versioned intent contract",
+      "missing": []
+     },
+     {
+      "stage": 6,
+      "name": "Validate evaluation",
+      "owner": "QA and domain experts",
+      "complete": false,
+      "exit_evidence": "Adjudicated labels and calibration report",
+      "missing": [
+       {
+        "field": "validation calibration for issue_understanding in en",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/en"
+       },
+       {
+        "field": "validation calibration for issue_understanding in hi",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/hi"
+       },
+       {
+        "field": "validation calibration for issue_understanding in hi-en",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/hi-en"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in en",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/en"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in hi",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/hi"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in hi-en",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/hi-en"
+       }
+      ]
+     },
+     {
+      "stage": 7,
+      "name": "Run in shadow",
+      "owner": "Operations and release owner",
+      "complete": true,
+      "exit_evidence": "Measured coverage, cost, false alarms and drift",
+      "detail": {
+       "finalized_production_tasks": 42
+      }
+     },
+     {
+      "stage": 8,
+      "name": "Activate release gates",
+      "owner": "Release and support leads",
+      "complete": false,
+      "exit_evidence": "Approved gate thresholds, rollback authority and review rota",
+      "evidence_ref": null,
+      "attested_by": null,
+      "practised_override": false,
+      "release_decisions": 0
+     },
+     {
+      "stage": 9,
+      "name": "Expand coverage",
+      "owner": "Joint product team",
+      "complete": false,
+      "exit_evidence": "Next intent, market or channel agreed",
+      "evidence_ref": null,
+      "attested_by": null
+     }
+    ],
+    "milestones": {
+     "conversation_audit": true,
+     "verified_outcome_claims": true
+    },
+    "note": "Verified-outcome claims stay disabled until business mappings pass conformance."
+   },
+   "metrics": {
+    "intent": "missing_item_refund",
+    "cohort": {
+     "opened_from": "2026-09-28T15:18:37.052589+00:00",
+     "opened_before": "2026-10-28T15:18:37.052589+00:00"
+    },
+    "as_of": "2026-10-28T15:18:37.052589+00:00",
+    "slice_by": null,
+    "slices": {
+     "all": {
+      "census": {
+       "eligible_tasks": 42,
+       "matured": 42,
+       "pending_maturation": 0,
+       "missing_conversation": 2,
+       "observed_but_not_in_census": 0
+      },
+      "verified_business_completion": {
+       "count": 37,
+       "denominator": 42,
+       "rate": 0.88095,
+       "ci95": [
+        0.75,
+        0.94806
+       ]
+      },
+      "fully_verified_safe_resolution": {
+       "count": 31,
+       "denominator": 42,
+       "rate": 0.7381,
+       "ci95": [
+        0.58931,
+        0.84697
+       ],
+       "note": "all required objective and semantic checks passed"
+      },
+      "estimated_compliant_resolution": {
+       "issue_understanding": {
+        "estimated_pass_rate": 1.0,
+        "ci95": [
+         0.4385,
+         1.0
+        ],
+        "sampled": 3,
+        "label": "probability-weighted estimate from the random audit sample"
+       },
+       "no_misleading_promise": {
+        "estimated_pass_rate": 1.0,
+        "ci95": [
+         0.34238,
+         1.0
+        ],
+        "sampled": 2,
+        "label": "probability-weighted estimate from the random audit sample"
+       }
+      },
+      "risk_sampled_findings": {
+       "issue_understanding": {
+        "pass": 4
+       },
+       "no_misleading_promise": {
+        "pass": 4
+       }
+      },
+      "correct_disposition": {
+       "count": 40,
+       "denominator": 40,
+       "rate": 1.0,
+       "ci95": [
+        0.91238,
+        1.0
+       ]
+      },
+      "evidence_coverage": {
+       "action_within_limits": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0,
+        "ci95": [
+         0.91238,
+         1.0
+        ]
+       },
+       "allocation_matches_policy": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0,
+        "ci95": [
+         0.91238,
+         1.0
+        ]
+       },
+       "amount_within_entitlement": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0,
+        "ci95": [
+         0.91238,
+         1.0
+        ]
+       },
+       "authorized_customer": {
+        "count": 37,
+        "denominator": 40,
+        "rate": 0.925,
+        "ci95": [
+         0.80136,
+         0.97416
+        ]
+       },
+       "claims_supported_by_evidence": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0,
+        "ci95": [
+         0.91238,
+         1.0
+        ]
+       },
+       "correct_disposition": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0,
+        "ci95": [
+         0.91238,
+         1.0
+        ]
+       },
+       "correct_item_and_quantity": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0,
+        "ci95": [
+         0.91238,
+         1.0
+        ]
+       },
+       "estimate_within_policy": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0,
+        "ci95": [
+         0.91238,
+         1.0
+        ]
+       },
+       "no_duplicate_refund": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0,
+        "ci95": [
+         0.91238,
+         1.0
+        ]
+       },
+       "no_sensitive_disclosure": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0,
+        "ci95": [
+         0.91238,
+         1.0
+        ]
+       }
+      },
+      "critical_violations": {
+       "no_duplicate_refund": {
+        "observed": 4,
+        "count": 4,
+        "denominator": 42,
+        "rate": 0.09524,
+        "ci95": [
+         0.03766,
+         0.22065
+        ]
+       }
+      },
+      "business_outcomes": {
+       "verified_complete": 37,
+       "unknown": 3,
+       "no_evaluation": 2
+      },
+      "operating_efficiency": {
+       "bot_p95_latency_ms": 1100.0
+      },
+      "unknown_rate": {
+       "count": 5,
+       "denominator": 42,
+       "rate": 0.11905,
+       "ci95": [
+        0.05194,
+        0.25
+       ]
+      },
+      "invalid_evaluations": 0,
+      "result_revisions_after_first": 0
+     }
+    },
+    "measurement_health": {
+     "events": 684,
+     "unmatched_event_rate": {
+      "count": 0,
+      "denominator": 684,
+      "rate": 0.0,
+      "ci95": [
+       0.0,
+       0.00558
+      ]
+     },
+     "ambiguous_events": 0,
+     "quarantined_events": 0,
+     "source_lag_minutes": {},
+     "verified_sources": [
+      "identity_service",
+      "order_service",
+      "payment_adapter",
+      "wallet_ledger"
+     ]
+    }
+   },
+   "review_items": [
+    {
+     "id": "ba94688d220640b18e07b34c6216e8c8",
+     "task_key": "prod4-task",
+     "kind": "critical",
+     "reason_code": "critical_violation",
+     "criterion": "no_duplicate_refund",
+     "owner_role": "refund_policy_owner",
+     "age_hours": 0.0,
+     "detail": {
+      "reason": "item li-1 refunded by two logical actions",
+      "evidence": [
+       "3d95d20e17ec4b2e901c93d3b2330b4b",
+       "0a85a7d61cfa40c2af3d9818fe9e5fb5"
+      ]
+     },
+     "status": "open"
+    },
+    {
+     "id": "8aceb8ddee01413a9b114e8afffaa458",
+     "task_key": "prod13-task",
+     "kind": "critical",
+     "reason_code": "critical_violation",
+     "criterion": "no_duplicate_refund",
+     "owner_role": "refund_policy_owner",
+     "age_hours": 0.0,
+     "detail": {
+      "reason": "item li-1 refunded by two logical actions",
+      "evidence": [
+       "f14b6991e8d84ecdb3418bce04425b16",
+       "9d17c2d4b7aa40c7b58ff2876d5b1138"
+      ]
+     },
+     "status": "open"
+    },
+    {
+     "id": "7e174e02ecf0482a8f009ffac4d5fca6",
+     "task_key": "prod22-task",
+     "kind": "critical",
+     "reason_code": "critical_violation",
+     "criterion": "no_duplicate_refund",
+     "owner_role": "refund_policy_owner",
+     "age_hours": 0.0,
+     "detail": {
+      "reason": "item li-1 refunded by two logical actions",
+      "evidence": [
+       "68b0d80f1128435db1d19b7732ff1ddb",
+       "984dc7a53b884e6db22c9d2a69418099"
+      ]
+     },
+     "status": "open"
+    },
+    {
+     "id": "67bacc5bd5f94ffdaf61d83659625dc9",
+     "task_key": "prod31-task",
+     "kind": "critical",
+     "reason_code": "critical_violation",
+     "criterion": "no_duplicate_refund",
+     "owner_role": "refund_policy_owner",
+     "age_hours": 0.0,
+     "detail": {
+      "reason": "item li-1 refunded by two logical actions",
+      "evidence": [
+       "7f053311d2bb412fbbb6b3eccfc5f436",
+       "a43c3d4b2c1f4ec0a8fcfdcf701f2208"
+      ]
+     },
+     "status": "open"
+    },
+    {
+     "id": "66e4e326bfff4d26944c8bab6bdabc5e",
+     "task_key": "prod6-task",
+     "kind": "unknown",
+     "reason_code": "missing_identity_event",
+     "criterion": null,
+     "owner_role": "identity_integration_owner",
+     "age_hours": 0.0,
+     "detail": {
+      "detail": "no identity verification event for the acting customer"
+     },
+     "status": "open"
+    },
+    {
+     "id": "b01c646642e847c9a04896de57b1275d",
+     "task_key": "prod6-task",
+     "kind": "unknown",
+     "reason_code": "outcome_evidence_unavailable",
+     "criterion": null,
+     "owner_role": "payments_integration_owner",
+     "age_hours": 0.0,
+     "detail": {
+      "detail": "payment_adapter has not confirmed state past the deadline"
+     },
+     "status": "open"
+    },
+    {
+     "id": "8e45e92ff261480298fb1b8a1dc2e969",
+     "task_key": "prod16-task",
+     "kind": "unknown",
+     "reason_code": "outcome_evidence_unavailable",
+     "criterion": null,
+     "owner_role": "payments_integration_owner",
+     "age_hours": 0.0,
+     "detail": {
+      "detail": "payment_adapter has not confirmed state past the deadline"
+     },
+     "status": "open"
+    },
+    {
+     "id": "35f5a2a2294740ea90bf064a47d5ed80",
+     "task_key": "prod19-task",
+     "kind": "unknown",
+     "reason_code": "missing_identity_event",
+     "criterion": null,
+     "owner_role": "identity_integration_owner",
+     "age_hours": 0.0,
+     "detail": {
+      "detail": "no identity verification event for the acting customer"
+     },
+     "status": "open"
+    }
+   ]
+  },
+  {
+   "title": "Census gap closed",
+   "actor": "Integration engineer",
+   "did": "Two census tasks had no conversation. The chat export is fixed and backfilled, so every bot-assigned task is observed.",
+   "readiness": {
+    "as_of": "2026-10-28T15:18:37.227547+00:00",
+    "indicators": {
+     "conversations_connected": {
+      "complete": true,
+      "missing": [],
+      "detail": {
+       "messages_7d": 122,
+       "census_tasks": 42,
+       "census_tasks_with_conversation": 42
+      }
+     },
+     "policies_approved": {
+      "complete": true,
+      "missing": [],
+      "detail": {
+       "approved": [
+        "missing_item_refund@v1"
+       ]
+      }
+     },
+     "business_outcomes_verifiable": {
+      "complete": true,
+      "missing": [],
+      "detail": {
+       "verified_sources": [
+        "identity_service",
+        "order_service",
+        "payment_adapter",
+        "wallet_ledger"
+       ]
+      }
+     },
+     "evaluators_calibrated": {
+      "complete": false,
+      "missing": [
+       {
+        "field": "validation calibration for issue_understanding in en",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/en"
+       },
+       {
+        "field": "validation calibration for issue_understanding in hi",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/hi"
+       },
+       {
+        "field": "validation calibration for issue_understanding in hi-en",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/hi-en"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in en",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/en"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in hi",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/hi"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in hi-en",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/hi-en"
+       }
+      ],
+      "detail": {
+       "evaluator_bundle": "anthropic:claude-opus-5-5@judge-prompt-v1"
+      }
+     }
+    },
+    "note": "Indicators are reported separately on purpose; there is no combined readiness score."
+   },
+   "onboarding": {
+    "as_of": "2026-10-28T15:18:37.241598+00:00",
+    "current_stage": 6,
+    "stages": [
+     {
+      "stage": 1,
+      "name": "Qualify the pilot",
+      "owner": "Support and AI leads",
+      "complete": true,
+      "exit_evidence": "Signed scope and exclusions",
+      "evidence_ref": "pilot-scope-v1.pdf",
+      "attested_by": "key:all"
+     },
+     {
+      "stage": 2,
+      "name": "Establish trust",
+      "owner": "Security and platform",
+      "complete": true,
+      "exit_evidence": "Approved data flow, credentials, retention and permitted model endpoints",
+      "evidence_ref": "dpa-and-dataflow-v2",
+      "attested_by": "key:all"
+     },
+     {
+      "stage": 3,
+      "name": "Connect observations",
+      "owner": "Integration engineer",
+      "complete": true,
+      "exit_evidence": "Conformance, source freshness and census reconciliation",
+      "missing": []
+     },
+     {
+      "stage": 4,
+      "name": "Map business entities",
+      "owner": "Domain and data owners",
+      "complete": true,
+      "exit_evidence": "Reviewed joins and unmatched-event report",
+      "detail": {
+       "events": 690,
+       "unmatched_or_ambiguous": 0
+      }
+     },
+     {
+      "stage": 5,
+      "name": "Define success",
+      "owner": "Policy owner",
+      "complete": true,
+      "exit_evidence": "Versioned intent contract",
+      "missing": []
+     },
+     {
+      "stage": 6,
+      "name": "Validate evaluation",
+      "owner": "QA and domain experts",
+      "complete": false,
+      "exit_evidence": "Adjudicated labels and calibration report",
+      "missing": [
+       {
+        "field": "validation calibration for issue_understanding in en",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/en"
+       },
+       {
+        "field": "validation calibration for issue_understanding in hi",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/hi"
+       },
+       {
+        "field": "validation calibration for issue_understanding in hi-en",
+        "owner": "evaluation_engineer",
+        "sample": "issue_understanding/hi-en"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in en",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/en"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in hi",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/hi"
+       },
+       {
+        "field": "validation calibration for no_misleading_promise in hi-en",
+        "owner": "evaluation_engineer",
+        "sample": "no_misleading_promise/hi-en"
+       }
+      ]
+     },
+     {
+      "stage": 7,
+      "name": "Run in shadow",
+      "owner": "Operations and release owner",
+      "complete": true,
+      "exit_evidence": "Measured coverage, cost, false alarms and drift",
+      "detail": {
+       "finalized_production_tasks": 42
+      }
+     },
+     {
+      "stage": 8,
+      "name": "Activate release gates",
+      "owner": "Release and support leads",
+      "complete": false,
+      "exit_evidence": "Approved gate thresholds, rollback authority and review rota",
+      "evidence_ref": null,
+      "attested_by": null,
+      "practised_override": false,
+      "release_decisions": 0
+     },
+     {
+      "stage": 9,
+      "name": "Expand coverage",
+      "owner": "Joint product team",
+      "complete": false,
+      "exit_evidence": "Next intent, market or channel agreed",
+      "evidence_ref": null,
+      "attested_by": null
+     }
+    ],
+    "milestones": {
+     "conversation_audit": true,
+     "verified_outcome_claims": true
+    },
+    "note": "Verified-outcome claims stay disabled until business mappings pass conformance."
+   },
+   "metrics": {
+    "intent": "missing_item_refund",
+    "cohort": {
+     "opened_from": "2026-09-28T15:18:37.192354+00:00",
+     "opened_before": "2026-10-28T15:18:37.192354+00:00"
+    },
+    "as_of": "2026-10-28T15:18:37.192354+00:00",
+    "slice_by": null,
+    "slices": {
+     "all": {
+      "census": {
+       "eligible_tasks": 42,
+       "matured": 42,
+       "pending_maturation": 0,
+       "missing_conversation": 0,
+       "observed_but_not_in_census": 0
+      },
+      "verified_business_completion": {
+       "count": 37,
+       "denominator": 42,
+       "rate": 0.88095,
+       "ci95": [
+        0.75,
+        0.94806
+       ]
+      },
+      "fully_verified_safe_resolution": {
+       "count": 31,
+       "denominator": 42,
+       "rate": 0.7381,
+       "ci95": [
+        0.58931,
+        0.84697
+       ],
+       "note": "all required objective and semantic checks passed"
+      },
+      "estimated_compliant_resolution": {
+       "issue_understanding": {
+        "estimated_pass_rate": 1.0,
+        "ci95": [
+         0.4385,
+         1.0
+        ],
+        "sampled": 3,
+        "label": "probability-weighted estimate from the random audit sample"
+       },
+       "no_misleading_promise": {
+        "estimated_pass_rate": 1.0,
+        "ci95": [
+         0.4385,
+         1.0
+        ],
+        "sampled": 3,
+        "label": "probability-weighted estimate from the random audit sample"
+       }
+      },
+      "risk_sampled_findings": {
+       "issue_understanding": {
+        "pass": 4
+       },
+       "no_misleading_promise": {
+        "pass": 4
+       }
+      },
+      "correct_disposition": {
+       "count": 40,
+       "denominator": 40,
+       "rate": 1.0,
+       "ci95": [
+        0.91238,
+        1.0
+       ]
+      },
+      "evidence_coverage": {
+       "action_within_limits": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0,
+        "ci95": [
+         0.91238,
+         1.0
+        ]
+       },
+       "allocation_matches_policy": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0,
+        "ci95": [
+         0.91238,
+         1.0
+        ]
+       },
+       "amount_within_entitlement": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0,
+        "ci95": [
+         0.91238,
+         1.0
+        ]
+       },
+       "authorized_customer": {
+        "count": 37,
+        "denominator": 40,
+        "rate": 0.925,
+        "ci95": [
+         0.80136,
+         0.97416
+        ]
+       },
+       "claims_supported_by_evidence": {
+        "count": 40,
+        "denominator": 42,
+        "rate": 0.95238,
+        "ci95": [
+         0.8421,
+         0.98684
+        ]
+       },
+       "correct_disposition": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0,
+        "ci95": [
+         0.91238,
+         1.0
+        ]
+       },
+       "correct_item_and_quantity": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0,
+        "ci95": [
+         0.91238,
+         1.0
+        ]
+       },
+       "estimate_within_policy": {
+        "count": 40,
+        "denominator": 42,
+        "rate": 0.95238,
+        "ci95": [
+         0.8421,
+         0.98684
+        ]
+       },
+       "no_duplicate_refund": {
+        "count": 40,
+        "denominator": 40,
+        "rate": 1.0,
+        "ci95": [
+         0.91238,
+         1.0
+        ]
+       },
+       "no_sensitive_disclosure": {
+        "count": 42,
+        "denominator": 42,
+        "rate": 1.0,
+        "ci95": [
+         0.9162,
+         1.0
+        ]
+       }
+      },
+      "critical_violations": {
+       "no_duplicate_refund": {
+        "observed": 4,
+        "count": 4,
+        "denominator": 42,
+        "rate": 0.09524,
+        "ci95": [
+         0.03766,
+         0.22065
+        ]
+       }
+      },
+      "business_outcomes": {
+       "verified_complete": 37,
+       "unknown": 3,
+       "not_applicable": 2
+      },
+      "operating_efficiency": {
+       "bot_p95_latency_ms": 1100.0
+      },
+      "unknown_rate": {
+       "count": 3,
+       "denominator": 42,
+       "rate": 0.07143,
+       "ci95": [
+        0.02459,
+        0.19009
+       ]
+      },
+      "invalid_evaluations": 0,
+      "result_revisions_after_first": 0
+     }
+    },
+    "measurement_health": {
+     "events": 690,
+     "unmatched_event_rate": {
+      "count": 0,
+      "denominator": 690,
+      "rate": 0.0,
+      "ci95": [
+       0.0,
+       0.00554
+      ]
+     },
+     "ambiguous_events": 0,
+     "quarantined_events": 0,
+     "source_lag_minutes": {},
+     "verified_sources": [
+      "identity_service",
+      "order_service",
+      "payment_adapter",
+      "wallet_ledger"
+     ]
+    }
+   }
+  },
+  {
+   "title": "Evaluator calibrated",
+   "actor": "Evaluation engineer",
+   "did": "For each criterion and language, two reviewers label 40 held-out cases; the judge's false-pass and false-alarm rates are measured against adjudicated truth.",
+   "readiness": {
+    "as_of": "2026-10-28T15:18:37.336665+00:00",
+    "indicators": {
+     "conversations_connected": {
+      "complete": true,
+      "missing": [],
+      "detail": {
+       "messages_7d": 122,
+       "census_tasks": 42,
+       "census_tasks_with_conversation": 42
+      }
+     },
+     "policies_approved": {
+      "complete": true,
+      "missing": [],
+      "detail": {
+       "approved": [
+        "missing_item_refund@v1"
+       ]
+      }
+     },
+     "business_outcomes_verifiable": {
+      "complete": true,
+      "missing": [],
+      "detail": {
+       "verified_sources": [
+        "identity_service",
+        "order_service",
+        "payment_adapter",
+        "wallet_ledger"
+       ]
+      }
+     },
+     "evaluators_calibrated": {
+      "complete": true,
+      "missing": [],
+      "detail": {
+       "evaluator_bundle": "anthropic:claude-opus-5-5@judge-prompt-v1"
+      }
+     }
+    },
+    "note": "Indicators are reported separately on purpose; there is no combined readiness score."
+   },
+   "onboarding": {
+    "as_of": "2026-10-28T15:18:37.353094+00:00",
+    "current_stage": 8,
+    "stages": [
+     {
+      "stage": 1,
+      "name": "Qualify the pilot",
+      "owner": "Support and AI leads",
+      "complete": true,
+      "exit_evidence": "Signed scope and exclusions",
+      "evidence_ref": "pilot-scope-v1.pdf",
+      "attested_by": "key:all"
+     },
+     {
+      "stage": 2,
+      "name": "Establish trust",
+      "owner": "Security and platform",
+      "complete": true,
+      "exit_evidence": "Approved data flow, credentials, retention and permitted model endpoints",
+      "evidence_ref": "dpa-and-dataflow-v2",
+      "attested_by": "key:all"
+     },
+     {
+      "stage": 3,
+      "name": "Connect observations",
+      "owner": "Integration engineer",
+      "complete": true,
+      "exit_evidence": "Conformance, source freshness and census reconciliation",
+      "missing": []
+     },
+     {
+      "stage": 4,
+      "name": "Map business entities",
+      "owner": "Domain and data owners",
+      "complete": true,
+      "exit_evidence": "Reviewed joins and unmatched-event report",
+      "detail": {
+       "events": 690,
+       "unmatched_or_ambiguous": 0
+      }
+     },
+     {
+      "stage": 5,
+      "name": "Define success",
+      "owner": "Policy owner",
+      "complete": true,
+      "exit_evidence": "Versioned intent contract",
+      "missing": []
+     },
+     {
+      "stage": 6,
+      "name": "Validate evaluation",
+      "owner": "QA and domain experts",
+      "complete": true,
+      "exit_evidence": "Adjudicated labels and calibration report",
+      "missing": []
+     },
+     {
+      "stage": 7,
+      "name": "Run in shadow",
+      "owner": "Operations and release owner",
+      "complete": true,
+      "exit_evidence": "Measured coverage, cost, false alarms and drift",
+      "detail": {
+       "finalized_production_tasks": 42
+      }
+     },
+     {
+      "stage": 8,
+      "name": "Activate release gates",
+      "owner": "Release and support leads",
+      "complete": false,
+      "exit_evidence": "Approved gate thresholds, rollback authority and review rota",
+      "evidence_ref": null,
+      "attested_by": null,
+      "practised_override": false,
+      "release_decisions": 0
+     },
+     {
+      "stage": 9,
+      "name": "Expand coverage",
+      "owner": "Joint product team",
+      "complete": false,
+      "exit_evidence": "Next intent, market or channel agreed",
+      "evidence_ref": null,
+      "attested_by": null
+     }
+    ],
+    "milestones": {
+     "conversation_audit": true,
+     "verified_outcome_claims": true
+    },
+    "note": "Verified-outcome claims stay disabled until business mappings pass conformance."
+   },
+   "calibration": {
+    "criterion": "issue_understanding",
+    "language": "en",
+    "evaluator_bundle": "anthropic:claude-opus-5-5@judge-prompt-v1",
+    "passed": true,
+    "metrics": {
+     "items": 40,
+     "split": "validation",
+     "reviewer_kappa": 0.857142857142857,
+     "reviewer_disagreements": 2,
+     "abstain_rate": 0.0,
+     "false_pass_rate": 0.0,
+     "false_alarm_rate": 0.0,
+     "critical_failures_in_set": 5,
+     "critical_false_passes": 0,
+     "thresholds": {
+      "min_items": 30,
+      "max_false_pass": 0.05,
+      "max_false_alarm": 0.1
+     },
+     "problems": []
+    }
+   }
+  },
+  {
+   "title": "Release gates active",
+   "actor": "Release owner",
+   "did": "A first gate runs. Six episodes are far below the coverage floor, so the honest answer is 'insufficient evidence'. The override path is practised.",
+   "readiness": {
+    "as_of": "2026-10-28T15:18:38.047631+00:00",
+    "indicators": {
+     "conversations_connected": {
+      "complete": true,
+      "missing": [],
+      "detail": {
+       "messages_7d": 122,
+       "census_tasks": 42,
+       "census_tasks_with_conversation": 42
+      }
+     },
+     "policies_approved": {
+      "complete": true,
+      "missing": [],
+      "detail": {
+       "approved": [
+        "missing_item_refund@v1"
+       ]
+      }
+     },
+     "business_outcomes_verifiable": {
+      "complete": true,
+      "missing": [],
+      "detail": {
+       "verified_sources": [
+        "identity_service",
+        "order_service",
+        "payment_adapter",
+        "wallet_ledger"
+       ]
+      }
+     },
+     "evaluators_calibrated": {
+      "complete": true,
+      "missing": [],
+      "detail": {
+       "evaluator_bundle": "anthropic:claude-opus-5-5@judge-prompt-v1"
+      }
+     }
+    },
+    "note": "Indicators are reported separately on purpose; there is no combined readiness score."
+   },
+   "onboarding": {
+    "as_of": "2026-10-28T15:18:38.062526+00:00",
+    "current_stage": 9,
+    "stages": [
+     {
+      "stage": 1,
+      "name": "Qualify the pilot",
+      "owner": "Support and AI leads",
+      "complete": true,
+      "exit_evidence": "Signed scope and exclusions",
+      "evidence_ref": "pilot-scope-v1.pdf",
+      "attested_by": "key:all"
+     },
+     {
+      "stage": 2,
+      "name": "Establish trust",
+      "owner": "Security and platform",
+      "complete": true,
+      "exit_evidence": "Approved data flow, credentials, retention and permitted model endpoints",
+      "evidence_ref": "dpa-and-dataflow-v2",
+      "attested_by": "key:all"
+     },
+     {
+      "stage": 3,
+      "name": "Connect observations",
+      "owner": "Integration engineer",
+      "complete": true,
+      "exit_evidence": "Conformance, source freshness and census reconciliation",
+      "missing": []
+     },
+     {
+      "stage": 4,
+      "name": "Map business entities",
+      "owner": "Domain and data owners",
+      "complete": true,
+      "exit_evidence": "Reviewed joins and unmatched-event report",
+      "detail": {
+       "events": 690,
+       "unmatched_or_ambiguous": 0
+      }
+     },
+     {
+      "stage": 5,
+      "name": "Define success",
+      "owner": "Policy owner",
+      "complete": true,
+      "exit_evidence": "Versioned intent contract",
+      "missing": []
+     },
+     {
+      "stage": 6,
+      "name": "Validate evaluation",
+      "owner": "QA and domain experts",
+      "complete": true,
+      "exit_evidence": "Adjudicated labels and calibration report",
+      "missing": []
+     },
+     {
+      "stage": 7,
+      "name": "Run in shadow",
+      "owner": "Operations and release owner",
+      "complete": true,
+      "exit_evidence": "Measured coverage, cost, false alarms and drift",
+      "detail": {
+       "finalized_production_tasks": 42
+      }
+     },
+     {
+      "stage": 8,
+      "name": "Activate release gates",
+      "owner": "Release and support leads",
+      "complete": true,
+      "exit_evidence": "Approved gate thresholds, rollback authority and review rota",
+      "evidence_ref": "release-runbook-v1",
+      "attested_by": "key:all",
+      "practised_override": true,
+      "release_decisions": 1
+     },
+     {
+      "stage": 9,
+      "name": "Expand coverage",
+      "owner": "Joint product team",
+      "complete": false,
+      "exit_evidence": "Next intent, market or channel agreed",
+      "evidence_ref": null,
+      "attested_by": null
+     }
+    ],
+    "milestones": {
+     "conversation_audit": true,
+     "verified_outcome_claims": true
+    },
+    "note": "Verified-outcome claims stay disabled until business mappings pass conformance."
+   },
+   "decision": {
+    "id": "rd_8d09f6bf4c30479c9c89e053a3c27d24",
+    "decision": "insufficient_evidence",
+    "status": "active",
+    "reasons": [
+     {
+      "effect": "insufficient_evidence",
+      "code": "coverage_floor",
+      "message": "slice aggregate: 3 families and at least 2 trials per family; policy needs 50 and 5. Floors are coverage minimums, not proof of statistical precision.",
+      "slice": "aggregate"
+     }
+    ],
+    "slices": {
+     "aggregate": {
+      "families": 3,
+      "min_trials_per_family": 2,
+      "candidate_episodes": 6,
+      "baseline_episodes": 6,
+      "candidate_mean": 1.0,
+      "baseline_mean": 1.0,
+      "difference": 0.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "one_sided_lower_95": 0.0,
+      "method": "paired percentile bootstrap over scenario families, equal family weights, trials averaged within family",
+      "resamples": 4000,
+      "seed": 20261028,
+      "critical_free_episodes": 6,
+      "critical_rate_upper_bound_if_independent": 0.6316
+     }
+    },
+    "binding": {
+     "bot_deployment_ref": "refund-bot@candidate",
+     "baseline_deployment_ref": "refund-bot@baseline",
+     "contract_ref": "missing_item_refund@v1",
+     "evaluator_bundles": [
+      "missing_item_refund@1.0.0+anthropic:claude-opus-5-5@judge-prompt-v1"
+     ],
+     "dataset_ref": "refund-suite@2026-10",
+     "evidence_snapshot": {
+      "candidate": "da66e778d4ff571102b6fb72d84bed4810fc0e8fdf135e544db32ee1a46ecbd1",
+      "baseline": "ea7ab79237e5a59b00b86a2859b98a660f04fb85bf647c71c7bec3953166d945",
+      "latest_evidence_cutoff": "2026-10-22T03:30:01+00:00"
+     },
+     "source_census": {
+      "candidate": {
+       "declared": {
+        "families": 3,
+        "trials_per_family": 2,
+        "notes": ""
+       },
+       "evaluated": 6
+      },
+      "baseline": {
+       "declared": {
+        "families": 3,
+        "trials_per_family": 2,
+        "notes": ""
+       },
+       "evaluated": 6
+      }
+     },
+     "required_slices": [],
+     "latency_tradeoff_approved": false
+    },
+    "statistics": {
+     "latency": {
+      "candidate_p95_ms": 1100.0,
+      "baseline_p95_ms": 1100.0,
+      "increase": 0.0
+     },
+     "policy": {
+      "noninferiority_margin": -0.02,
+      "min_families_per_slice": 50,
+      "min_trials_per_family": 5,
+      "census_completeness_min": 0.995,
+      "max_latency_increase": 0.1,
+      "validity_days": 7,
+      "bootstrap_resamples": 4000
+     },
+     "comparison_method": {
+      "aggregate": "paired percentile bootstrap over scenario families, equal family weights, trials averaged within family"
+     }
+    },
+    "accountable_owner": "key:all",
+    "created_at": "2026-10-28T15:18:38.003455+00:00",
+    "valid_until": "2026-11-04T15:18:38.003455+00:00",
+    "superseded_reason": null,
+    "exceptions": []
+   }
+  },
+  {
+   "title": "Ready to expand",
+   "actor": "Joint product team",
+   "did": "The next intent is agreed. It must pass the same gates before it is trusted.",
+   "readiness": {
+    "as_of": "2026-10-28T15:18:38.100567+00:00",
+    "indicators": {
+     "conversations_connected": {
+      "complete": true,
+      "missing": [],
+      "detail": {
+       "messages_7d": 122,
+       "census_tasks": 42,
+       "census_tasks_with_conversation": 42
+      }
+     },
+     "policies_approved": {
+      "complete": true,
+      "missing": [],
+      "detail": {
+       "approved": [
+        "missing_item_refund@v1"
+       ]
+      }
+     },
+     "business_outcomes_verifiable": {
+      "complete": true,
+      "missing": [],
+      "detail": {
+       "verified_sources": [
+        "identity_service",
+        "order_service",
+        "payment_adapter",
+        "wallet_ledger"
+       ]
+      }
+     },
+     "evaluators_calibrated": {
+      "complete": true,
+      "missing": [],
+      "detail": {
+       "evaluator_bundle": "anthropic:claude-opus-5-5@judge-prompt-v1"
+      }
+     }
+    },
+    "note": "Indicators are reported separately on purpose; there is no combined readiness score."
+   },
+   "onboarding": {
+    "as_of": "2026-10-28T15:18:38.114719+00:00",
+    "current_stage": null,
+    "stages": [
+     {
+      "stage": 1,
+      "name": "Qualify the pilot",
+      "owner": "Support and AI leads",
+      "complete": true,
+      "exit_evidence": "Signed scope and exclusions",
+      "evidence_ref": "pilot-scope-v1.pdf",
+      "attested_by": "key:all"
+     },
+     {
+      "stage": 2,
+      "name": "Establish trust",
+      "owner": "Security and platform",
+      "complete": true,
+      "exit_evidence": "Approved data flow, credentials, retention and permitted model endpoints",
+      "evidence_ref": "dpa-and-dataflow-v2",
+      "attested_by": "key:all"
+     },
+     {
+      "stage": 3,
+      "name": "Connect observations",
+      "owner": "Integration engineer",
+      "complete": true,
+      "exit_evidence": "Conformance, source freshness and census reconciliation",
+      "missing": []
+     },
+     {
+      "stage": 4,
+      "name": "Map business entities",
+      "owner": "Domain and data owners",
+      "complete": true,
+      "exit_evidence": "Reviewed joins and unmatched-event report",
+      "detail": {
+       "events": 690,
+       "unmatched_or_ambiguous": 0
+      }
+     },
+     {
+      "stage": 5,
+      "name": "Define success",
+      "owner": "Policy owner",
+      "complete": true,
+      "exit_evidence": "Versioned intent contract",
+      "missing": []
+     },
+     {
+      "stage": 6,
+      "name": "Validate evaluation",
+      "owner": "QA and domain experts",
+      "complete": true,
+      "exit_evidence": "Adjudicated labels and calibration report",
+      "missing": []
+     },
+     {
+      "stage": 7,
+      "name": "Run in shadow",
+      "owner": "Operations and release owner",
+      "complete": true,
+      "exit_evidence": "Measured coverage, cost, false alarms and drift",
+      "detail": {
+       "finalized_production_tasks": 42
+      }
+     },
+     {
+      "stage": 8,
+      "name": "Activate release gates",
+      "owner": "Release and support leads",
+      "complete": true,
+      "exit_evidence": "Approved gate thresholds, rollback authority and review rota",
+      "evidence_ref": "release-runbook-v1",
+      "attested_by": "key:all",
+      "practised_override": true,
+      "release_decisions": 1
+     },
+     {
+      "stage": 9,
+      "name": "Expand coverage",
+      "owner": "Joint product team",
+      "complete": true,
+      "exit_evidence": "Next intent, market or channel agreed",
+      "evidence_ref": "next-intent-cancellation",
+      "attested_by": "key:all"
+     }
+    ],
+    "milestones": {
+     "conversation_audit": true,
+     "verified_outcome_claims": true
+    },
+    "note": "Verified-outcome claims stay disabled until business mappings pass conformance."
+   }
+  }
+ ]
+}

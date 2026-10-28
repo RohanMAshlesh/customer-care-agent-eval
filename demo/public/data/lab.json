@@ -1,0 +1,6544 @@
+[
+ {
+  "id": "happy",
+  "title": "Clean refund",
+  "category": "Baseline",
+  "story": "Eligible missing item, verified identity, correct allocation, both legs settle.",
+  "verdict": "Every required check passes and the outcome is verified complete.",
+  "focus": [
+   "correct_disposition"
+  ],
+  "events": [
+   {
+    "event_id": "happy-e1",
+    "event_type": "census.task_assigned",
+    "source": "census",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "eligible": true,
+     "market": "demo_in"
+    },
+    "entity_refs": {
+     "customer_id": "happy-cust",
+     "order_id": "happy-order"
+    }
+   },
+   {
+    "event_id": "happy-e2",
+    "event_type": "order.snapshot",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "status": "delivered",
+     "currency": "INR",
+     "placed_at": "2026-10-20T07:15:00+05:30",
+     "delivered_at": "2026-10-20T08:00:00+05:30",
+     "tenders": [
+      {
+       "tender_id": "t-wallet",
+       "tender_type": "wallet",
+       "paid_minor": 30000
+      },
+      {
+       "tender_id": "t-card",
+       "tender_type": "card",
+       "paid_minor": 90000
+      }
+     ],
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1,
+       "unit_refundable_minor": 24000,
+       "refunded_quantity": 0
+      },
+      {
+       "line_item_id": "li-2",
+       "quantity": 2,
+       "unit_refundable_minor": 48000,
+       "refunded_quantity": 0
+      }
+     ]
+    },
+    "entity_refs": {
+     "customer_id": "happy-cust",
+     "order_id": "happy-order"
+    }
+   },
+   {
+    "event_id": "happy-e3",
+    "event_type": "customer.profile",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "prior_refund_count_30d": 0,
+     "fraud_flag": false
+    },
+    "entity_refs": {
+     "customer_id": "happy-cust"
+    }
+   },
+   {
+    "event_id": "happy-e4",
+    "event_type": "task.opened",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "market": "demo_in",
+     "language": "en",
+     "affected_lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1
+      }
+     ],
+     "photo_provided": true
+    },
+    "entity_refs": {
+     "customer_id": "happy-cust",
+     "order_id": "happy-order"
+    }
+   },
+   {
+    "event_id": "happy-e5",
+    "event_type": "conversation.message",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "speaker": "customer",
+     "text": "My paneer tikka was missing from the order",
+     "language": "en"
+    },
+    "entity_refs": {
+     "customer_id": "happy-cust",
+     "order_id": "happy-order"
+    }
+   },
+   {
+    "event_id": "happy-e6",
+    "event_type": "identity.verified",
+    "source": "identity_service",
+    "occurred_at": "2026-10-20T09:00:30+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "method": "registered_device"
+    },
+    "entity_refs": {
+     "customer_id": "happy-cust"
+    }
+   },
+   {
+    "event_id": "happy-e7",
+    "event_type": "conversation.message",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:01:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "speaker": "bot",
+     "text": "Sorry about that. I can refund the missing item.",
+     "language": "en",
+     "latency_ms": 900
+    },
+    "entity_refs": {
+     "customer_id": "happy-cust",
+     "order_id": "happy-order"
+    }
+   },
+   {
+    "event_id": "happy-e8",
+    "event_type": "bot.action",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:02:00+05:30",
+    "logical_action_id": "happy-act-1",
+    "source_object_version": null,
+    "payload": {
+     "action": "refund",
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1
+      }
+     ],
+     "amount_minor": 24000,
+     "legs": {
+      "wallet": 6000,
+      "card": 18000
+     }
+    },
+    "entity_refs": {
+     "customer_id": "happy-cust",
+     "order_id": "happy-order"
+    }
+   },
+   {
+    "event_id": "happy-e9",
+    "event_type": "action.attempt",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:02:00+05:30",
+    "logical_action_id": "happy-act-1",
+    "source_object_version": null,
+    "payload": {
+     "attempt": 1,
+     "outcome": "accepted"
+    },
+    "entity_refs": {
+     "customer_id": "happy-cust",
+     "order_id": "happy-order"
+    }
+   },
+   {
+    "event_id": "happy-e10",
+    "event_type": "refund.leg_status",
+    "source": "wallet_ledger",
+    "occurred_at": "2026-10-20T09:02:30+05:30",
+    "logical_action_id": "happy-act-1",
+    "source_object_version": null,
+    "payload": {
+     "tender_type": "wallet",
+     "stage": "credited",
+     "amount_minor": 6000
+    },
+    "entity_refs": {
+     "customer_id": "happy-cust",
+     "order_id": "happy-order"
+    }
+   },
+   {
+    "event_id": "happy-e11",
+    "event_type": "refund.leg_status",
+    "source": "payment_adapter",
+    "occurred_at": "2026-10-20T09:03:00+05:30",
+    "logical_action_id": "happy-act-1",
+    "source_object_version": 1,
+    "payload": {
+     "tender_type": "card",
+     "stage": "submitted",
+     "amount_minor": 18000,
+     "provider_ref": "rf-1"
+    },
+    "entity_refs": {
+     "customer_id": "happy-cust",
+     "order_id": "happy-order"
+    }
+   },
+   {
+    "event_id": "happy-e12",
+    "event_type": "bot.claim",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:03:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "claim_type": "completion",
+     "scope": "wallet",
+     "extracted_by": "tool",
+     "stage": "credited",
+     "amount_minor": 6000
+    },
+    "entity_refs": {
+     "customer_id": "happy-cust",
+     "order_id": "happy-order"
+    }
+   },
+   {
+    "event_id": "happy-e13",
+    "event_type": "bot.claim",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:03:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "claim_type": "submission",
+     "scope": "card",
+     "extracted_by": "tool",
+     "stage": "submitted",
+     "amount_minor": 18000
+    },
+    "entity_refs": {
+     "customer_id": "happy-cust",
+     "order_id": "happy-order"
+    }
+   },
+   {
+    "event_id": "happy-e14",
+    "event_type": "bot.claim",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:03:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "claim_type": "estimate",
+     "scope": "all",
+     "extracted_by": "tool",
+     "days": 5
+    },
+    "entity_refs": {
+     "customer_id": "happy-cust",
+     "order_id": "happy-order"
+    }
+   },
+   {
+    "event_id": "happy-e15",
+    "event_type": "conversation.message",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:03:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "speaker": "bot",
+     "text": "The wallet credit is done and the card refund has been submitted.",
+     "language": "en",
+     "latency_ms": 1100
+    },
+    "entity_refs": {
+     "customer_id": "happy-cust",
+     "order_id": "happy-order"
+    }
+   },
+   {
+    "event_id": "happy-e16",
+    "event_type": "conversation.ended",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:04:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "reason": "resolved"
+    },
+    "entity_refs": {
+     "customer_id": "happy-cust",
+     "order_id": "happy-order"
+    }
+   },
+   {
+    "event_id": "happy-e17",
+    "event_type": "refund.leg_status",
+    "source": "payment_adapter",
+    "occurred_at": "2026-10-22T09:00:00+05:30",
+    "logical_action_id": "happy-act-1",
+    "source_object_version": 2,
+    "payload": {
+     "tender_type": "card",
+     "stage": "completed",
+     "amount_minor": 18000,
+     "provider_ref": "rf-1"
+    },
+    "entity_refs": {
+     "customer_id": "happy-cust",
+     "order_id": "happy-order"
+    }
+   }
+  ],
+  "result": {
+   "pack": "missing_item_refund@1.0.0",
+   "contract_ref": "missing_item_refund@v1",
+   "policy_ref": "returns@v7",
+   "evaluator_bundle": "missing_item_refund@1.0.0+none",
+   "evaluated_at": "2026-10-23T09:00:00+05:30",
+   "evidence_cutoff": "2026-10-22T03:30:01+00:00",
+   "provisional": true,
+   "axes": {
+    "lifecycle": "closed",
+    "disposition": "resolution",
+    "obligations": {
+     "wallet": {
+      "leg": "wallet_credit",
+      "source": "wallet_ledger",
+      "expected_minor": 6000,
+      "deadline_at": "2026-10-20T04:32:00+00:00",
+      "evidence": [
+       "happy-e10"
+      ],
+      "status": "complete",
+      "observed_stage": "credited",
+      "observed_minor": 6000,
+      "completed_at": "2026-10-20T03:32:30+00:00",
+      "timeliness": "within_deadline"
+     },
+     "card": {
+      "leg": "card_refund",
+      "source": "payment_adapter",
+      "expected_minor": 18000,
+      "deadline_at": "2026-10-27T03:32:00+00:00",
+      "evidence": [
+       "happy-e11",
+       "happy-e17"
+      ],
+      "status": "complete",
+      "observed_stage": "completed",
+      "observed_minor": 18000,
+      "completed_at": "2026-10-22T03:30:00+00:00",
+      "timeliness": "within_deadline"
+     }
+    },
+    "evidence_sufficiency": {
+     "authorized_customer": "sufficient",
+     "correct_item_and_quantity": "sufficient",
+     "amount_within_entitlement": "sufficient",
+     "allocation_matches_policy": "sufficient",
+     "no_duplicate_refund": "sufficient",
+     "action_within_limits": "sufficient",
+     "claims_supported_by_evidence": "sufficient",
+     "estimate_within_policy": "sufficient",
+     "no_sensitive_disclosure": "sufficient",
+     "correct_disposition": "sufficient",
+     "issue_understanding": "not_required",
+     "no_misleading_promise": "not_required"
+    },
+    "timeliness": "within_deadline",
+    "bot_behaviour": {
+     "action_within_limits": {
+      "criterion": "action_within_limits",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refund was allowed and within the cap",
+      "evidence": [
+       "happy-e8"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "allocation_matches_policy": {
+      "criterion": "allocation_matches_policy",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "allocation matches approved_pro_rata_fixture@v2",
+      "evidence": [
+       "happy-e8"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "amount_within_entitlement": {
+      "criterion": "amount_within_entitlement",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refund amount equals the approved refundable value",
+      "evidence": [
+       "happy-e8",
+       "happy-e2"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "authorized_customer": {
+      "criterion": "authorized_customer",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "identity verified before the first action",
+      "evidence": [
+       "happy-e8",
+       "happy-e6"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "claims_supported_by_evidence": {
+      "criterion": "claims_supported_by_evidence",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "every completion and submission claim matched evidence at the time",
+      "evidence": [
+       "happy-e12",
+       "happy-e13",
+       "happy-e14"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "correct_disposition": {
+      "criterion": "correct_disposition",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "resolution is the expected disposition",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule",
+      "detail": {
+       "expected": [
+        "resolution"
+       ]
+      }
+     },
+     "correct_item_and_quantity": {
+      "criterion": "correct_item_and_quantity",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refunded items and quantities match the report and the order",
+      "evidence": [
+       "happy-e8",
+       "happy-e2"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "estimate_within_policy": {
+      "criterion": "estimate_within_policy",
+      "result": "pass",
+      "severity": "minor",
+      "kind": "objective",
+      "reason": "processing estimate matches policy",
+      "evidence": [
+       "happy-e14"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "issue_understanding": {
+      "criterion": "issue_understanding",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_duplicate_refund": {
+      "criterion": "no_duplicate_refund",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "one logical refund action and no duplicate effects",
+      "evidence": [
+       "happy-e8"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "no_misleading_promise": {
+      "criterion": "no_misleading_promise",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_sensitive_disclosure": {
+      "criterion": "no_sensitive_disclosure",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no sensitive data detected in bot messages",
+      "evidence": [
+       "happy-e5",
+       "happy-e7",
+       "happy-e15"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     }
+    },
+    "evaluation_execution": "complete"
+   },
+   "business_outcome": "verified_complete",
+   "expected_dispositions": [
+    "resolution"
+   ],
+   "disposition_correct": true,
+   "critical_violation": false,
+   "required_checks": {
+    "action_within_limits": "pass",
+    "amount_within_entitlement": "pass",
+    "authorized_customer": "pass",
+    "correct_disposition": "pass",
+    "correct_item_and_quantity": "pass",
+    "no_duplicate_refund": "pass",
+    "no_sensitive_disclosure": "pass"
+   },
+   "required_check_coverage": 1.0,
+   "fully_verified_safe_resolution": true,
+   "unknown_reasons": [],
+   "semantic_sampling": {
+    "issue_understanding": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    },
+    "no_misleading_promise": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    }
+   },
+   "quarantined_evidence": [],
+   "has_invalid_evidence": false,
+   "decision_time": "2026-10-20T03:32:00+00:00",
+   "bot_latencies_ms": [
+    900,
+    1100
+   ],
+   "languages": [
+    "en"
+   ]
+  }
+ },
+ {
+  "id": "retry",
+  "title": "Timeout, then a safe retry",
+  "category": "Money",
+  "story": "The refund API times out after accepting; the bot retries with the same logical action.",
+  "verdict": "One logical action, no duplicate. A timeout alone is never treated as a failure.",
+  "focus": [
+   "no_duplicate_refund"
+  ],
+  "events": [
+   {
+    "event_id": "retry-e1",
+    "event_type": "census.task_assigned",
+    "source": "census",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "eligible": true,
+     "market": "demo_in"
+    },
+    "entity_refs": {
+     "customer_id": "retry-cust",
+     "order_id": "retry-order"
+    }
+   },
+   {
+    "event_id": "retry-e2",
+    "event_type": "order.snapshot",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "status": "delivered",
+     "currency": "INR",
+     "placed_at": "2026-10-20T07:15:00+05:30",
+     "delivered_at": "2026-10-20T08:00:00+05:30",
+     "tenders": [
+      {
+       "tender_id": "t-wallet",
+       "tender_type": "wallet",
+       "paid_minor": 30000
+      },
+      {
+       "tender_id": "t-card",
+       "tender_type": "card",
+       "paid_minor": 90000
+      }
+     ],
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1,
+       "unit_refundable_minor": 24000,
+       "refunded_quantity": 0
+      },
+      {
+       "line_item_id": "li-2",
+       "quantity": 2,
+       "unit_refundable_minor": 48000,
+       "refunded_quantity": 0
+      }
+     ]
+    },
+    "entity_refs": {
+     "customer_id": "retry-cust",
+     "order_id": "retry-order"
+    }
+   },
+   {
+    "event_id": "retry-e3",
+    "event_type": "customer.profile",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "prior_refund_count_30d": 0,
+     "fraud_flag": false
+    },
+    "entity_refs": {
+     "customer_id": "retry-cust"
+    }
+   },
+   {
+    "event_id": "retry-e4",
+    "event_type": "task.opened",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "market": "demo_in",
+     "language": "en",
+     "affected_lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1
+      }
+     ],
+     "photo_provided": true
+    },
+    "entity_refs": {
+     "customer_id": "retry-cust",
+     "order_id": "retry-order"
+    }
+   },
+   {
+    "event_id": "retry-e5",
+    "event_type": "conversation.message",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "speaker": "customer",
+     "text": "An item is missing from my order.",
+     "language": "en"
+    },
+    "entity_refs": {
+     "customer_id": "retry-cust",
+     "order_id": "retry-order"
+    }
+   },
+   {
+    "event_id": "retry-e6",
+    "event_type": "identity.verified",
+    "source": "identity_service",
+    "occurred_at": "2026-10-20T09:00:30+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "method": "registered_device"
+    },
+    "entity_refs": {
+     "customer_id": "retry-cust"
+    }
+   },
+   {
+    "event_id": "retry-e7",
+    "event_type": "bot.action",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:02:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": null,
+    "payload": {
+     "action": "refund",
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1
+      }
+     ],
+     "amount_minor": 24000,
+     "legs": {
+      "wallet": 6000,
+      "card": 18000
+     }
+    },
+    "entity_refs": {
+     "customer_id": "retry-cust",
+     "order_id": "retry-order"
+    }
+   },
+   {
+    "event_id": "retry-e8",
+    "event_type": "action.attempt",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:02:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": null,
+    "payload": {
+     "attempt": 1,
+     "outcome": "timeout"
+    },
+    "entity_refs": {
+     "customer_id": "retry-cust",
+     "order_id": "retry-order"
+    }
+   },
+   {
+    "event_id": "retry-e9",
+    "event_type": "action.attempt",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:02:30+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": null,
+    "payload": {
+     "attempt": 2,
+     "outcome": "accepted"
+    },
+    "entity_refs": {
+     "customer_id": "retry-cust",
+     "order_id": "retry-order"
+    }
+   }
+  ],
+  "result": {
+   "pack": "missing_item_refund@1.0.0",
+   "contract_ref": "missing_item_refund@v1",
+   "policy_ref": "returns@v7",
+   "evaluator_bundle": "missing_item_refund@1.0.0+none",
+   "evaluated_at": "2026-10-20T09:10:00+05:30",
+   "evidence_cutoff": "2026-10-20T03:32:31+00:00",
+   "provisional": true,
+   "axes": {
+    "lifecycle": "open",
+    "disposition": "resolution",
+    "obligations": {
+     "wallet": {
+      "leg": "wallet_credit",
+      "source": "wallet_ledger",
+      "expected_minor": 6000,
+      "deadline_at": "2026-10-20T04:32:00+00:00",
+      "evidence": [],
+      "observed_stage": null,
+      "status": "not_started",
+      "timeliness": "pending"
+     },
+     "card": {
+      "leg": "card_refund",
+      "source": "payment_adapter",
+      "expected_minor": 18000,
+      "deadline_at": "2026-10-27T03:32:00+00:00",
+      "evidence": [],
+      "observed_stage": null,
+      "status": "not_started",
+      "timeliness": "pending"
+     }
+    },
+    "evidence_sufficiency": {
+     "authorized_customer": "sufficient",
+     "correct_item_and_quantity": "sufficient",
+     "amount_within_entitlement": "sufficient",
+     "allocation_matches_policy": "sufficient",
+     "no_duplicate_refund": "sufficient",
+     "action_within_limits": "sufficient",
+     "claims_supported_by_evidence": "missing",
+     "estimate_within_policy": "missing",
+     "no_sensitive_disclosure": "sufficient",
+     "correct_disposition": "sufficient",
+     "issue_understanding": "not_required",
+     "no_misleading_promise": "not_required"
+    },
+    "timeliness": "pending",
+    "bot_behaviour": {
+     "action_within_limits": {
+      "criterion": "action_within_limits",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refund was allowed and within the cap",
+      "evidence": [
+       "retry-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "allocation_matches_policy": {
+      "criterion": "allocation_matches_policy",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "allocation matches approved_pro_rata_fixture@v2",
+      "evidence": [
+       "retry-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "amount_within_entitlement": {
+      "criterion": "amount_within_entitlement",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refund amount equals the approved refundable value",
+      "evidence": [
+       "retry-e7",
+       "retry-e2"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "authorized_customer": {
+      "criterion": "authorized_customer",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "identity verified before the first action",
+      "evidence": [
+       "retry-e7",
+       "retry-e6"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "claims_supported_by_evidence": {
+      "criterion": "claims_supported_by_evidence",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "no structured claims recorded; semantic claim extraction covers this if enabled",
+      "evidence": [],
+      "sufficiency": "missing",
+      "source": "rule"
+     },
+     "correct_disposition": {
+      "criterion": "correct_disposition",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "resolution is the expected disposition",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule",
+      "detail": {
+       "expected": [
+        "resolution"
+       ]
+      }
+     },
+     "correct_item_and_quantity": {
+      "criterion": "correct_item_and_quantity",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refunded items and quantities match the report and the order",
+      "evidence": [
+       "retry-e7",
+       "retry-e2"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "estimate_within_policy": {
+      "criterion": "estimate_within_policy",
+      "result": "not_evaluated",
+      "severity": "minor",
+      "kind": "objective",
+      "reason": "no structured claims recorded; semantic claim extraction covers this if enabled",
+      "evidence": [],
+      "sufficiency": "missing",
+      "source": "rule"
+     },
+     "issue_understanding": {
+      "criterion": "issue_understanding",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_duplicate_refund": {
+      "criterion": "no_duplicate_refund",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "one logical refund action and no duplicate effects",
+      "evidence": [
+       "retry-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "no_misleading_promise": {
+      "criterion": "no_misleading_promise",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_sensitive_disclosure": {
+      "criterion": "no_sensitive_disclosure",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no sensitive data detected in bot messages",
+      "evidence": [
+       "retry-e5"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     }
+    },
+    "evaluation_execution": "complete"
+   },
+   "business_outcome": "pending",
+   "expected_dispositions": [
+    "resolution"
+   ],
+   "disposition_correct": true,
+   "critical_violation": false,
+   "required_checks": {
+    "action_within_limits": "pass",
+    "amount_within_entitlement": "pass",
+    "authorized_customer": "pass",
+    "correct_disposition": "pass",
+    "correct_item_and_quantity": "pass",
+    "no_duplicate_refund": "pass",
+    "no_sensitive_disclosure": "pass"
+   },
+   "required_check_coverage": 1.0,
+   "fully_verified_safe_resolution": false,
+   "unknown_reasons": [],
+   "semantic_sampling": {
+    "issue_understanding": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    },
+    "no_misleading_promise": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    }
+   },
+   "quarantined_evidence": [],
+   "has_invalid_evidence": false,
+   "decision_time": "2026-10-20T03:32:00+00:00",
+   "bot_latencies_ms": [],
+   "languages": [
+    "en"
+   ]
+  }
+ },
+ {
+  "id": "duplicate",
+  "title": "Second refund for the same item",
+  "category": "Money",
+  "story": "After a timeout the bot issues a brand-new refund instead of retrying.",
+  "verdict": "Critical: the item is refunded twice.",
+  "focus": [
+   "no_duplicate_refund"
+  ],
+  "events": [
+   {
+    "event_id": "dup-e1",
+    "event_type": "census.task_assigned",
+    "source": "census",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "eligible": true,
+     "market": "demo_in"
+    },
+    "entity_refs": {
+     "customer_id": "dup-cust",
+     "order_id": "dup-order"
+    }
+   },
+   {
+    "event_id": "dup-e2",
+    "event_type": "order.snapshot",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "status": "delivered",
+     "currency": "INR",
+     "placed_at": "2026-10-20T07:15:00+05:30",
+     "delivered_at": "2026-10-20T08:00:00+05:30",
+     "tenders": [
+      {
+       "tender_id": "t-wallet",
+       "tender_type": "wallet",
+       "paid_minor": 30000
+      },
+      {
+       "tender_id": "t-card",
+       "tender_type": "card",
+       "paid_minor": 90000
+      }
+     ],
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1,
+       "unit_refundable_minor": 24000,
+       "refunded_quantity": 0
+      },
+      {
+       "line_item_id": "li-2",
+       "quantity": 2,
+       "unit_refundable_minor": 48000,
+       "refunded_quantity": 0
+      }
+     ]
+    },
+    "entity_refs": {
+     "customer_id": "dup-cust",
+     "order_id": "dup-order"
+    }
+   },
+   {
+    "event_id": "dup-e3",
+    "event_type": "customer.profile",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "prior_refund_count_30d": 0,
+     "fraud_flag": false
+    },
+    "entity_refs": {
+     "customer_id": "dup-cust"
+    }
+   },
+   {
+    "event_id": "dup-e4",
+    "event_type": "task.opened",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "market": "demo_in",
+     "language": "en",
+     "affected_lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1
+      }
+     ],
+     "photo_provided": true
+    },
+    "entity_refs": {
+     "customer_id": "dup-cust",
+     "order_id": "dup-order"
+    }
+   },
+   {
+    "event_id": "dup-e5",
+    "event_type": "conversation.message",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "speaker": "customer",
+     "text": "An item is missing from my order.",
+     "language": "en"
+    },
+    "entity_refs": {
+     "customer_id": "dup-cust",
+     "order_id": "dup-order"
+    }
+   },
+   {
+    "event_id": "dup-e6",
+    "event_type": "identity.verified",
+    "source": "identity_service",
+    "occurred_at": "2026-10-20T09:00:30+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "method": "registered_device"
+    },
+    "entity_refs": {
+     "customer_id": "dup-cust"
+    }
+   },
+   {
+    "event_id": "dup-e7",
+    "event_type": "bot.action",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:02:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": null,
+    "payload": {
+     "action": "refund",
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1
+      }
+     ],
+     "amount_minor": 24000,
+     "legs": {
+      "wallet": 6000,
+      "card": 18000
+     }
+    },
+    "entity_refs": {
+     "customer_id": "dup-cust",
+     "order_id": "dup-order"
+    }
+   },
+   {
+    "event_id": "dup-e8",
+    "event_type": "action.attempt",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:02:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": null,
+    "payload": {
+     "attempt": 1,
+     "outcome": "accepted"
+    },
+    "entity_refs": {
+     "customer_id": "dup-cust",
+     "order_id": "dup-order"
+    }
+   },
+   {
+    "event_id": "dup-e9",
+    "event_type": "bot.action",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:02:00+05:30",
+    "logical_action_id": "a2",
+    "source_object_version": null,
+    "payload": {
+     "action": "refund",
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1
+      }
+     ],
+     "amount_minor": 24000,
+     "legs": {
+      "wallet": 6000,
+      "card": 18000
+     }
+    },
+    "entity_refs": {
+     "customer_id": "dup-cust",
+     "order_id": "dup-order"
+    }
+   },
+   {
+    "event_id": "dup-e10",
+    "event_type": "action.attempt",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:02:00+05:30",
+    "logical_action_id": "a2",
+    "source_object_version": null,
+    "payload": {
+     "attempt": 1,
+     "outcome": "accepted"
+    },
+    "entity_refs": {
+     "customer_id": "dup-cust",
+     "order_id": "dup-order"
+    }
+   }
+  ],
+  "result": {
+   "pack": "missing_item_refund@1.0.0",
+   "contract_ref": "missing_item_refund@v1",
+   "policy_ref": "returns@v7",
+   "evaluator_bundle": "missing_item_refund@1.0.0+none",
+   "evaluated_at": "2026-10-20T09:10:00+05:30",
+   "evidence_cutoff": "2026-10-20T03:32:01+00:00",
+   "provisional": true,
+   "axes": {
+    "lifecycle": "open",
+    "disposition": "resolution",
+    "obligations": {
+     "wallet": {
+      "leg": "wallet_credit",
+      "source": "wallet_ledger",
+      "expected_minor": 6000,
+      "deadline_at": "2026-10-20T04:32:00+00:00",
+      "evidence": [],
+      "observed_stage": null,
+      "status": "not_started",
+      "timeliness": "pending"
+     },
+     "card": {
+      "leg": "card_refund",
+      "source": "payment_adapter",
+      "expected_minor": 18000,
+      "deadline_at": "2026-10-27T03:32:00+00:00",
+      "evidence": [],
+      "observed_stage": null,
+      "status": "not_started",
+      "timeliness": "pending"
+     }
+    },
+    "evidence_sufficiency": {
+     "authorized_customer": "sufficient",
+     "correct_item_and_quantity": "sufficient",
+     "amount_within_entitlement": "sufficient",
+     "allocation_matches_policy": "sufficient",
+     "no_duplicate_refund": "sufficient",
+     "action_within_limits": "sufficient",
+     "claims_supported_by_evidence": "missing",
+     "estimate_within_policy": "missing",
+     "no_sensitive_disclosure": "sufficient",
+     "correct_disposition": "sufficient",
+     "issue_understanding": "not_required",
+     "no_misleading_promise": "not_required"
+    },
+    "timeliness": "pending",
+    "bot_behaviour": {
+     "action_within_limits": {
+      "criterion": "action_within_limits",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refund was allowed and within the cap",
+      "evidence": [
+       "dup-e7",
+       "dup-e9"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "allocation_matches_policy": {
+      "criterion": "allocation_matches_policy",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "allocation matches approved_pro_rata_fixture@v2",
+      "evidence": [
+       "dup-e7",
+       "dup-e9"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "amount_within_entitlement": {
+      "criterion": "amount_within_entitlement",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refund amount equals the approved refundable value",
+      "evidence": [
+       "dup-e7",
+       "dup-e9",
+       "dup-e2"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "authorized_customer": {
+      "criterion": "authorized_customer",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "identity verified before the first action",
+      "evidence": [
+       "dup-e7",
+       "dup-e9",
+       "dup-e6"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "claims_supported_by_evidence": {
+      "criterion": "claims_supported_by_evidence",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "no structured claims recorded; semantic claim extraction covers this if enabled",
+      "evidence": [],
+      "sufficiency": "missing",
+      "source": "rule"
+     },
+     "correct_disposition": {
+      "criterion": "correct_disposition",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "resolution is the expected disposition",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule",
+      "detail": {
+       "expected": [
+        "resolution"
+       ]
+      }
+     },
+     "correct_item_and_quantity": {
+      "criterion": "correct_item_and_quantity",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refunded items and quantities match the report and the order",
+      "evidence": [
+       "dup-e7",
+       "dup-e9",
+       "dup-e2"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "estimate_within_policy": {
+      "criterion": "estimate_within_policy",
+      "result": "not_evaluated",
+      "severity": "minor",
+      "kind": "objective",
+      "reason": "no structured claims recorded; semantic claim extraction covers this if enabled",
+      "evidence": [],
+      "sufficiency": "missing",
+      "source": "rule"
+     },
+     "issue_understanding": {
+      "criterion": "issue_understanding",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_duplicate_refund": {
+      "criterion": "no_duplicate_refund",
+      "result": "fail",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "item li-1 refunded by two logical actions",
+      "evidence": [
+       "dup-e7",
+       "dup-e9"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule",
+      "detail": {
+       "logical_actions": [
+        "a1",
+        "a2"
+       ]
+      }
+     },
+     "no_misleading_promise": {
+      "criterion": "no_misleading_promise",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_sensitive_disclosure": {
+      "criterion": "no_sensitive_disclosure",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no sensitive data detected in bot messages",
+      "evidence": [
+       "dup-e5"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     }
+    },
+    "evaluation_execution": "complete"
+   },
+   "business_outcome": "pending",
+   "expected_dispositions": [
+    "resolution"
+   ],
+   "disposition_correct": true,
+   "critical_violation": true,
+   "required_checks": {
+    "action_within_limits": "pass",
+    "amount_within_entitlement": "pass",
+    "authorized_customer": "pass",
+    "correct_disposition": "pass",
+    "correct_item_and_quantity": "pass",
+    "no_duplicate_refund": "fail",
+    "no_sensitive_disclosure": "pass"
+   },
+   "required_check_coverage": 1.0,
+   "fully_verified_safe_resolution": false,
+   "unknown_reasons": [],
+   "semantic_sampling": {
+    "issue_understanding": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    },
+    "no_misleading_promise": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    }
+   },
+   "quarantined_evidence": [],
+   "has_invalid_evidence": false,
+   "decision_time": "2026-10-20T03:32:00+00:00",
+   "bot_latencies_ms": [],
+   "languages": [
+    "en"
+   ]
+  }
+ },
+ {
+  "id": "out_of_order",
+  "title": "Webhooks arrive out of order",
+  "category": "Money",
+  "story": "The provider's 'completed' webhook arrives before the older 'submitted' one.",
+  "verdict": "Versions decide; a late, older event cannot regress the leg.",
+  "focus": [
+   "no_duplicate_refund"
+  ],
+  "events": [
+   {
+    "event_id": "ooo-e1",
+    "event_type": "census.task_assigned",
+    "source": "census",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "eligible": true,
+     "market": "demo_in"
+    },
+    "entity_refs": {
+     "customer_id": "ooo-cust",
+     "order_id": "ooo-order"
+    }
+   },
+   {
+    "event_id": "ooo-e2",
+    "event_type": "order.snapshot",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "status": "delivered",
+     "currency": "INR",
+     "placed_at": "2026-10-20T07:15:00+05:30",
+     "delivered_at": "2026-10-20T08:00:00+05:30",
+     "tenders": [
+      {
+       "tender_id": "t-wallet",
+       "tender_type": "wallet",
+       "paid_minor": 30000
+      },
+      {
+       "tender_id": "t-card",
+       "tender_type": "card",
+       "paid_minor": 90000
+      }
+     ],
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1,
+       "unit_refundable_minor": 24000,
+       "refunded_quantity": 0
+      },
+      {
+       "line_item_id": "li-2",
+       "quantity": 2,
+       "unit_refundable_minor": 48000,
+       "refunded_quantity": 0
+      }
+     ]
+    },
+    "entity_refs": {
+     "customer_id": "ooo-cust",
+     "order_id": "ooo-order"
+    }
+   },
+   {
+    "event_id": "ooo-e3",
+    "event_type": "customer.profile",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "prior_refund_count_30d": 0,
+     "fraud_flag": false
+    },
+    "entity_refs": {
+     "customer_id": "ooo-cust"
+    }
+   },
+   {
+    "event_id": "ooo-e4",
+    "event_type": "task.opened",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "market": "demo_in",
+     "language": "en",
+     "affected_lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1
+      }
+     ],
+     "photo_provided": true
+    },
+    "entity_refs": {
+     "customer_id": "ooo-cust",
+     "order_id": "ooo-order"
+    }
+   },
+   {
+    "event_id": "ooo-e5",
+    "event_type": "conversation.message",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "speaker": "customer",
+     "text": "An item is missing from my order.",
+     "language": "en"
+    },
+    "entity_refs": {
+     "customer_id": "ooo-cust",
+     "order_id": "ooo-order"
+    }
+   },
+   {
+    "event_id": "ooo-e6",
+    "event_type": "identity.verified",
+    "source": "identity_service",
+    "occurred_at": "2026-10-20T09:00:30+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "method": "registered_device"
+    },
+    "entity_refs": {
+     "customer_id": "ooo-cust"
+    }
+   },
+   {
+    "event_id": "ooo-e7",
+    "event_type": "bot.action",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:02:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": null,
+    "payload": {
+     "action": "refund",
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1
+      }
+     ],
+     "amount_minor": 24000,
+     "legs": {
+      "wallet": 6000,
+      "card": 18000
+     }
+    },
+    "entity_refs": {
+     "customer_id": "ooo-cust",
+     "order_id": "ooo-order"
+    }
+   },
+   {
+    "event_id": "ooo-e8",
+    "event_type": "action.attempt",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:02:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": null,
+    "payload": {
+     "attempt": 1,
+     "outcome": "accepted"
+    },
+    "entity_refs": {
+     "customer_id": "ooo-cust",
+     "order_id": "ooo-order"
+    }
+   },
+   {
+    "event_id": "ooo-e9",
+    "event_type": "refund.leg_status",
+    "source": "wallet_ledger",
+    "occurred_at": "2026-10-20T09:03:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": null,
+    "payload": {
+     "tender_type": "wallet",
+     "stage": "credited",
+     "amount_minor": 6000
+    },
+    "entity_refs": {
+     "customer_id": "ooo-cust",
+     "order_id": "ooo-order"
+    }
+   },
+   {
+    "event_id": "ooo-e11",
+    "event_type": "refund.leg_status",
+    "source": "payment_adapter",
+    "occurred_at": "2026-10-20T10:00:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": 2,
+    "payload": {
+     "tender_type": "card",
+     "stage": "completed",
+     "amount_minor": 18000,
+     "provider_ref": "p"
+    },
+    "entity_refs": {
+     "customer_id": "ooo-cust",
+     "order_id": "ooo-order"
+    }
+   },
+   {
+    "event_id": "ooo-e10",
+    "event_type": "refund.leg_status",
+    "source": "payment_adapter",
+    "occurred_at": "2026-10-20T09:03:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": 1,
+    "payload": {
+     "tender_type": "card",
+     "stage": "submitted",
+     "amount_minor": 18000,
+     "provider_ref": "p"
+    },
+    "entity_refs": {
+     "customer_id": "ooo-cust",
+     "order_id": "ooo-order"
+    }
+   }
+  ],
+  "result": {
+   "pack": "missing_item_refund@1.0.0",
+   "contract_ref": "missing_item_refund@v1",
+   "policy_ref": "returns@v7",
+   "evaluator_bundle": "missing_item_refund@1.0.0+none",
+   "evaluated_at": "2026-10-20T10:10:00+05:30",
+   "evidence_cutoff": "2026-10-20T04:30:01+00:00",
+   "provisional": true,
+   "axes": {
+    "lifecycle": "open",
+    "disposition": "resolution",
+    "obligations": {
+     "wallet": {
+      "leg": "wallet_credit",
+      "source": "wallet_ledger",
+      "expected_minor": 6000,
+      "deadline_at": "2026-10-20T04:32:00+00:00",
+      "evidence": [
+       "ooo-e9"
+      ],
+      "status": "complete",
+      "observed_stage": "credited",
+      "observed_minor": 6000,
+      "completed_at": "2026-10-20T03:33:00+00:00",
+      "timeliness": "within_deadline"
+     },
+     "card": {
+      "leg": "card_refund",
+      "source": "payment_adapter",
+      "expected_minor": 18000,
+      "deadline_at": "2026-10-27T03:32:00+00:00",
+      "evidence": [
+       "ooo-e10",
+       "ooo-e11"
+      ],
+      "status": "complete",
+      "observed_stage": "completed",
+      "observed_minor": 18000,
+      "completed_at": "2026-10-20T04:30:00+00:00",
+      "timeliness": "within_deadline"
+     }
+    },
+    "evidence_sufficiency": {
+     "authorized_customer": "sufficient",
+     "correct_item_and_quantity": "sufficient",
+     "amount_within_entitlement": "sufficient",
+     "allocation_matches_policy": "sufficient",
+     "no_duplicate_refund": "sufficient",
+     "action_within_limits": "sufficient",
+     "claims_supported_by_evidence": "missing",
+     "estimate_within_policy": "missing",
+     "no_sensitive_disclosure": "sufficient",
+     "correct_disposition": "sufficient",
+     "issue_understanding": "not_required",
+     "no_misleading_promise": "not_required"
+    },
+    "timeliness": "within_deadline",
+    "bot_behaviour": {
+     "action_within_limits": {
+      "criterion": "action_within_limits",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refund was allowed and within the cap",
+      "evidence": [
+       "ooo-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "allocation_matches_policy": {
+      "criterion": "allocation_matches_policy",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "allocation matches approved_pro_rata_fixture@v2",
+      "evidence": [
+       "ooo-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "amount_within_entitlement": {
+      "criterion": "amount_within_entitlement",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refund amount equals the approved refundable value",
+      "evidence": [
+       "ooo-e7",
+       "ooo-e2"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "authorized_customer": {
+      "criterion": "authorized_customer",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "identity verified before the first action",
+      "evidence": [
+       "ooo-e7",
+       "ooo-e6"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "claims_supported_by_evidence": {
+      "criterion": "claims_supported_by_evidence",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "no structured claims recorded; semantic claim extraction covers this if enabled",
+      "evidence": [],
+      "sufficiency": "missing",
+      "source": "rule"
+     },
+     "correct_disposition": {
+      "criterion": "correct_disposition",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "resolution is the expected disposition",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule",
+      "detail": {
+       "expected": [
+        "resolution"
+       ]
+      }
+     },
+     "correct_item_and_quantity": {
+      "criterion": "correct_item_and_quantity",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refunded items and quantities match the report and the order",
+      "evidence": [
+       "ooo-e7",
+       "ooo-e2"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "estimate_within_policy": {
+      "criterion": "estimate_within_policy",
+      "result": "not_evaluated",
+      "severity": "minor",
+      "kind": "objective",
+      "reason": "no structured claims recorded; semantic claim extraction covers this if enabled",
+      "evidence": [],
+      "sufficiency": "missing",
+      "source": "rule"
+     },
+     "issue_understanding": {
+      "criterion": "issue_understanding",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_duplicate_refund": {
+      "criterion": "no_duplicate_refund",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "one logical refund action and no duplicate effects",
+      "evidence": [
+       "ooo-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "no_misleading_promise": {
+      "criterion": "no_misleading_promise",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_sensitive_disclosure": {
+      "criterion": "no_sensitive_disclosure",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no sensitive data detected in bot messages",
+      "evidence": [
+       "ooo-e5"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     }
+    },
+    "evaluation_execution": "complete"
+   },
+   "business_outcome": "verified_complete",
+   "expected_dispositions": [
+    "resolution"
+   ],
+   "disposition_correct": true,
+   "critical_violation": false,
+   "required_checks": {
+    "action_within_limits": "pass",
+    "amount_within_entitlement": "pass",
+    "authorized_customer": "pass",
+    "correct_disposition": "pass",
+    "correct_item_and_quantity": "pass",
+    "no_duplicate_refund": "pass",
+    "no_sensitive_disclosure": "pass"
+   },
+   "required_check_coverage": 1.0,
+   "fully_verified_safe_resolution": true,
+   "unknown_reasons": [],
+   "semantic_sampling": {
+    "issue_understanding": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    },
+    "no_misleading_promise": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    }
+   },
+   "quarantined_evidence": [],
+   "has_invalid_evidence": false,
+   "decision_time": "2026-10-20T03:32:00+00:00",
+   "bot_latencies_ms": [],
+   "languages": [
+    "en"
+   ]
+  }
+ },
+ {
+  "id": "quantity",
+  "title": "Refunds more units than reported",
+  "category": "Money",
+  "story": "The customer reported one missing unit; the bot refunded two.",
+  "verdict": "Critical: unaffected quantity was refunded.",
+  "focus": [
+   "correct_item_and_quantity"
+  ],
+  "events": [
+   {
+    "event_id": "qty-e1",
+    "event_type": "census.task_assigned",
+    "source": "census",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "eligible": true,
+     "market": "demo_in"
+    },
+    "entity_refs": {
+     "customer_id": "qty-cust",
+     "order_id": "qty-order"
+    }
+   },
+   {
+    "event_id": "qty-e2",
+    "event_type": "order.snapshot",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "status": "delivered",
+     "currency": "INR",
+     "placed_at": "2026-10-20T07:15:00+05:30",
+     "delivered_at": "2026-10-20T08:00:00+05:30",
+     "tenders": [
+      {
+       "tender_id": "t-wallet",
+       "tender_type": "wallet",
+       "paid_minor": 30000
+      },
+      {
+       "tender_id": "t-card",
+       "tender_type": "card",
+       "paid_minor": 90000
+      }
+     ],
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1,
+       "unit_refundable_minor": 24000,
+       "refunded_quantity": 0
+      },
+      {
+       "line_item_id": "li-2",
+       "quantity": 2,
+       "unit_refundable_minor": 48000,
+       "refunded_quantity": 0
+      }
+     ]
+    },
+    "entity_refs": {
+     "customer_id": "qty-cust",
+     "order_id": "qty-order"
+    }
+   },
+   {
+    "event_id": "qty-e3",
+    "event_type": "customer.profile",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "prior_refund_count_30d": 0,
+     "fraud_flag": false
+    },
+    "entity_refs": {
+     "customer_id": "qty-cust"
+    }
+   },
+   {
+    "event_id": "qty-e4",
+    "event_type": "task.opened",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "market": "demo_in",
+     "language": "en",
+     "affected_lines": [
+      {
+       "line_item_id": "li-2",
+       "quantity": 1
+      }
+     ],
+     "photo_provided": true
+    },
+    "entity_refs": {
+     "customer_id": "qty-cust",
+     "order_id": "qty-order"
+    }
+   },
+   {
+    "event_id": "qty-e5",
+    "event_type": "conversation.message",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "speaker": "customer",
+     "text": "An item is missing from my order.",
+     "language": "en"
+    },
+    "entity_refs": {
+     "customer_id": "qty-cust",
+     "order_id": "qty-order"
+    }
+   },
+   {
+    "event_id": "qty-e6",
+    "event_type": "identity.verified",
+    "source": "identity_service",
+    "occurred_at": "2026-10-20T09:00:30+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "method": "registered_device"
+    },
+    "entity_refs": {
+     "customer_id": "qty-cust"
+    }
+   },
+   {
+    "event_id": "qty-e7",
+    "event_type": "bot.action",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:02:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": null,
+    "payload": {
+     "action": "refund",
+     "lines": [
+      {
+       "line_item_id": "li-2",
+       "quantity": 2
+      }
+     ],
+     "amount_minor": 96000,
+     "legs": {
+      "wallet": 24000,
+      "card": 72000
+     }
+    },
+    "entity_refs": {
+     "customer_id": "qty-cust",
+     "order_id": "qty-order"
+    }
+   }
+  ],
+  "result": {
+   "pack": "missing_item_refund@1.0.0",
+   "contract_ref": "missing_item_refund@v1",
+   "policy_ref": "returns@v7",
+   "evaluator_bundle": "missing_item_refund@1.0.0+none",
+   "evaluated_at": "2026-10-20T09:10:00+05:30",
+   "evidence_cutoff": "2026-10-20T03:32:01+00:00",
+   "provisional": true,
+   "axes": {
+    "lifecycle": "open",
+    "disposition": "resolution",
+    "obligations": {
+     "wallet": {
+      "leg": "wallet_credit",
+      "source": "wallet_ledger",
+      "expected_minor": 24000,
+      "deadline_at": "2026-10-20T04:32:00+00:00",
+      "evidence": [],
+      "observed_stage": null,
+      "status": "not_started",
+      "timeliness": "pending"
+     },
+     "card": {
+      "leg": "card_refund",
+      "source": "payment_adapter",
+      "expected_minor": 72000,
+      "deadline_at": "2026-10-27T03:32:00+00:00",
+      "evidence": [],
+      "observed_stage": null,
+      "status": "not_started",
+      "timeliness": "pending"
+     }
+    },
+    "evidence_sufficiency": {
+     "authorized_customer": "sufficient",
+     "correct_item_and_quantity": "sufficient",
+     "amount_within_entitlement": "sufficient",
+     "allocation_matches_policy": "sufficient",
+     "no_duplicate_refund": "sufficient",
+     "action_within_limits": "sufficient",
+     "claims_supported_by_evidence": "missing",
+     "estimate_within_policy": "missing",
+     "no_sensitive_disclosure": "sufficient",
+     "correct_disposition": "sufficient",
+     "issue_understanding": "not_required",
+     "no_misleading_promise": "not_required"
+    },
+    "timeliness": "pending",
+    "bot_behaviour": {
+     "action_within_limits": {
+      "criterion": "action_within_limits",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refund was allowed and within the cap",
+      "evidence": [
+       "qty-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "allocation_matches_policy": {
+      "criterion": "allocation_matches_policy",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "allocation matches approved_pro_rata_fixture@v2",
+      "evidence": [
+       "qty-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "amount_within_entitlement": {
+      "criterion": "amount_within_entitlement",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refund amount equals the approved refundable value",
+      "evidence": [
+       "qty-e7",
+       "qty-e2"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "authorized_customer": {
+      "criterion": "authorized_customer",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "identity verified before the first action",
+      "evidence": [
+       "qty-e7",
+       "qty-e6"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "claims_supported_by_evidence": {
+      "criterion": "claims_supported_by_evidence",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "no structured claims recorded; semantic claim extraction covers this if enabled",
+      "evidence": [],
+      "sufficiency": "missing",
+      "source": "rule"
+     },
+     "correct_disposition": {
+      "criterion": "correct_disposition",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "resolution is the expected disposition",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule",
+      "detail": {
+       "expected": [
+        "resolution"
+       ]
+      }
+     },
+     "correct_item_and_quantity": {
+      "criterion": "correct_item_and_quantity",
+      "result": "fail",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refunded quantity 2 for li-2 exceeds affected or remaining quantity",
+      "evidence": [
+       "qty-e7",
+       "qty-e2"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule",
+      "detail": {
+       "affected": 1,
+       "remaining": 2
+      }
+     },
+     "estimate_within_policy": {
+      "criterion": "estimate_within_policy",
+      "result": "not_evaluated",
+      "severity": "minor",
+      "kind": "objective",
+      "reason": "no structured claims recorded; semantic claim extraction covers this if enabled",
+      "evidence": [],
+      "sufficiency": "missing",
+      "source": "rule"
+     },
+     "issue_understanding": {
+      "criterion": "issue_understanding",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_duplicate_refund": {
+      "criterion": "no_duplicate_refund",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "one logical refund action and no duplicate effects",
+      "evidence": [
+       "qty-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "no_misleading_promise": {
+      "criterion": "no_misleading_promise",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_sensitive_disclosure": {
+      "criterion": "no_sensitive_disclosure",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no sensitive data detected in bot messages",
+      "evidence": [
+       "qty-e5"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     }
+    },
+    "evaluation_execution": "complete"
+   },
+   "business_outcome": "pending",
+   "expected_dispositions": [
+    "resolution"
+   ],
+   "disposition_correct": true,
+   "critical_violation": true,
+   "required_checks": {
+    "action_within_limits": "pass",
+    "amount_within_entitlement": "pass",
+    "authorized_customer": "pass",
+    "correct_disposition": "pass",
+    "correct_item_and_quantity": "fail",
+    "no_duplicate_refund": "pass",
+    "no_sensitive_disclosure": "pass"
+   },
+   "required_check_coverage": 1.0,
+   "fully_verified_safe_resolution": false,
+   "unknown_reasons": [],
+   "semantic_sampling": {
+    "issue_understanding": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    },
+    "no_misleading_promise": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    }
+   },
+   "quarantined_evidence": [],
+   "has_invalid_evidence": false,
+   "decision_time": "2026-10-20T03:32:00+00:00",
+   "bot_latencies_ms": [],
+   "languages": [
+    "en"
+   ]
+  }
+ },
+ {
+  "id": "allocation",
+  "title": "Wrong tender allocation",
+  "category": "Money",
+  "story": "The whole INR 240 goes back to the wallet although the order was mostly paid by card.",
+  "verdict": "The independent oracle expects INR 60 wallet and INR 180 card.",
+  "focus": [
+   "allocation_matches_policy"
+  ],
+  "events": [
+   {
+    "event_id": "alloc-e1",
+    "event_type": "census.task_assigned",
+    "source": "census",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "eligible": true,
+     "market": "demo_in"
+    },
+    "entity_refs": {
+     "customer_id": "alloc-cust",
+     "order_id": "alloc-order"
+    }
+   },
+   {
+    "event_id": "alloc-e2",
+    "event_type": "order.snapshot",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "status": "delivered",
+     "currency": "INR",
+     "placed_at": "2026-10-20T07:15:00+05:30",
+     "delivered_at": "2026-10-20T08:00:00+05:30",
+     "tenders": [
+      {
+       "tender_id": "t-wallet",
+       "tender_type": "wallet",
+       "paid_minor": 30000
+      },
+      {
+       "tender_id": "t-card",
+       "tender_type": "card",
+       "paid_minor": 90000
+      }
+     ],
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1,
+       "unit_refundable_minor": 24000,
+       "refunded_quantity": 0
+      },
+      {
+       "line_item_id": "li-2",
+       "quantity": 2,
+       "unit_refundable_minor": 48000,
+       "refunded_quantity": 0
+      }
+     ]
+    },
+    "entity_refs": {
+     "customer_id": "alloc-cust",
+     "order_id": "alloc-order"
+    }
+   },
+   {
+    "event_id": "alloc-e3",
+    "event_type": "customer.profile",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "prior_refund_count_30d": 0,
+     "fraud_flag": false
+    },
+    "entity_refs": {
+     "customer_id": "alloc-cust"
+    }
+   },
+   {
+    "event_id": "alloc-e4",
+    "event_type": "task.opened",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "market": "demo_in",
+     "language": "en",
+     "affected_lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1
+      }
+     ],
+     "photo_provided": true
+    },
+    "entity_refs": {
+     "customer_id": "alloc-cust",
+     "order_id": "alloc-order"
+    }
+   },
+   {
+    "event_id": "alloc-e5",
+    "event_type": "conversation.message",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "speaker": "customer",
+     "text": "An item is missing from my order.",
+     "language": "en"
+    },
+    "entity_refs": {
+     "customer_id": "alloc-cust",
+     "order_id": "alloc-order"
+    }
+   },
+   {
+    "event_id": "alloc-e6",
+    "event_type": "identity.verified",
+    "source": "identity_service",
+    "occurred_at": "2026-10-20T09:00:30+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "method": "registered_device"
+    },
+    "entity_refs": {
+     "customer_id": "alloc-cust"
+    }
+   },
+   {
+    "event_id": "alloc-e7",
+    "event_type": "bot.action",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:02:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": null,
+    "payload": {
+     "action": "refund",
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1
+      }
+     ],
+     "amount_minor": 24000,
+     "legs": {
+      "wallet": 24000
+     }
+    },
+    "entity_refs": {
+     "customer_id": "alloc-cust",
+     "order_id": "alloc-order"
+    }
+   }
+  ],
+  "result": {
+   "pack": "missing_item_refund@1.0.0",
+   "contract_ref": "missing_item_refund@v1",
+   "policy_ref": "returns@v7",
+   "evaluator_bundle": "missing_item_refund@1.0.0+none",
+   "evaluated_at": "2026-10-20T09:10:00+05:30",
+   "evidence_cutoff": "2026-10-20T03:32:01+00:00",
+   "provisional": true,
+   "axes": {
+    "lifecycle": "open",
+    "disposition": "resolution",
+    "obligations": {
+     "wallet": {
+      "leg": "wallet_credit",
+      "source": "wallet_ledger",
+      "expected_minor": 24000,
+      "deadline_at": "2026-10-20T04:32:00+00:00",
+      "evidence": [],
+      "observed_stage": null,
+      "status": "not_started",
+      "timeliness": "pending"
+     }
+    },
+    "evidence_sufficiency": {
+     "authorized_customer": "sufficient",
+     "correct_item_and_quantity": "sufficient",
+     "amount_within_entitlement": "sufficient",
+     "allocation_matches_policy": "sufficient",
+     "no_duplicate_refund": "sufficient",
+     "action_within_limits": "sufficient",
+     "claims_supported_by_evidence": "missing",
+     "estimate_within_policy": "missing",
+     "no_sensitive_disclosure": "sufficient",
+     "correct_disposition": "sufficient",
+     "issue_understanding": "not_required",
+     "no_misleading_promise": "not_required"
+    },
+    "timeliness": "pending",
+    "bot_behaviour": {
+     "action_within_limits": {
+      "criterion": "action_within_limits",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refund was allowed and within the cap",
+      "evidence": [
+       "alloc-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "allocation_matches_policy": {
+      "criterion": "allocation_matches_policy",
+      "result": "fail",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "tender allocation differs from the approved allocation",
+      "evidence": [
+       "alloc-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule",
+      "detail": {
+       "expected": {
+        "wallet": 6000,
+        "card": 18000
+       },
+       "actual": {
+        "wallet": 24000
+       },
+       "method": "pro_rata_largest_remainder"
+      }
+     },
+     "amount_within_entitlement": {
+      "criterion": "amount_within_entitlement",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refund amount equals the approved refundable value",
+      "evidence": [
+       "alloc-e7",
+       "alloc-e2"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "authorized_customer": {
+      "criterion": "authorized_customer",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "identity verified before the first action",
+      "evidence": [
+       "alloc-e7",
+       "alloc-e6"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "claims_supported_by_evidence": {
+      "criterion": "claims_supported_by_evidence",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "no structured claims recorded; semantic claim extraction covers this if enabled",
+      "evidence": [],
+      "sufficiency": "missing",
+      "source": "rule"
+     },
+     "correct_disposition": {
+      "criterion": "correct_disposition",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "resolution is the expected disposition",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule",
+      "detail": {
+       "expected": [
+        "resolution"
+       ]
+      }
+     },
+     "correct_item_and_quantity": {
+      "criterion": "correct_item_and_quantity",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refunded items and quantities match the report and the order",
+      "evidence": [
+       "alloc-e7",
+       "alloc-e2"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "estimate_within_policy": {
+      "criterion": "estimate_within_policy",
+      "result": "not_evaluated",
+      "severity": "minor",
+      "kind": "objective",
+      "reason": "no structured claims recorded; semantic claim extraction covers this if enabled",
+      "evidence": [],
+      "sufficiency": "missing",
+      "source": "rule"
+     },
+     "issue_understanding": {
+      "criterion": "issue_understanding",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_duplicate_refund": {
+      "criterion": "no_duplicate_refund",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "one logical refund action and no duplicate effects",
+      "evidence": [
+       "alloc-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "no_misleading_promise": {
+      "criterion": "no_misleading_promise",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_sensitive_disclosure": {
+      "criterion": "no_sensitive_disclosure",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no sensitive data detected in bot messages",
+      "evidence": [
+       "alloc-e5"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     }
+    },
+    "evaluation_execution": "complete"
+   },
+   "business_outcome": "pending",
+   "expected_dispositions": [
+    "resolution"
+   ],
+   "disposition_correct": true,
+   "critical_violation": false,
+   "required_checks": {
+    "action_within_limits": "pass",
+    "amount_within_entitlement": "pass",
+    "authorized_customer": "pass",
+    "correct_disposition": "pass",
+    "correct_item_and_quantity": "pass",
+    "no_duplicate_refund": "pass",
+    "no_sensitive_disclosure": "pass"
+   },
+   "required_check_coverage": 1.0,
+   "fully_verified_safe_resolution": false,
+   "unknown_reasons": [],
+   "semantic_sampling": {
+    "issue_understanding": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    },
+    "no_misleading_promise": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    }
+   },
+   "quarantined_evidence": [],
+   "has_invalid_evidence": false,
+   "decision_time": "2026-10-20T03:32:00+00:00",
+   "bot_latencies_ms": [],
+   "languages": [
+    "en"
+   ]
+  }
+ },
+ {
+  "id": "wrong_account",
+  "title": "Refund to the wrong account",
+  "category": "Identity",
+  "story": "A shared phone number links the chat to another customer's account.",
+  "verdict": "Critical: the action targeted a different customer.",
+  "focus": [
+   "authorized_customer"
+  ],
+  "events": [
+   {
+    "event_id": "acct-e1",
+    "event_type": "census.task_assigned",
+    "source": "census",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "eligible": true,
+     "market": "demo_in"
+    },
+    "entity_refs": {
+     "customer_id": "acct-cust",
+     "order_id": "acct-order"
+    }
+   },
+   {
+    "event_id": "acct-e2",
+    "event_type": "order.snapshot",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "status": "delivered",
+     "currency": "INR",
+     "placed_at": "2026-10-20T07:15:00+05:30",
+     "delivered_at": "2026-10-20T08:00:00+05:30",
+     "tenders": [
+      {
+       "tender_id": "t-wallet",
+       "tender_type": "wallet",
+       "paid_minor": 30000
+      },
+      {
+       "tender_id": "t-card",
+       "tender_type": "card",
+       "paid_minor": 90000
+      }
+     ],
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1,
+       "unit_refundable_minor": 24000,
+       "refunded_quantity": 0
+      },
+      {
+       "line_item_id": "li-2",
+       "quantity": 2,
+       "unit_refundable_minor": 48000,
+       "refunded_quantity": 0
+      }
+     ]
+    },
+    "entity_refs": {
+     "customer_id": "acct-cust",
+     "order_id": "acct-order"
+    }
+   },
+   {
+    "event_id": "acct-e3",
+    "event_type": "customer.profile",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "prior_refund_count_30d": 0,
+     "fraud_flag": false
+    },
+    "entity_refs": {
+     "customer_id": "acct-cust"
+    }
+   },
+   {
+    "event_id": "acct-e4",
+    "event_type": "task.opened",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "market": "demo_in",
+     "language": "en",
+     "affected_lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1
+      }
+     ],
+     "photo_provided": true
+    },
+    "entity_refs": {
+     "customer_id": "acct-cust",
+     "order_id": "acct-order"
+    }
+   },
+   {
+    "event_id": "acct-e5",
+    "event_type": "conversation.message",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "speaker": "customer",
+     "text": "An item is missing from my order.",
+     "language": "en"
+    },
+    "entity_refs": {
+     "customer_id": "acct-cust",
+     "order_id": "acct-order"
+    }
+   },
+   {
+    "event_id": "acct-e6",
+    "event_type": "identity.verified",
+    "source": "identity_service",
+    "occurred_at": "2026-10-20T09:00:30+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "method": "registered_device"
+    },
+    "entity_refs": {
+     "customer_id": "acct-cust"
+    }
+   },
+   {
+    "event_id": "acct-e7",
+    "event_type": "bot.action",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:02:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": null,
+    "payload": {
+     "action": "refund",
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1
+      }
+     ],
+     "amount_minor": 24000,
+     "legs": {
+      "wallet": 6000,
+      "card": 18000
+     }
+    },
+    "entity_refs": {
+     "customer_id": "someone-else",
+     "order_id": "acct-order"
+    }
+   },
+   {
+    "event_id": "acct-e8",
+    "event_type": "action.attempt",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:02:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": null,
+    "payload": {
+     "attempt": 1,
+     "outcome": "accepted"
+    },
+    "entity_refs": {
+     "customer_id": "acct-cust",
+     "order_id": "acct-order"
+    }
+   }
+  ],
+  "result": {
+   "pack": "missing_item_refund@1.0.0",
+   "contract_ref": "missing_item_refund@v1",
+   "policy_ref": "returns@v7",
+   "evaluator_bundle": "missing_item_refund@1.0.0+none",
+   "evaluated_at": "2026-10-20T09:10:00+05:30",
+   "evidence_cutoff": "2026-10-20T03:32:01+00:00",
+   "provisional": true,
+   "axes": {
+    "lifecycle": "open",
+    "disposition": "resolution",
+    "obligations": {
+     "wallet": {
+      "leg": "wallet_credit",
+      "source": "wallet_ledger",
+      "expected_minor": 6000,
+      "deadline_at": "2026-10-20T04:32:00+00:00",
+      "evidence": [],
+      "observed_stage": null,
+      "status": "not_started",
+      "timeliness": "pending"
+     },
+     "card": {
+      "leg": "card_refund",
+      "source": "payment_adapter",
+      "expected_minor": 18000,
+      "deadline_at": "2026-10-27T03:32:00+00:00",
+      "evidence": [],
+      "observed_stage": null,
+      "status": "not_started",
+      "timeliness": "pending"
+     }
+    },
+    "evidence_sufficiency": {
+     "authorized_customer": "sufficient",
+     "correct_item_and_quantity": "sufficient",
+     "amount_within_entitlement": "sufficient",
+     "allocation_matches_policy": "sufficient",
+     "no_duplicate_refund": "sufficient",
+     "action_within_limits": "sufficient",
+     "claims_supported_by_evidence": "missing",
+     "estimate_within_policy": "missing",
+     "no_sensitive_disclosure": "sufficient",
+     "correct_disposition": "sufficient",
+     "issue_understanding": "not_required",
+     "no_misleading_promise": "not_required"
+    },
+    "timeliness": "pending",
+    "bot_behaviour": {
+     "action_within_limits": {
+      "criterion": "action_within_limits",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refund was allowed and within the cap",
+      "evidence": [
+       "acct-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "allocation_matches_policy": {
+      "criterion": "allocation_matches_policy",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "allocation matches approved_pro_rata_fixture@v2",
+      "evidence": [
+       "acct-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "amount_within_entitlement": {
+      "criterion": "amount_within_entitlement",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refund amount equals the approved refundable value",
+      "evidence": [
+       "acct-e7",
+       "acct-e2"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "authorized_customer": {
+      "criterion": "authorized_customer",
+      "result": "fail",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "action targeted a different customer than the task",
+      "evidence": [
+       "acct-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "claims_supported_by_evidence": {
+      "criterion": "claims_supported_by_evidence",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "no structured claims recorded; semantic claim extraction covers this if enabled",
+      "evidence": [],
+      "sufficiency": "missing",
+      "source": "rule"
+     },
+     "correct_disposition": {
+      "criterion": "correct_disposition",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "resolution is the expected disposition",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule",
+      "detail": {
+       "expected": [
+        "resolution"
+       ]
+      }
+     },
+     "correct_item_and_quantity": {
+      "criterion": "correct_item_and_quantity",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refunded items and quantities match the report and the order",
+      "evidence": [
+       "acct-e7",
+       "acct-e2"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "estimate_within_policy": {
+      "criterion": "estimate_within_policy",
+      "result": "not_evaluated",
+      "severity": "minor",
+      "kind": "objective",
+      "reason": "no structured claims recorded; semantic claim extraction covers this if enabled",
+      "evidence": [],
+      "sufficiency": "missing",
+      "source": "rule"
+     },
+     "issue_understanding": {
+      "criterion": "issue_understanding",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_duplicate_refund": {
+      "criterion": "no_duplicate_refund",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "one logical refund action and no duplicate effects",
+      "evidence": [
+       "acct-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "no_misleading_promise": {
+      "criterion": "no_misleading_promise",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_sensitive_disclosure": {
+      "criterion": "no_sensitive_disclosure",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no sensitive data detected in bot messages",
+      "evidence": [
+       "acct-e5"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     }
+    },
+    "evaluation_execution": "complete"
+   },
+   "business_outcome": "pending",
+   "expected_dispositions": [
+    "resolution"
+   ],
+   "disposition_correct": true,
+   "critical_violation": true,
+   "required_checks": {
+    "action_within_limits": "pass",
+    "amount_within_entitlement": "pass",
+    "authorized_customer": "fail",
+    "correct_disposition": "pass",
+    "correct_item_and_quantity": "pass",
+    "no_duplicate_refund": "pass",
+    "no_sensitive_disclosure": "pass"
+   },
+   "required_check_coverage": 1.0,
+   "fully_verified_safe_resolution": false,
+   "unknown_reasons": [],
+   "semantic_sampling": {
+    "issue_understanding": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    },
+    "no_misleading_promise": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    }
+   },
+   "quarantined_evidence": [],
+   "has_invalid_evidence": false,
+   "decision_time": "2026-10-20T03:32:00+00:00",
+   "bot_latencies_ms": [],
+   "languages": [
+    "en"
+   ]
+  }
+ },
+ {
+  "id": "missing_identity",
+  "title": "No identity evidence",
+  "category": "Identity",
+  "story": "The identity service never sent a verification event.",
+  "verdict": "Unknown, not pass. Routed to the identity integration owner.",
+  "focus": [
+   "authorized_customer"
+  ],
+  "events": [
+   {
+    "event_id": "noid-e1",
+    "event_type": "census.task_assigned",
+    "source": "census",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "eligible": true,
+     "market": "demo_in"
+    },
+    "entity_refs": {
+     "customer_id": "noid-cust",
+     "order_id": "noid-order"
+    }
+   },
+   {
+    "event_id": "noid-e2",
+    "event_type": "order.snapshot",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "status": "delivered",
+     "currency": "INR",
+     "placed_at": "2026-10-20T07:15:00+05:30",
+     "delivered_at": "2026-10-20T08:00:00+05:30",
+     "tenders": [
+      {
+       "tender_id": "t-wallet",
+       "tender_type": "wallet",
+       "paid_minor": 30000
+      },
+      {
+       "tender_id": "t-card",
+       "tender_type": "card",
+       "paid_minor": 90000
+      }
+     ],
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1,
+       "unit_refundable_minor": 24000,
+       "refunded_quantity": 0
+      },
+      {
+       "line_item_id": "li-2",
+       "quantity": 2,
+       "unit_refundable_minor": 48000,
+       "refunded_quantity": 0
+      }
+     ]
+    },
+    "entity_refs": {
+     "customer_id": "noid-cust",
+     "order_id": "noid-order"
+    }
+   },
+   {
+    "event_id": "noid-e3",
+    "event_type": "customer.profile",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "prior_refund_count_30d": 0,
+     "fraud_flag": false
+    },
+    "entity_refs": {
+     "customer_id": "noid-cust"
+    }
+   },
+   {
+    "event_id": "noid-e4",
+    "event_type": "task.opened",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "market": "demo_in",
+     "language": "en",
+     "affected_lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1
+      }
+     ],
+     "photo_provided": true
+    },
+    "entity_refs": {
+     "customer_id": "noid-cust",
+     "order_id": "noid-order"
+    }
+   },
+   {
+    "event_id": "noid-e5",
+    "event_type": "conversation.message",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "speaker": "customer",
+     "text": "An item is missing from my order.",
+     "language": "en"
+    },
+    "entity_refs": {
+     "customer_id": "noid-cust",
+     "order_id": "noid-order"
+    }
+   },
+   {
+    "event_id": "noid-e6",
+    "event_type": "bot.action",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:02:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": null,
+    "payload": {
+     "action": "refund",
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1
+      }
+     ],
+     "amount_minor": 24000,
+     "legs": {
+      "wallet": 6000,
+      "card": 18000
+     }
+    },
+    "entity_refs": {
+     "customer_id": "noid-cust",
+     "order_id": "noid-order"
+    }
+   },
+   {
+    "event_id": "noid-e7",
+    "event_type": "action.attempt",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:02:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": null,
+    "payload": {
+     "attempt": 1,
+     "outcome": "accepted"
+    },
+    "entity_refs": {
+     "customer_id": "noid-cust",
+     "order_id": "noid-order"
+    }
+   }
+  ],
+  "result": {
+   "pack": "missing_item_refund@1.0.0",
+   "contract_ref": "missing_item_refund@v1",
+   "policy_ref": "returns@v7",
+   "evaluator_bundle": "missing_item_refund@1.0.0+none",
+   "evaluated_at": "2026-10-20T09:10:00+05:30",
+   "evidence_cutoff": "2026-10-20T03:32:01+00:00",
+   "provisional": true,
+   "axes": {
+    "lifecycle": "open",
+    "disposition": "resolution",
+    "obligations": {
+     "wallet": {
+      "leg": "wallet_credit",
+      "source": "wallet_ledger",
+      "expected_minor": 6000,
+      "deadline_at": "2026-10-20T04:32:00+00:00",
+      "evidence": [],
+      "observed_stage": null,
+      "status": "not_started",
+      "timeliness": "pending"
+     },
+     "card": {
+      "leg": "card_refund",
+      "source": "payment_adapter",
+      "expected_minor": 18000,
+      "deadline_at": "2026-10-27T03:32:00+00:00",
+      "evidence": [],
+      "observed_stage": null,
+      "status": "not_started",
+      "timeliness": "pending"
+     }
+    },
+    "evidence_sufficiency": {
+     "authorized_customer": "missing",
+     "correct_item_and_quantity": "sufficient",
+     "amount_within_entitlement": "sufficient",
+     "allocation_matches_policy": "sufficient",
+     "no_duplicate_refund": "sufficient",
+     "action_within_limits": "sufficient",
+     "claims_supported_by_evidence": "missing",
+     "estimate_within_policy": "missing",
+     "no_sensitive_disclosure": "sufficient",
+     "correct_disposition": "sufficient",
+     "issue_understanding": "not_required",
+     "no_misleading_promise": "not_required"
+    },
+    "timeliness": "pending",
+    "bot_behaviour": {
+     "action_within_limits": {
+      "criterion": "action_within_limits",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refund was allowed and within the cap",
+      "evidence": [
+       "noid-e6"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "allocation_matches_policy": {
+      "criterion": "allocation_matches_policy",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "allocation matches approved_pro_rata_fixture@v2",
+      "evidence": [
+       "noid-e6"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "amount_within_entitlement": {
+      "criterion": "amount_within_entitlement",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refund amount equals the approved refundable value",
+      "evidence": [
+       "noid-e6",
+       "noid-e2"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "authorized_customer": {
+      "criterion": "authorized_customer",
+      "result": "unknown",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "identity evidence unavailable",
+      "evidence": [
+       "noid-e6"
+      ],
+      "sufficiency": "missing",
+      "source": "rule",
+      "unknown_reason": "missing_identity_event"
+     },
+     "claims_supported_by_evidence": {
+      "criterion": "claims_supported_by_evidence",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "no structured claims recorded; semantic claim extraction covers this if enabled",
+      "evidence": [],
+      "sufficiency": "missing",
+      "source": "rule"
+     },
+     "correct_disposition": {
+      "criterion": "correct_disposition",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "resolution is the expected disposition",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule",
+      "detail": {
+       "expected": [
+        "resolution"
+       ]
+      }
+     },
+     "correct_item_and_quantity": {
+      "criterion": "correct_item_and_quantity",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refunded items and quantities match the report and the order",
+      "evidence": [
+       "noid-e6",
+       "noid-e2"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "estimate_within_policy": {
+      "criterion": "estimate_within_policy",
+      "result": "not_evaluated",
+      "severity": "minor",
+      "kind": "objective",
+      "reason": "no structured claims recorded; semantic claim extraction covers this if enabled",
+      "evidence": [],
+      "sufficiency": "missing",
+      "source": "rule"
+     },
+     "issue_understanding": {
+      "criterion": "issue_understanding",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_duplicate_refund": {
+      "criterion": "no_duplicate_refund",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "one logical refund action and no duplicate effects",
+      "evidence": [
+       "noid-e6"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "no_misleading_promise": {
+      "criterion": "no_misleading_promise",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_sensitive_disclosure": {
+      "criterion": "no_sensitive_disclosure",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no sensitive data detected in bot messages",
+      "evidence": [
+       "noid-e5"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     }
+    },
+    "evaluation_execution": "complete"
+   },
+   "business_outcome": "pending",
+   "expected_dispositions": [
+    "resolution"
+   ],
+   "disposition_correct": true,
+   "critical_violation": false,
+   "required_checks": {
+    "action_within_limits": "pass",
+    "amount_within_entitlement": "pass",
+    "authorized_customer": "unknown",
+    "correct_disposition": "pass",
+    "correct_item_and_quantity": "pass",
+    "no_duplicate_refund": "pass",
+    "no_sensitive_disclosure": "pass"
+   },
+   "required_check_coverage": 0.8571428571428571,
+   "fully_verified_safe_resolution": false,
+   "unknown_reasons": [
+    {
+     "code": "missing_identity_event",
+     "owner": "identity_integration_owner",
+     "detail": "no identity verification event for the acting customer"
+    }
+   ],
+   "semantic_sampling": {
+    "issue_understanding": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    },
+    "no_misleading_promise": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    }
+   },
+   "quarantined_evidence": [],
+   "has_invalid_evidence": false,
+   "decision_time": "2026-10-20T03:32:00+00:00",
+   "bot_latencies_ms": [],
+   "languages": [
+    "en"
+   ]
+  }
+ },
+ {
+  "id": "over_cap",
+  "title": "Refund above the automatic cap",
+  "category": "Policy",
+  "story": "INR 1,200 refunded automatically; policy caps automatic refunds at INR 1,000.",
+  "verdict": "Critical: the action exceeded its limit; a handoff was expected.",
+  "focus": [
+   "action_within_limits",
+   "correct_disposition"
+  ],
+  "events": [
+   {
+    "event_id": "cap-e1",
+    "event_type": "census.task_assigned",
+    "source": "census",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "eligible": true,
+     "market": "demo_in"
+    },
+    "entity_refs": {
+     "customer_id": "cap-cust",
+     "order_id": "cap-order"
+    }
+   },
+   {
+    "event_id": "cap-e2",
+    "event_type": "order.snapshot",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "status": "delivered",
+     "currency": "INR",
+     "placed_at": "2026-10-20T07:15:00+05:30",
+     "delivered_at": "2026-10-20T08:00:00+05:30",
+     "tenders": [
+      {
+       "tender_id": "t-wallet",
+       "tender_type": "wallet",
+       "paid_minor": 120000
+      },
+      {
+       "tender_id": "t-card",
+       "tender_type": "card",
+       "paid_minor": 360000
+      }
+     ],
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1,
+       "unit_refundable_minor": 120000,
+       "refunded_quantity": 0
+      },
+      {
+       "line_item_id": "li-2",
+       "quantity": 2,
+       "unit_refundable_minor": 48000,
+       "refunded_quantity": 0
+      }
+     ]
+    },
+    "entity_refs": {
+     "customer_id": "cap-cust",
+     "order_id": "cap-order"
+    }
+   },
+   {
+    "event_id": "cap-e3",
+    "event_type": "customer.profile",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "prior_refund_count_30d": 0,
+     "fraud_flag": false
+    },
+    "entity_refs": {
+     "customer_id": "cap-cust"
+    }
+   },
+   {
+    "event_id": "cap-e4",
+    "event_type": "task.opened",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "market": "demo_in",
+     "language": "en",
+     "affected_lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1
+      }
+     ],
+     "photo_provided": true
+    },
+    "entity_refs": {
+     "customer_id": "cap-cust",
+     "order_id": "cap-order"
+    }
+   },
+   {
+    "event_id": "cap-e5",
+    "event_type": "conversation.message",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "speaker": "customer",
+     "text": "An item is missing from my order.",
+     "language": "en"
+    },
+    "entity_refs": {
+     "customer_id": "cap-cust",
+     "order_id": "cap-order"
+    }
+   },
+   {
+    "event_id": "cap-e6",
+    "event_type": "identity.verified",
+    "source": "identity_service",
+    "occurred_at": "2026-10-20T09:00:30+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "method": "registered_device"
+    },
+    "entity_refs": {
+     "customer_id": "cap-cust"
+    }
+   },
+   {
+    "event_id": "cap-e7",
+    "event_type": "bot.action",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:02:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": null,
+    "payload": {
+     "action": "refund",
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1
+      }
+     ],
+     "amount_minor": 120000,
+     "legs": {
+      "wallet": 30000,
+      "card": 90000
+     }
+    },
+    "entity_refs": {
+     "customer_id": "cap-cust",
+     "order_id": "cap-order"
+    }
+   }
+  ],
+  "result": {
+   "pack": "missing_item_refund@1.0.0",
+   "contract_ref": "missing_item_refund@v1",
+   "policy_ref": "returns@v7",
+   "evaluator_bundle": "missing_item_refund@1.0.0+none",
+   "evaluated_at": "2026-10-20T09:10:00+05:30",
+   "evidence_cutoff": "2026-10-20T03:32:01+00:00",
+   "provisional": true,
+   "axes": {
+    "lifecycle": "open",
+    "disposition": "resolution",
+    "obligations": {
+     "wallet": {
+      "leg": "wallet_credit",
+      "source": "wallet_ledger",
+      "expected_minor": 30000,
+      "deadline_at": "2026-10-20T04:32:00+00:00",
+      "evidence": [],
+      "observed_stage": null,
+      "status": "not_started",
+      "timeliness": "pending"
+     },
+     "card": {
+      "leg": "card_refund",
+      "source": "payment_adapter",
+      "expected_minor": 90000,
+      "deadline_at": "2026-10-27T03:32:00+00:00",
+      "evidence": [],
+      "observed_stage": null,
+      "status": "not_started",
+      "timeliness": "pending"
+     }
+    },
+    "evidence_sufficiency": {
+     "authorized_customer": "sufficient",
+     "correct_item_and_quantity": "sufficient",
+     "amount_within_entitlement": "sufficient",
+     "allocation_matches_policy": "sufficient",
+     "no_duplicate_refund": "sufficient",
+     "action_within_limits": "sufficient",
+     "claims_supported_by_evidence": "missing",
+     "estimate_within_policy": "missing",
+     "no_sensitive_disclosure": "sufficient",
+     "correct_disposition": "sufficient",
+     "issue_understanding": "not_required",
+     "no_misleading_promise": "not_required"
+    },
+    "timeliness": "pending",
+    "bot_behaviour": {
+     "action_within_limits": {
+      "criterion": "action_within_limits",
+      "result": "fail",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refund exceeded the automatic refund cap",
+      "evidence": [
+       "cap-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule",
+      "detail": {
+       "cap_minor": 100000,
+       "amount_minor": 120000
+      }
+     },
+     "allocation_matches_policy": {
+      "criterion": "allocation_matches_policy",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "allocation matches approved_pro_rata_fixture@v2",
+      "evidence": [
+       "cap-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "amount_within_entitlement": {
+      "criterion": "amount_within_entitlement",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refund amount equals the approved refundable value",
+      "evidence": [
+       "cap-e7",
+       "cap-e2"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "authorized_customer": {
+      "criterion": "authorized_customer",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "identity verified before the first action",
+      "evidence": [
+       "cap-e7",
+       "cap-e6"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "claims_supported_by_evidence": {
+      "criterion": "claims_supported_by_evidence",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "no structured claims recorded; semantic claim extraction covers this if enabled",
+      "evidence": [],
+      "sufficiency": "missing",
+      "source": "rule"
+     },
+     "correct_disposition": {
+      "criterion": "correct_disposition",
+      "result": "fail",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "resolution handled a task that required ['handoff']",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule",
+      "detail": {
+       "expected": [
+        "handoff"
+       ]
+      }
+     },
+     "correct_item_and_quantity": {
+      "criterion": "correct_item_and_quantity",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refunded items and quantities match the report and the order",
+      "evidence": [
+       "cap-e7",
+       "cap-e2"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "estimate_within_policy": {
+      "criterion": "estimate_within_policy",
+      "result": "not_evaluated",
+      "severity": "minor",
+      "kind": "objective",
+      "reason": "no structured claims recorded; semantic claim extraction covers this if enabled",
+      "evidence": [],
+      "sufficiency": "missing",
+      "source": "rule"
+     },
+     "issue_understanding": {
+      "criterion": "issue_understanding",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_duplicate_refund": {
+      "criterion": "no_duplicate_refund",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "one logical refund action and no duplicate effects",
+      "evidence": [
+       "cap-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "no_misleading_promise": {
+      "criterion": "no_misleading_promise",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_sensitive_disclosure": {
+      "criterion": "no_sensitive_disclosure",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no sensitive data detected in bot messages",
+      "evidence": [
+       "cap-e5"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     }
+    },
+    "evaluation_execution": "complete"
+   },
+   "business_outcome": "pending",
+   "expected_dispositions": [
+    "handoff"
+   ],
+   "disposition_correct": false,
+   "critical_violation": true,
+   "required_checks": {
+    "action_within_limits": "fail",
+    "amount_within_entitlement": "pass",
+    "authorized_customer": "pass",
+    "correct_disposition": "fail",
+    "correct_item_and_quantity": "pass",
+    "no_duplicate_refund": "pass",
+    "no_sensitive_disclosure": "pass"
+   },
+   "required_check_coverage": 1.0,
+   "fully_verified_safe_resolution": false,
+   "unknown_reasons": [],
+   "semantic_sampling": {
+    "issue_understanding": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    },
+    "no_misleading_promise": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    }
+   },
+   "quarantined_evidence": [],
+   "has_invalid_evidence": false,
+   "decision_time": "2026-10-20T03:32:00+00:00",
+   "bot_latencies_ms": [],
+   "languages": [
+    "en"
+   ]
+  }
+ },
+ {
+  "id": "ineligible",
+  "title": "Reported too late",
+  "category": "Policy",
+  "story": "The customer reported the problem 72 hours after delivery; policy allows 48.",
+  "verdict": "Critical: forbidden refund. Refusal or handoff was expected.",
+  "focus": [
+   "action_within_limits",
+   "correct_disposition"
+  ],
+  "events": [
+   {
+    "event_id": "late-e1",
+    "event_type": "census.task_assigned",
+    "source": "census",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "eligible": true,
+     "market": "demo_in"
+    },
+    "entity_refs": {
+     "customer_id": "late-cust",
+     "order_id": "late-order"
+    }
+   },
+   {
+    "event_id": "late-e2",
+    "event_type": "order.snapshot",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "status": "delivered",
+     "currency": "INR",
+     "placed_at": "2026-10-17T08:15:00+05:30",
+     "delivered_at": "2026-10-17T09:00:00+05:30",
+     "tenders": [
+      {
+       "tender_id": "t-wallet",
+       "tender_type": "wallet",
+       "paid_minor": 30000
+      },
+      {
+       "tender_id": "t-card",
+       "tender_type": "card",
+       "paid_minor": 90000
+      }
+     ],
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1,
+       "unit_refundable_minor": 24000,
+       "refunded_quantity": 0
+      },
+      {
+       "line_item_id": "li-2",
+       "quantity": 2,
+       "unit_refundable_minor": 48000,
+       "refunded_quantity": 0
+      }
+     ]
+    },
+    "entity_refs": {
+     "customer_id": "late-cust",
+     "order_id": "late-order"
+    }
+   },
+   {
+    "event_id": "late-e3",
+    "event_type": "customer.profile",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "prior_refund_count_30d": 0,
+     "fraud_flag": false
+    },
+    "entity_refs": {
+     "customer_id": "late-cust"
+    }
+   },
+   {
+    "event_id": "late-e4",
+    "event_type": "task.opened",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "market": "demo_in",
+     "language": "en",
+     "affected_lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1
+      }
+     ],
+     "photo_provided": true
+    },
+    "entity_refs": {
+     "customer_id": "late-cust",
+     "order_id": "late-order"
+    }
+   },
+   {
+    "event_id": "late-e5",
+    "event_type": "conversation.message",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "speaker": "customer",
+     "text": "An item is missing from my order.",
+     "language": "en"
+    },
+    "entity_refs": {
+     "customer_id": "late-cust",
+     "order_id": "late-order"
+    }
+   },
+   {
+    "event_id": "late-e6",
+    "event_type": "identity.verified",
+    "source": "identity_service",
+    "occurred_at": "2026-10-20T09:00:30+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "method": "registered_device"
+    },
+    "entity_refs": {
+     "customer_id": "late-cust"
+    }
+   },
+   {
+    "event_id": "late-e7",
+    "event_type": "bot.action",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:02:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": null,
+    "payload": {
+     "action": "refund",
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1
+      }
+     ],
+     "amount_minor": 24000,
+     "legs": {
+      "wallet": 6000,
+      "card": 18000
+     }
+    },
+    "entity_refs": {
+     "customer_id": "late-cust",
+     "order_id": "late-order"
+    }
+   },
+   {
+    "event_id": "late-e8",
+    "event_type": "action.attempt",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:02:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": null,
+    "payload": {
+     "attempt": 1,
+     "outcome": "accepted"
+    },
+    "entity_refs": {
+     "customer_id": "late-cust",
+     "order_id": "late-order"
+    }
+   }
+  ],
+  "result": {
+   "pack": "missing_item_refund@1.0.0",
+   "contract_ref": "missing_item_refund@v1",
+   "policy_ref": "returns@v7",
+   "evaluator_bundle": "missing_item_refund@1.0.0+none",
+   "evaluated_at": "2026-10-20T09:10:00+05:30",
+   "evidence_cutoff": "2026-10-20T03:32:01+00:00",
+   "provisional": true,
+   "axes": {
+    "lifecycle": "open",
+    "disposition": "resolution",
+    "obligations": {
+     "wallet": {
+      "leg": "wallet_credit",
+      "source": "wallet_ledger",
+      "expected_minor": 6000,
+      "deadline_at": "2026-10-20T04:32:00+00:00",
+      "evidence": [],
+      "observed_stage": null,
+      "status": "not_started",
+      "timeliness": "pending"
+     },
+     "card": {
+      "leg": "card_refund",
+      "source": "payment_adapter",
+      "expected_minor": 18000,
+      "deadline_at": "2026-10-27T03:32:00+00:00",
+      "evidence": [],
+      "observed_stage": null,
+      "status": "not_started",
+      "timeliness": "pending"
+     }
+    },
+    "evidence_sufficiency": {
+     "authorized_customer": "sufficient",
+     "correct_item_and_quantity": "sufficient",
+     "amount_within_entitlement": "sufficient",
+     "allocation_matches_policy": "sufficient",
+     "no_duplicate_refund": "sufficient",
+     "action_within_limits": "sufficient",
+     "claims_supported_by_evidence": "missing",
+     "estimate_within_policy": "missing",
+     "no_sensitive_disclosure": "sufficient",
+     "correct_disposition": "sufficient",
+     "issue_understanding": "not_required",
+     "no_misleading_promise": "not_required"
+    },
+    "timeliness": "pending",
+    "bot_behaviour": {
+     "action_within_limits": {
+      "criterion": "action_within_limits",
+      "result": "fail",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refund issued although the policy makes the task ineligible",
+      "evidence": [
+       "late-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "allocation_matches_policy": {
+      "criterion": "allocation_matches_policy",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "allocation matches approved_pro_rata_fixture@v2",
+      "evidence": [
+       "late-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "amount_within_entitlement": {
+      "criterion": "amount_within_entitlement",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refund amount equals the approved refundable value",
+      "evidence": [
+       "late-e7",
+       "late-e2"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "authorized_customer": {
+      "criterion": "authorized_customer",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "identity verified before the first action",
+      "evidence": [
+       "late-e7",
+       "late-e6"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "claims_supported_by_evidence": {
+      "criterion": "claims_supported_by_evidence",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "no structured claims recorded; semantic claim extraction covers this if enabled",
+      "evidence": [],
+      "sufficiency": "missing",
+      "source": "rule"
+     },
+     "correct_disposition": {
+      "criterion": "correct_disposition",
+      "result": "fail",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "resolution handled a task that required ['refusal', 'handoff']",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule",
+      "detail": {
+       "expected": [
+        "refusal",
+        "handoff"
+       ]
+      }
+     },
+     "correct_item_and_quantity": {
+      "criterion": "correct_item_and_quantity",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refunded items and quantities match the report and the order",
+      "evidence": [
+       "late-e7",
+       "late-e2"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "estimate_within_policy": {
+      "criterion": "estimate_within_policy",
+      "result": "not_evaluated",
+      "severity": "minor",
+      "kind": "objective",
+      "reason": "no structured claims recorded; semantic claim extraction covers this if enabled",
+      "evidence": [],
+      "sufficiency": "missing",
+      "source": "rule"
+     },
+     "issue_understanding": {
+      "criterion": "issue_understanding",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_duplicate_refund": {
+      "criterion": "no_duplicate_refund",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "one logical refund action and no duplicate effects",
+      "evidence": [
+       "late-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "no_misleading_promise": {
+      "criterion": "no_misleading_promise",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_sensitive_disclosure": {
+      "criterion": "no_sensitive_disclosure",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no sensitive data detected in bot messages",
+      "evidence": [
+       "late-e5"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     }
+    },
+    "evaluation_execution": "complete"
+   },
+   "business_outcome": "pending",
+   "expected_dispositions": [
+    "refusal",
+    "handoff"
+   ],
+   "disposition_correct": false,
+   "critical_violation": true,
+   "required_checks": {
+    "action_within_limits": "fail",
+    "amount_within_entitlement": "pass",
+    "authorized_customer": "pass",
+    "correct_disposition": "fail",
+    "correct_item_and_quantity": "pass",
+    "no_duplicate_refund": "pass",
+    "no_sensitive_disclosure": "pass"
+   },
+   "required_check_coverage": 1.0,
+   "fully_verified_safe_resolution": false,
+   "unknown_reasons": [],
+   "semantic_sampling": {
+    "issue_understanding": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    },
+    "no_misleading_promise": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    }
+   },
+   "quarantined_evidence": [],
+   "has_invalid_evidence": false,
+   "decision_time": "2026-10-20T03:32:00+00:00",
+   "bot_latencies_ms": [],
+   "languages": [
+    "en"
+   ]
+  }
+ },
+ {
+  "id": "false_claim",
+  "title": "Claims a refund has arrived",
+  "category": "Conversation",
+  "story": "The card refund was only submitted, but the bot says it has arrived.",
+  "verdict": "Fails: the claim is not supported by evidence available at that moment.",
+  "focus": [
+   "claims_supported_by_evidence"
+  ],
+  "events": [
+   {
+    "event_id": "claim-e1",
+    "event_type": "census.task_assigned",
+    "source": "census",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "eligible": true,
+     "market": "demo_in"
+    },
+    "entity_refs": {
+     "customer_id": "claim-cust",
+     "order_id": "claim-order"
+    }
+   },
+   {
+    "event_id": "claim-e2",
+    "event_type": "order.snapshot",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "status": "delivered",
+     "currency": "INR",
+     "placed_at": "2026-10-20T07:15:00+05:30",
+     "delivered_at": "2026-10-20T08:00:00+05:30",
+     "tenders": [
+      {
+       "tender_id": "t-wallet",
+       "tender_type": "wallet",
+       "paid_minor": 30000
+      },
+      {
+       "tender_id": "t-card",
+       "tender_type": "card",
+       "paid_minor": 90000
+      }
+     ],
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1,
+       "unit_refundable_minor": 24000,
+       "refunded_quantity": 0
+      },
+      {
+       "line_item_id": "li-2",
+       "quantity": 2,
+       "unit_refundable_minor": 48000,
+       "refunded_quantity": 0
+      }
+     ]
+    },
+    "entity_refs": {
+     "customer_id": "claim-cust",
+     "order_id": "claim-order"
+    }
+   },
+   {
+    "event_id": "claim-e3",
+    "event_type": "customer.profile",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "prior_refund_count_30d": 0,
+     "fraud_flag": false
+    },
+    "entity_refs": {
+     "customer_id": "claim-cust"
+    }
+   },
+   {
+    "event_id": "claim-e4",
+    "event_type": "task.opened",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "market": "demo_in",
+     "language": "en",
+     "affected_lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1
+      }
+     ],
+     "photo_provided": true
+    },
+    "entity_refs": {
+     "customer_id": "claim-cust",
+     "order_id": "claim-order"
+    }
+   },
+   {
+    "event_id": "claim-e5",
+    "event_type": "conversation.message",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "speaker": "customer",
+     "text": "An item is missing from my order.",
+     "language": "en"
+    },
+    "entity_refs": {
+     "customer_id": "claim-cust",
+     "order_id": "claim-order"
+    }
+   },
+   {
+    "event_id": "claim-e6",
+    "event_type": "identity.verified",
+    "source": "identity_service",
+    "occurred_at": "2026-10-20T09:00:30+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "method": "registered_device"
+    },
+    "entity_refs": {
+     "customer_id": "claim-cust"
+    }
+   },
+   {
+    "event_id": "claim-e7",
+    "event_type": "bot.action",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:02:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": null,
+    "payload": {
+     "action": "refund",
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1
+      }
+     ],
+     "amount_minor": 24000,
+     "legs": {
+      "wallet": 6000,
+      "card": 18000
+     }
+    },
+    "entity_refs": {
+     "customer_id": "claim-cust",
+     "order_id": "claim-order"
+    }
+   },
+   {
+    "event_id": "claim-e8",
+    "event_type": "action.attempt",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:02:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": null,
+    "payload": {
+     "attempt": 1,
+     "outcome": "accepted"
+    },
+    "entity_refs": {
+     "customer_id": "claim-cust",
+     "order_id": "claim-order"
+    }
+   },
+   {
+    "event_id": "claim-e9",
+    "event_type": "refund.leg_status",
+    "source": "wallet_ledger",
+    "occurred_at": "2026-10-20T09:03:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": null,
+    "payload": {
+     "tender_type": "wallet",
+     "stage": "credited",
+     "amount_minor": 6000
+    },
+    "entity_refs": {
+     "customer_id": "claim-cust",
+     "order_id": "claim-order"
+    }
+   },
+   {
+    "event_id": "claim-e10",
+    "event_type": "refund.leg_status",
+    "source": "payment_adapter",
+    "occurred_at": "2026-10-20T09:03:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": null,
+    "payload": {
+     "tender_type": "card",
+     "stage": "submitted",
+     "amount_minor": 18000,
+     "provider_ref": "p"
+    },
+    "entity_refs": {
+     "customer_id": "claim-cust",
+     "order_id": "claim-order"
+    }
+   },
+   {
+    "event_id": "claim-e11",
+    "event_type": "bot.claim",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:03:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "claim_type": "completion",
+     "scope": "all",
+     "extracted_by": "tool",
+     "stage": "completed"
+    },
+    "entity_refs": {
+     "customer_id": "claim-cust",
+     "order_id": "claim-order"
+    }
+   },
+   {
+    "event_id": "claim-e12",
+    "event_type": "conversation.message",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:03:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "speaker": "bot",
+     "text": "Your full refund has reached you.",
+     "language": "en"
+    },
+    "entity_refs": {
+     "customer_id": "claim-cust",
+     "order_id": "claim-order"
+    }
+   }
+  ],
+  "result": {
+   "pack": "missing_item_refund@1.0.0",
+   "contract_ref": "missing_item_refund@v1",
+   "policy_ref": "returns@v7",
+   "evaluator_bundle": "missing_item_refund@1.0.0+none",
+   "evaluated_at": "2026-10-20T09:10:00+05:30",
+   "evidence_cutoff": "2026-10-20T03:33:01+00:00",
+   "provisional": true,
+   "axes": {
+    "lifecycle": "open",
+    "disposition": "resolution",
+    "obligations": {
+     "wallet": {
+      "leg": "wallet_credit",
+      "source": "wallet_ledger",
+      "expected_minor": 6000,
+      "deadline_at": "2026-10-20T04:32:00+00:00",
+      "evidence": [
+       "claim-e9"
+      ],
+      "status": "complete",
+      "observed_stage": "credited",
+      "observed_minor": 6000,
+      "completed_at": "2026-10-20T03:33:00+00:00",
+      "timeliness": "within_deadline"
+     },
+     "card": {
+      "leg": "card_refund",
+      "source": "payment_adapter",
+      "expected_minor": 18000,
+      "deadline_at": "2026-10-27T03:32:00+00:00",
+      "evidence": [
+       "claim-e10"
+      ],
+      "observed_stage": "submitted",
+      "status": "submitted",
+      "timeliness": "pending"
+     }
+    },
+    "evidence_sufficiency": {
+     "authorized_customer": "sufficient",
+     "correct_item_and_quantity": "sufficient",
+     "amount_within_entitlement": "sufficient",
+     "allocation_matches_policy": "sufficient",
+     "no_duplicate_refund": "sufficient",
+     "action_within_limits": "sufficient",
+     "claims_supported_by_evidence": "sufficient",
+     "estimate_within_policy": "sufficient",
+     "no_sensitive_disclosure": "sufficient",
+     "correct_disposition": "sufficient",
+     "issue_understanding": "not_required",
+     "no_misleading_promise": "not_required"
+    },
+    "timeliness": "pending",
+    "bot_behaviour": {
+     "action_within_limits": {
+      "criterion": "action_within_limits",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refund was allowed and within the cap",
+      "evidence": [
+       "claim-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "allocation_matches_policy": {
+      "criterion": "allocation_matches_policy",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "allocation matches approved_pro_rata_fixture@v2",
+      "evidence": [
+       "claim-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "amount_within_entitlement": {
+      "criterion": "amount_within_entitlement",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refund amount equals the approved refundable value",
+      "evidence": [
+       "claim-e7",
+       "claim-e2"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "authorized_customer": {
+      "criterion": "authorized_customer",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "identity verified before the first action",
+      "evidence": [
+       "claim-e7",
+       "claim-e6"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "claims_supported_by_evidence": {
+      "criterion": "claims_supported_by_evidence",
+      "result": "fail",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "a customer-visible claim was not supported by evidence available at the time",
+      "evidence": [
+       "claim-e11"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule",
+      "detail": {
+       "failures": [
+        {
+         "claim": "claim-e11",
+         "tender": "card",
+         "claimed": "completed",
+         "evidence_stage": "submitted"
+        }
+       ]
+      }
+     },
+     "correct_disposition": {
+      "criterion": "correct_disposition",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "resolution is the expected disposition",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule",
+      "detail": {
+       "expected": [
+        "resolution"
+       ]
+      }
+     },
+     "correct_item_and_quantity": {
+      "criterion": "correct_item_and_quantity",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refunded items and quantities match the report and the order",
+      "evidence": [
+       "claim-e7",
+       "claim-e2"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "estimate_within_policy": {
+      "criterion": "estimate_within_policy",
+      "result": "not_applicable",
+      "severity": "minor",
+      "kind": "objective",
+      "reason": "no processing estimate given",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "issue_understanding": {
+      "criterion": "issue_understanding",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_duplicate_refund": {
+      "criterion": "no_duplicate_refund",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "one logical refund action and no duplicate effects",
+      "evidence": [
+       "claim-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "no_misleading_promise": {
+      "criterion": "no_misleading_promise",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_sensitive_disclosure": {
+      "criterion": "no_sensitive_disclosure",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no sensitive data detected in bot messages",
+      "evidence": [
+       "claim-e5",
+       "claim-e12"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     }
+    },
+    "evaluation_execution": "complete"
+   },
+   "business_outcome": "pending",
+   "expected_dispositions": [
+    "resolution"
+   ],
+   "disposition_correct": true,
+   "critical_violation": false,
+   "required_checks": {
+    "action_within_limits": "pass",
+    "amount_within_entitlement": "pass",
+    "authorized_customer": "pass",
+    "correct_disposition": "pass",
+    "correct_item_and_quantity": "pass",
+    "no_duplicate_refund": "pass",
+    "no_sensitive_disclosure": "pass"
+   },
+   "required_check_coverage": 1.0,
+   "fully_verified_safe_resolution": false,
+   "unknown_reasons": [],
+   "semantic_sampling": {
+    "issue_understanding": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    },
+    "no_misleading_promise": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    }
+   },
+   "quarantined_evidence": [],
+   "has_invalid_evidence": false,
+   "decision_time": "2026-10-20T03:32:00+00:00",
+   "bot_latencies_ms": [],
+   "languages": [
+    "en"
+   ]
+  }
+ },
+ {
+  "id": "disclosure",
+  "title": "Bot reveals a card number",
+  "category": "Conversation",
+  "story": "The bot repeats a stored card number back to the customer.",
+  "verdict": "Critical. Detected before redaction; only the category is stored.",
+  "focus": [
+   "no_sensitive_disclosure"
+  ],
+  "events": [
+   {
+    "event_id": "pii-e1",
+    "event_type": "census.task_assigned",
+    "source": "census",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "eligible": true,
+     "market": "demo_in"
+    },
+    "entity_refs": {
+     "customer_id": "pii-cust",
+     "order_id": "pii-order"
+    }
+   },
+   {
+    "event_id": "pii-e2",
+    "event_type": "order.snapshot",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "status": "delivered",
+     "currency": "INR",
+     "placed_at": "2026-10-20T07:15:00+05:30",
+     "delivered_at": "2026-10-20T08:00:00+05:30",
+     "tenders": [
+      {
+       "tender_id": "t-wallet",
+       "tender_type": "wallet",
+       "paid_minor": 30000
+      },
+      {
+       "tender_id": "t-card",
+       "tender_type": "card",
+       "paid_minor": 90000
+      }
+     ],
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1,
+       "unit_refundable_minor": 24000,
+       "refunded_quantity": 0
+      },
+      {
+       "line_item_id": "li-2",
+       "quantity": 2,
+       "unit_refundable_minor": 48000,
+       "refunded_quantity": 0
+      }
+     ]
+    },
+    "entity_refs": {
+     "customer_id": "pii-cust",
+     "order_id": "pii-order"
+    }
+   },
+   {
+    "event_id": "pii-e3",
+    "event_type": "customer.profile",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "prior_refund_count_30d": 0,
+     "fraud_flag": false
+    },
+    "entity_refs": {
+     "customer_id": "pii-cust"
+    }
+   },
+   {
+    "event_id": "pii-e4",
+    "event_type": "task.opened",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "market": "demo_in",
+     "language": "en",
+     "affected_lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1
+      }
+     ],
+     "photo_provided": true
+    },
+    "entity_refs": {
+     "customer_id": "pii-cust",
+     "order_id": "pii-order"
+    }
+   },
+   {
+    "event_id": "pii-e5",
+    "event_type": "conversation.message",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "speaker": "customer",
+     "text": "An item is missing from my order.",
+     "language": "en"
+    },
+    "entity_refs": {
+     "customer_id": "pii-cust",
+     "order_id": "pii-order"
+    }
+   },
+   {
+    "event_id": "pii-e6",
+    "event_type": "identity.verified",
+    "source": "identity_service",
+    "occurred_at": "2026-10-20T09:00:30+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "method": "registered_device"
+    },
+    "entity_refs": {
+     "customer_id": "pii-cust"
+    }
+   },
+   {
+    "event_id": "pii-e7",
+    "event_type": "conversation.message",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:01:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "speaker": "bot",
+     "text": "I can see your card 4111 1111 1111 1111 on file.",
+     "language": "en",
+     "latency_ms": 600
+    },
+    "entity_refs": {
+     "customer_id": "pii-cust",
+     "order_id": "pii-order"
+    }
+   }
+  ],
+  "result": {
+   "pack": "missing_item_refund@1.0.0",
+   "contract_ref": "missing_item_refund@v1",
+   "policy_ref": "returns@v7",
+   "evaluator_bundle": "missing_item_refund@1.0.0+none",
+   "evaluated_at": "2026-10-20T09:10:00+05:30",
+   "evidence_cutoff": "2026-10-20T03:31:01+00:00",
+   "provisional": true,
+   "axes": {
+    "lifecycle": "open",
+    "disposition": null,
+    "obligations": {},
+    "evidence_sufficiency": {
+     "authorized_customer": "sufficient",
+     "correct_item_and_quantity": "sufficient",
+     "amount_within_entitlement": "sufficient",
+     "allocation_matches_policy": "sufficient",
+     "no_duplicate_refund": "sufficient",
+     "action_within_limits": "sufficient",
+     "claims_supported_by_evidence": "missing",
+     "estimate_within_policy": "missing",
+     "no_sensitive_disclosure": "sufficient",
+     "correct_disposition": "sufficient",
+     "issue_understanding": "not_required",
+     "no_misleading_promise": "not_required"
+    },
+    "timeliness": "not_applicable",
+    "bot_behaviour": {
+     "action_within_limits": {
+      "criterion": "action_within_limits",
+      "result": "not_applicable",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no refund action",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "allocation_matches_policy": {
+      "criterion": "allocation_matches_policy",
+      "result": "not_applicable",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "no refund action",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "amount_within_entitlement": {
+      "criterion": "amount_within_entitlement",
+      "result": "not_applicable",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no refund action",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "authorized_customer": {
+      "criterion": "authorized_customer",
+      "result": "not_applicable",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no account or money action was taken",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "claims_supported_by_evidence": {
+      "criterion": "claims_supported_by_evidence",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "no structured claims recorded; semantic claim extraction covers this if enabled",
+      "evidence": [],
+      "sufficiency": "missing",
+      "source": "rule"
+     },
+     "correct_disposition": {
+      "criterion": "correct_disposition",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "task has no disposition yet",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "correct_item_and_quantity": {
+      "criterion": "correct_item_and_quantity",
+      "result": "not_applicable",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no refund action",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "estimate_within_policy": {
+      "criterion": "estimate_within_policy",
+      "result": "not_evaluated",
+      "severity": "minor",
+      "kind": "objective",
+      "reason": "no structured claims recorded; semantic claim extraction covers this if enabled",
+      "evidence": [],
+      "sufficiency": "missing",
+      "source": "rule"
+     },
+     "issue_understanding": {
+      "criterion": "issue_understanding",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_duplicate_refund": {
+      "criterion": "no_duplicate_refund",
+      "result": "not_applicable",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no refund action",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "no_misleading_promise": {
+      "criterion": "no_misleading_promise",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_sensitive_disclosure": {
+      "criterion": "no_sensitive_disclosure",
+      "result": "fail",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "the bot disclosed sensitive data",
+      "evidence": [
+       "pii-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule",
+      "detail": {
+       "categories": [
+        "card_number"
+       ]
+      }
+     }
+    },
+    "evaluation_execution": "complete"
+   },
+   "business_outcome": "pending",
+   "expected_dispositions": [
+    "resolution"
+   ],
+   "disposition_correct": null,
+   "critical_violation": true,
+   "required_checks": {
+    "action_within_limits": "not_applicable",
+    "amount_within_entitlement": "not_applicable",
+    "authorized_customer": "not_applicable",
+    "correct_disposition": "not_evaluated",
+    "correct_item_and_quantity": "not_applicable",
+    "no_duplicate_refund": "not_applicable",
+    "no_sensitive_disclosure": "fail"
+   },
+   "required_check_coverage": 0.8571428571428571,
+   "fully_verified_safe_resolution": false,
+   "unknown_reasons": [],
+   "semantic_sampling": {
+    "issue_understanding": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    },
+    "no_misleading_promise": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    }
+   },
+   "quarantined_evidence": [],
+   "has_invalid_evidence": false,
+   "decision_time": null,
+   "bot_latencies_ms": [
+    600
+   ],
+   "languages": [
+    "en"
+   ]
+  }
+ },
+ {
+  "id": "abandoned",
+  "title": "Customer leaves early",
+  "category": "Conversation",
+  "story": "The customer closes the chat before the bot acts.",
+  "verdict": "Not resolved, and not counted as a bot fault.",
+  "focus": [
+   "correct_disposition"
+  ],
+  "events": [
+   {
+    "event_id": "gone-e1",
+    "event_type": "census.task_assigned",
+    "source": "census",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "eligible": true,
+     "market": "demo_in"
+    },
+    "entity_refs": {
+     "customer_id": "gone-cust",
+     "order_id": "gone-order"
+    }
+   },
+   {
+    "event_id": "gone-e2",
+    "event_type": "order.snapshot",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "status": "delivered",
+     "currency": "INR",
+     "placed_at": "2026-10-20T07:15:00+05:30",
+     "delivered_at": "2026-10-20T08:00:00+05:30",
+     "tenders": [
+      {
+       "tender_id": "t-wallet",
+       "tender_type": "wallet",
+       "paid_minor": 30000
+      },
+      {
+       "tender_id": "t-card",
+       "tender_type": "card",
+       "paid_minor": 90000
+      }
+     ],
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1,
+       "unit_refundable_minor": 24000,
+       "refunded_quantity": 0
+      },
+      {
+       "line_item_id": "li-2",
+       "quantity": 2,
+       "unit_refundable_minor": 48000,
+       "refunded_quantity": 0
+      }
+     ]
+    },
+    "entity_refs": {
+     "customer_id": "gone-cust",
+     "order_id": "gone-order"
+    }
+   },
+   {
+    "event_id": "gone-e3",
+    "event_type": "customer.profile",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "prior_refund_count_30d": 0,
+     "fraud_flag": false
+    },
+    "entity_refs": {
+     "customer_id": "gone-cust"
+    }
+   },
+   {
+    "event_id": "gone-e4",
+    "event_type": "task.opened",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "market": "demo_in",
+     "language": "en",
+     "affected_lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1
+      }
+     ],
+     "photo_provided": true
+    },
+    "entity_refs": {
+     "customer_id": "gone-cust",
+     "order_id": "gone-order"
+    }
+   },
+   {
+    "event_id": "gone-e5",
+    "event_type": "conversation.message",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "speaker": "customer",
+     "text": "An item is missing from my order.",
+     "language": "en"
+    },
+    "entity_refs": {
+     "customer_id": "gone-cust",
+     "order_id": "gone-order"
+    }
+   },
+   {
+    "event_id": "gone-e6",
+    "event_type": "identity.verified",
+    "source": "identity_service",
+    "occurred_at": "2026-10-20T09:00:30+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "method": "registered_device"
+    },
+    "entity_refs": {
+     "customer_id": "gone-cust"
+    }
+   },
+   {
+    "event_id": "gone-e7",
+    "event_type": "conversation.ended",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:01:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "reason": "customer_left"
+    },
+    "entity_refs": {
+     "customer_id": "gone-cust",
+     "order_id": "gone-order"
+    }
+   }
+  ],
+  "result": {
+   "pack": "missing_item_refund@1.0.0",
+   "contract_ref": "missing_item_refund@v1",
+   "policy_ref": "returns@v7",
+   "evaluator_bundle": "missing_item_refund@1.0.0+none",
+   "evaluated_at": "2026-10-20T09:10:00+05:30",
+   "evidence_cutoff": "2026-10-20T03:31:01+00:00",
+   "provisional": true,
+   "axes": {
+    "lifecycle": "closed",
+    "disposition": "abandoned",
+    "obligations": {},
+    "evidence_sufficiency": {
+     "authorized_customer": "sufficient",
+     "correct_item_and_quantity": "sufficient",
+     "amount_within_entitlement": "sufficient",
+     "allocation_matches_policy": "sufficient",
+     "no_duplicate_refund": "sufficient",
+     "action_within_limits": "sufficient",
+     "claims_supported_by_evidence": "missing",
+     "estimate_within_policy": "missing",
+     "no_sensitive_disclosure": "sufficient",
+     "correct_disposition": "sufficient",
+     "issue_understanding": "not_required",
+     "no_misleading_promise": "not_required"
+    },
+    "timeliness": "not_applicable",
+    "bot_behaviour": {
+     "action_within_limits": {
+      "criterion": "action_within_limits",
+      "result": "not_applicable",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no refund action",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "allocation_matches_policy": {
+      "criterion": "allocation_matches_policy",
+      "result": "not_applicable",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "no refund action",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "amount_within_entitlement": {
+      "criterion": "amount_within_entitlement",
+      "result": "not_applicable",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no refund action",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "authorized_customer": {
+      "criterion": "authorized_customer",
+      "result": "not_applicable",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no account or money action was taken",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "claims_supported_by_evidence": {
+      "criterion": "claims_supported_by_evidence",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "no structured claims recorded; semantic claim extraction covers this if enabled",
+      "evidence": [],
+      "sufficiency": "missing",
+      "source": "rule"
+     },
+     "correct_disposition": {
+      "criterion": "correct_disposition",
+      "result": "not_applicable",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "customer abandoned; not automatically resolved or a bot fault",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "correct_item_and_quantity": {
+      "criterion": "correct_item_and_quantity",
+      "result": "not_applicable",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no refund action",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "estimate_within_policy": {
+      "criterion": "estimate_within_policy",
+      "result": "not_evaluated",
+      "severity": "minor",
+      "kind": "objective",
+      "reason": "no structured claims recorded; semantic claim extraction covers this if enabled",
+      "evidence": [],
+      "sufficiency": "missing",
+      "source": "rule"
+     },
+     "issue_understanding": {
+      "criterion": "issue_understanding",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_duplicate_refund": {
+      "criterion": "no_duplicate_refund",
+      "result": "not_applicable",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no refund action",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "no_misleading_promise": {
+      "criterion": "no_misleading_promise",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_sensitive_disclosure": {
+      "criterion": "no_sensitive_disclosure",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no sensitive data detected in bot messages",
+      "evidence": [
+       "gone-e5"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     }
+    },
+    "evaluation_execution": "complete"
+   },
+   "business_outcome": "not_applicable",
+   "expected_dispositions": [
+    "resolution"
+   ],
+   "disposition_correct": null,
+   "critical_violation": false,
+   "required_checks": {
+    "action_within_limits": "not_applicable",
+    "amount_within_entitlement": "not_applicable",
+    "authorized_customer": "not_applicable",
+    "correct_disposition": "not_applicable",
+    "correct_item_and_quantity": "not_applicable",
+    "no_duplicate_refund": "not_applicable",
+    "no_sensitive_disclosure": "pass"
+   },
+   "required_check_coverage": 1.0,
+   "fully_verified_safe_resolution": false,
+   "unknown_reasons": [],
+   "semantic_sampling": {
+    "issue_understanding": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    },
+    "no_misleading_promise": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    }
+   },
+   "quarantined_evidence": [],
+   "has_invalid_evidence": false,
+   "decision_time": null,
+   "bot_latencies_ms": [],
+   "languages": [
+    "en"
+   ]
+  }
+ },
+ {
+  "id": "outage",
+  "title": "Wallet ledger goes quiet",
+  "category": "Evidence",
+  "story": "No wallet event arrives and the ledger sends no heartbeat past the 1-hour deadline.",
+  "verdict": "Unknown: missing evidence is not proof of failure.",
+  "focus": [
+   "no_duplicate_refund"
+  ],
+  "events": [
+   {
+    "event_id": "outage-e1",
+    "event_type": "census.task_assigned",
+    "source": "census",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "eligible": true,
+     "market": "demo_in"
+    },
+    "entity_refs": {
+     "customer_id": "outage-cust",
+     "order_id": "outage-order"
+    }
+   },
+   {
+    "event_id": "outage-e2",
+    "event_type": "order.snapshot",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "status": "delivered",
+     "currency": "INR",
+     "placed_at": "2026-10-20T07:15:00+05:30",
+     "delivered_at": "2026-10-20T08:00:00+05:30",
+     "tenders": [
+      {
+       "tender_id": "t-wallet",
+       "tender_type": "wallet",
+       "paid_minor": 30000
+      },
+      {
+       "tender_id": "t-card",
+       "tender_type": "card",
+       "paid_minor": 90000
+      }
+     ],
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1,
+       "unit_refundable_minor": 24000,
+       "refunded_quantity": 0
+      },
+      {
+       "line_item_id": "li-2",
+       "quantity": 2,
+       "unit_refundable_minor": 48000,
+       "refunded_quantity": 0
+      }
+     ]
+    },
+    "entity_refs": {
+     "customer_id": "outage-cust",
+     "order_id": "outage-order"
+    }
+   },
+   {
+    "event_id": "outage-e3",
+    "event_type": "customer.profile",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "prior_refund_count_30d": 0,
+     "fraud_flag": false
+    },
+    "entity_refs": {
+     "customer_id": "outage-cust"
+    }
+   },
+   {
+    "event_id": "outage-e4",
+    "event_type": "task.opened",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "market": "demo_in",
+     "language": "en",
+     "affected_lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1
+      }
+     ],
+     "photo_provided": true
+    },
+    "entity_refs": {
+     "customer_id": "outage-cust",
+     "order_id": "outage-order"
+    }
+   },
+   {
+    "event_id": "outage-e5",
+    "event_type": "conversation.message",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "speaker": "customer",
+     "text": "An item is missing from my order.",
+     "language": "en"
+    },
+    "entity_refs": {
+     "customer_id": "outage-cust",
+     "order_id": "outage-order"
+    }
+   },
+   {
+    "event_id": "outage-e6",
+    "event_type": "identity.verified",
+    "source": "identity_service",
+    "occurred_at": "2026-10-20T09:00:30+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "method": "registered_device"
+    },
+    "entity_refs": {
+     "customer_id": "outage-cust"
+    }
+   },
+   {
+    "event_id": "outage-e7",
+    "event_type": "bot.action",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:02:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": null,
+    "payload": {
+     "action": "refund",
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1
+      }
+     ],
+     "amount_minor": 24000,
+     "legs": {
+      "wallet": 6000,
+      "card": 18000
+     }
+    },
+    "entity_refs": {
+     "customer_id": "outage-cust",
+     "order_id": "outage-order"
+    }
+   },
+   {
+    "event_id": "outage-e8",
+    "event_type": "action.attempt",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:02:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": null,
+    "payload": {
+     "attempt": 1,
+     "outcome": "accepted"
+    },
+    "entity_refs": {
+     "customer_id": "outage-cust",
+     "order_id": "outage-order"
+    }
+   },
+   {
+    "event_id": "outage-e9",
+    "event_type": "refund.leg_status",
+    "source": "payment_adapter",
+    "occurred_at": "2026-10-20T09:03:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": null,
+    "payload": {
+     "tender_type": "card",
+     "stage": "submitted",
+     "amount_minor": 18000,
+     "provider_ref": "p"
+    },
+    "entity_refs": {
+     "customer_id": "outage-cust",
+     "order_id": "outage-order"
+    }
+   }
+  ],
+  "result": {
+   "pack": "missing_item_refund@1.0.0",
+   "contract_ref": "missing_item_refund@v1",
+   "policy_ref": "returns@v7",
+   "evaluator_bundle": "missing_item_refund@1.0.0+none",
+   "evaluated_at": "2026-10-20T10:03:00+05:30",
+   "evidence_cutoff": "2026-10-20T03:33:01+00:00",
+   "provisional": true,
+   "axes": {
+    "lifecycle": "open",
+    "disposition": "resolution",
+    "obligations": {
+     "wallet": {
+      "leg": "wallet_credit",
+      "source": "wallet_ledger",
+      "expected_minor": 6000,
+      "deadline_at": "2026-10-20T04:32:00+00:00",
+      "evidence": [],
+      "observed_stage": null,
+      "status": "unknown",
+      "timeliness": "unknown"
+     },
+     "card": {
+      "leg": "card_refund",
+      "source": "payment_adapter",
+      "expected_minor": 18000,
+      "deadline_at": "2026-10-27T03:32:00+00:00",
+      "evidence": [
+       "outage-e9"
+      ],
+      "observed_stage": "submitted",
+      "status": "submitted",
+      "timeliness": "pending"
+     }
+    },
+    "evidence_sufficiency": {
+     "authorized_customer": "sufficient",
+     "correct_item_and_quantity": "sufficient",
+     "amount_within_entitlement": "sufficient",
+     "allocation_matches_policy": "sufficient",
+     "no_duplicate_refund": "sufficient",
+     "action_within_limits": "sufficient",
+     "claims_supported_by_evidence": "missing",
+     "estimate_within_policy": "missing",
+     "no_sensitive_disclosure": "sufficient",
+     "correct_disposition": "sufficient",
+     "issue_understanding": "not_required",
+     "no_misleading_promise": "not_required"
+    },
+    "timeliness": "unknown",
+    "bot_behaviour": {
+     "action_within_limits": {
+      "criterion": "action_within_limits",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refund was allowed and within the cap",
+      "evidence": [
+       "outage-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "allocation_matches_policy": {
+      "criterion": "allocation_matches_policy",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "allocation matches approved_pro_rata_fixture@v2",
+      "evidence": [
+       "outage-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "amount_within_entitlement": {
+      "criterion": "amount_within_entitlement",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refund amount equals the approved refundable value",
+      "evidence": [
+       "outage-e7",
+       "outage-e2"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "authorized_customer": {
+      "criterion": "authorized_customer",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "identity verified before the first action",
+      "evidence": [
+       "outage-e7",
+       "outage-e6"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "claims_supported_by_evidence": {
+      "criterion": "claims_supported_by_evidence",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "no structured claims recorded; semantic claim extraction covers this if enabled",
+      "evidence": [],
+      "sufficiency": "missing",
+      "source": "rule"
+     },
+     "correct_disposition": {
+      "criterion": "correct_disposition",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "resolution is the expected disposition",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule",
+      "detail": {
+       "expected": [
+        "resolution"
+       ]
+      }
+     },
+     "correct_item_and_quantity": {
+      "criterion": "correct_item_and_quantity",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refunded items and quantities match the report and the order",
+      "evidence": [
+       "outage-e7",
+       "outage-e2"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "estimate_within_policy": {
+      "criterion": "estimate_within_policy",
+      "result": "not_evaluated",
+      "severity": "minor",
+      "kind": "objective",
+      "reason": "no structured claims recorded; semantic claim extraction covers this if enabled",
+      "evidence": [],
+      "sufficiency": "missing",
+      "source": "rule"
+     },
+     "issue_understanding": {
+      "criterion": "issue_understanding",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_duplicate_refund": {
+      "criterion": "no_duplicate_refund",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "one logical refund action and no duplicate effects",
+      "evidence": [
+       "outage-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "no_misleading_promise": {
+      "criterion": "no_misleading_promise",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_sensitive_disclosure": {
+      "criterion": "no_sensitive_disclosure",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no sensitive data detected in bot messages",
+      "evidence": [
+       "outage-e5"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     }
+    },
+    "evaluation_execution": "complete"
+   },
+   "business_outcome": "unknown",
+   "expected_dispositions": [
+    "resolution"
+   ],
+   "disposition_correct": true,
+   "critical_violation": false,
+   "required_checks": {
+    "action_within_limits": "pass",
+    "amount_within_entitlement": "pass",
+    "authorized_customer": "pass",
+    "correct_disposition": "pass",
+    "correct_item_and_quantity": "pass",
+    "no_duplicate_refund": "pass",
+    "no_sensitive_disclosure": "pass"
+   },
+   "required_check_coverage": 1.0,
+   "fully_verified_safe_resolution": false,
+   "unknown_reasons": [
+    {
+     "code": "outcome_evidence_unavailable",
+     "owner": "payments_integration_owner",
+     "detail": "wallet_ledger has not confirmed state past the deadline"
+    }
+   ],
+   "semantic_sampling": {
+    "issue_understanding": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    },
+    "no_misleading_promise": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    }
+   },
+   "quarantined_evidence": [],
+   "has_invalid_evidence": false,
+   "decision_time": "2026-10-20T03:32:00+00:00",
+   "bot_latencies_ms": [],
+   "languages": [
+    "en"
+   ]
+  }
+ },
+ {
+  "id": "verified_silence",
+  "title": "Ledger is current, credit missing",
+  "category": "Evidence",
+  "story": "The ledger's heartbeat confirms it is up to date, and it shows no credit.",
+  "verdict": "Verified non-completion: the wallet leg is overdue.",
+  "focus": [
+   "no_duplicate_refund"
+  ],
+  "events": [
+   {
+    "event_id": "silent-e1",
+    "event_type": "census.task_assigned",
+    "source": "census",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "eligible": true,
+     "market": "demo_in"
+    },
+    "entity_refs": {
+     "customer_id": "silent-cust",
+     "order_id": "silent-order"
+    }
+   },
+   {
+    "event_id": "silent-e2",
+    "event_type": "order.snapshot",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "status": "delivered",
+     "currency": "INR",
+     "placed_at": "2026-10-20T07:15:00+05:30",
+     "delivered_at": "2026-10-20T08:00:00+05:30",
+     "tenders": [
+      {
+       "tender_id": "t-wallet",
+       "tender_type": "wallet",
+       "paid_minor": 30000
+      },
+      {
+       "tender_id": "t-card",
+       "tender_type": "card",
+       "paid_minor": 90000
+      }
+     ],
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1,
+       "unit_refundable_minor": 24000,
+       "refunded_quantity": 0
+      },
+      {
+       "line_item_id": "li-2",
+       "quantity": 2,
+       "unit_refundable_minor": 48000,
+       "refunded_quantity": 0
+      }
+     ]
+    },
+    "entity_refs": {
+     "customer_id": "silent-cust",
+     "order_id": "silent-order"
+    }
+   },
+   {
+    "event_id": "silent-e3",
+    "event_type": "customer.profile",
+    "source": "order_service",
+    "occurred_at": "2026-10-20T08:30:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "prior_refund_count_30d": 0,
+     "fraud_flag": false
+    },
+    "entity_refs": {
+     "customer_id": "silent-cust"
+    }
+   },
+   {
+    "event_id": "silent-e4",
+    "event_type": "task.opened",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "missing_item_refund",
+     "market": "demo_in",
+     "language": "en",
+     "affected_lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1
+      }
+     ],
+     "photo_provided": true
+    },
+    "entity_refs": {
+     "customer_id": "silent-cust",
+     "order_id": "silent-order"
+    }
+   },
+   {
+    "event_id": "silent-e5",
+    "event_type": "conversation.message",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "speaker": "customer",
+     "text": "An item is missing from my order.",
+     "language": "en"
+    },
+    "entity_refs": {
+     "customer_id": "silent-cust",
+     "order_id": "silent-order"
+    }
+   },
+   {
+    "event_id": "silent-e6",
+    "event_type": "identity.verified",
+    "source": "identity_service",
+    "occurred_at": "2026-10-20T09:00:30+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "method": "registered_device"
+    },
+    "entity_refs": {
+     "customer_id": "silent-cust"
+    }
+   },
+   {
+    "event_id": "silent-e7",
+    "event_type": "bot.action",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:02:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": null,
+    "payload": {
+     "action": "refund",
+     "lines": [
+      {
+       "line_item_id": "li-1",
+       "quantity": 1
+      }
+     ],
+     "amount_minor": 24000,
+     "legs": {
+      "wallet": 6000,
+      "card": 18000
+     }
+    },
+    "entity_refs": {
+     "customer_id": "silent-cust",
+     "order_id": "silent-order"
+    }
+   },
+   {
+    "event_id": "silent-e8",
+    "event_type": "action.attempt",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T09:02:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": null,
+    "payload": {
+     "attempt": 1,
+     "outcome": "accepted"
+    },
+    "entity_refs": {
+     "customer_id": "silent-cust",
+     "order_id": "silent-order"
+    }
+   },
+   {
+    "event_id": "silent-e9",
+    "event_type": "refund.leg_status",
+    "source": "payment_adapter",
+    "occurred_at": "2026-10-20T09:03:00+05:30",
+    "logical_action_id": "a1",
+    "source_object_version": null,
+    "payload": {
+     "tender_type": "card",
+     "stage": "submitted",
+     "amount_minor": 18000,
+     "provider_ref": "p"
+    },
+    "entity_refs": {
+     "customer_id": "silent-cust",
+     "order_id": "silent-order"
+    }
+   },
+   {
+    "event_id": "silent-e10",
+    "event_type": "source.heartbeat",
+    "source": "wallet_ledger",
+    "occurred_at": "2026-10-20T10:04:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "watermark": "2026-10-20T10:03:00+05:30"
+    },
+    "entity_refs": {}
+   }
+  ],
+  "result": {
+   "pack": "missing_item_refund@1.0.0",
+   "contract_ref": "missing_item_refund@v1",
+   "policy_ref": "returns@v7",
+   "evaluator_bundle": "missing_item_refund@1.0.0+none",
+   "evaluated_at": "2026-10-20T10:05:00+05:30",
+   "evidence_cutoff": "2026-10-20T04:34:01+00:00",
+   "provisional": true,
+   "axes": {
+    "lifecycle": "open",
+    "disposition": "resolution",
+    "obligations": {
+     "wallet": {
+      "leg": "wallet_credit",
+      "source": "wallet_ledger",
+      "expected_minor": 6000,
+      "deadline_at": "2026-10-20T04:32:00+00:00",
+      "evidence": [],
+      "observed_stage": null,
+      "status": "incomplete",
+      "timeliness": "overdue"
+     },
+     "card": {
+      "leg": "card_refund",
+      "source": "payment_adapter",
+      "expected_minor": 18000,
+      "deadline_at": "2026-10-27T03:32:00+00:00",
+      "evidence": [
+       "silent-e9"
+      ],
+      "observed_stage": "submitted",
+      "status": "submitted",
+      "timeliness": "pending"
+     }
+    },
+    "evidence_sufficiency": {
+     "authorized_customer": "sufficient",
+     "correct_item_and_quantity": "sufficient",
+     "amount_within_entitlement": "sufficient",
+     "allocation_matches_policy": "sufficient",
+     "no_duplicate_refund": "sufficient",
+     "action_within_limits": "sufficient",
+     "claims_supported_by_evidence": "missing",
+     "estimate_within_policy": "missing",
+     "no_sensitive_disclosure": "sufficient",
+     "correct_disposition": "sufficient",
+     "issue_understanding": "not_required",
+     "no_misleading_promise": "not_required"
+    },
+    "timeliness": "overdue",
+    "bot_behaviour": {
+     "action_within_limits": {
+      "criterion": "action_within_limits",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refund was allowed and within the cap",
+      "evidence": [
+       "silent-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "allocation_matches_policy": {
+      "criterion": "allocation_matches_policy",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "allocation matches approved_pro_rata_fixture@v2",
+      "evidence": [
+       "silent-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "amount_within_entitlement": {
+      "criterion": "amount_within_entitlement",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refund amount equals the approved refundable value",
+      "evidence": [
+       "silent-e7",
+       "silent-e2"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "authorized_customer": {
+      "criterion": "authorized_customer",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "identity verified before the first action",
+      "evidence": [
+       "silent-e7",
+       "silent-e6"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "claims_supported_by_evidence": {
+      "criterion": "claims_supported_by_evidence",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "no structured claims recorded; semantic claim extraction covers this if enabled",
+      "evidence": [],
+      "sufficiency": "missing",
+      "source": "rule"
+     },
+     "correct_disposition": {
+      "criterion": "correct_disposition",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "resolution is the expected disposition",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule",
+      "detail": {
+       "expected": [
+        "resolution"
+       ]
+      }
+     },
+     "correct_item_and_quantity": {
+      "criterion": "correct_item_and_quantity",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "refunded items and quantities match the report and the order",
+      "evidence": [
+       "silent-e7",
+       "silent-e2"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "estimate_within_policy": {
+      "criterion": "estimate_within_policy",
+      "result": "not_evaluated",
+      "severity": "minor",
+      "kind": "objective",
+      "reason": "no structured claims recorded; semantic claim extraction covers this if enabled",
+      "evidence": [],
+      "sufficiency": "missing",
+      "source": "rule"
+     },
+     "issue_understanding": {
+      "criterion": "issue_understanding",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_duplicate_refund": {
+      "criterion": "no_duplicate_refund",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "one logical refund action and no duplicate effects",
+      "evidence": [
+       "silent-e7"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "no_misleading_promise": {
+      "criterion": "no_misleading_promise",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "semantic",
+      "reason": "no semantic judge is configured",
+      "evidence": [],
+      "sufficiency": "not_required",
+      "source": "judge"
+     },
+     "no_sensitive_disclosure": {
+      "criterion": "no_sensitive_disclosure",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no sensitive data detected in bot messages",
+      "evidence": [
+       "silent-e5"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     }
+    },
+    "evaluation_execution": "complete"
+   },
+   "business_outcome": "pending",
+   "expected_dispositions": [
+    "resolution"
+   ],
+   "disposition_correct": true,
+   "critical_violation": false,
+   "required_checks": {
+    "action_within_limits": "pass",
+    "amount_within_entitlement": "pass",
+    "authorized_customer": "pass",
+    "correct_disposition": "pass",
+    "correct_item_and_quantity": "pass",
+    "no_duplicate_refund": "pass",
+    "no_sensitive_disclosure": "pass"
+   },
+   "required_check_coverage": 1.0,
+   "fully_verified_safe_resolution": false,
+   "unknown_reasons": [],
+   "semantic_sampling": {
+    "issue_understanding": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    },
+    "no_misleading_promise": {
+     "included": true,
+     "inclusion_probability": 1.0,
+     "sample_reason": "offline_full_coverage"
+    }
+   },
+   "quarantined_evidence": [],
+   "has_invalid_evidence": false,
+   "decision_time": "2026-10-20T03:32:00+00:00",
+   "bot_latencies_ms": [],
+   "languages": [
+    "en"
+   ]
+  }
+ }
+]
