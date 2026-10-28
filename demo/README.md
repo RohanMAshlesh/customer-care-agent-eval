@@ -1,12 +1,13 @@
 # Evidence Desk demo
 
-A static, interactive walkthrough of the evaluation service. It has five views:
+A 3-minute guided tour for people with no background in AI evaluation. It opens with the problem and the answer, then walks through four steps, each ending with a one-line takeaway:
 
-- **Refund journey**: replay the blueprint's INR 1,200 refund moment by moment and watch verdict revisions.
-- **Edge-case lab**: 15 scenarios, including duplicates, out-of-order webhooks, a wrong account and missing evidence.
-- **Release gate**: change a candidate bot's quality and latency and see pass, block or insufficient evidence.
-- **Client onboarding**: real API responses captured while a tenant moves from pilot to release gates.
-- **How it works**: the pipeline and its principles.
+1. **One refund**: follow a customer's INR 240 refund from chat to bank, side by side with what a transcript-only review would conclude.
+2. **What it catches**: nine mistakes that sound fine in a chat, such as a double refund, money sent to the wrong account or a leaked card number.
+3. **Ship or not**: the launch check for a new bot version, which answers yes, no or "not enough proof yet".
+4. **Getting started**: the five setup steps a company goes through, with a four-item readiness checklist.
+
+Technical detail (every check, the raw evidence and the statistics) sits behind "For specialists" sections.
 
 Every verdict, gate decision and readiness state comes from the Python engine in this repository. Nothing is computed or invented in the browser.
 
