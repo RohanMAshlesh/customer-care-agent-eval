@@ -92,8 +92,12 @@ def test_cohort_metrics_reconcile_against_census(api):
     s = m["slices"]["all"]
     assert s["census"]["eligible_tasks"] == 5
     assert s["census"]["missing_conversation"] == 1
+    # The lost task matures and stays in the denominator as an unknown.
+    assert s["census"]["matured"] == 5 and s["census"]["pending_maturation"] == 0
+    assert s["verified_business_completion"]["denominator"] == 5
+    assert s["unknown_rate"]["count"] == 1
     assert s["verified_business_completion"]["count"] == 4
-    assert s["critical_violations"]["_none_observed"]["matured_tasks"] == 4
+    assert s["critical_violations"]["_none_observed"]["matured_tasks"] == 5
     assert m["measurement_health"]["verified_sources"]
 
 

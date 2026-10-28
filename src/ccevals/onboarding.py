@@ -346,6 +346,9 @@ def readiness(session: Session, tenant_id: str, now: datetime, judge_bundle: str
                                                   "detail": {"verified_sources": sorted(s for s, r in latest.items() if r.passed)}}
 
     missing = []
+    if not contracts:
+        missing.append({"field": "an approved contract that defines the semantic criteria to calibrate",
+                        "owner": "refund_policy_owner", "sample": None})
     if judge_bundle == "none":
         missing.append({"field": "a semantic judge (CCEVALS_JUDGE_PROVIDER)", "owner": "evaluation_engineer",
                         "sample": None})

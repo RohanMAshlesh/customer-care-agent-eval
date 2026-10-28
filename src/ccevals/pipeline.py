@@ -8,7 +8,7 @@ idempotent because a revision is appended only when the material content changes
 from __future__ import annotations
 
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Any
 
 from sqlalchemy import and_, func, or_, select
@@ -147,7 +147,12 @@ def evaluate_task(session: Session, task: Task, judge: Judge, now: datetime | No
     task.dirty = False
 
     if facts is None:
-        return None  # census-only so far; counted as missing conversation in measurement health
+        # Census-only so far. The task still matures so it stays in the metric denominator as unknown.
+        if resolved is not None:
+            maturation = timedelta(hours=resolved[1].measurement.maturation_hours)
+            task.deadline_at = task.opened_at + maturation
+            task.finalized = now >= task.deadline_at
+        return None
     if resolved is None:
         result = errored_result(None, f"no approved contract for intent {task.intent!r}", now)
         result["axes"]["evaluation_execution"] = "invalid"
