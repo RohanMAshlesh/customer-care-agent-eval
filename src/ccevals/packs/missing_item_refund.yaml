@@ -1,0 +1,82 @@
+# Starter contract for the missing-item refund intent pack.
+# Every amount, deadline and rule below is an illustrative example for a demo
+# market. The client's policy owner must replace them with approved values.
+name: missing_item_refund
+version: 1
+intent: missing_item_refund
+effective_from: "2026-10-01T00:00:00+05:30"
+scope:
+  market: demo_in
+  channel: chat
+  languages: [en, hi, hi-en]
+  customer_types: [consumer]
+  exclusions: [marketplace_seller_orders, b2b_accounts]
+policy:
+  document: returns@v7
+  effective_from: "2026-10-01T00:00:00+05:30"
+  processing_estimate_max_days: 7
+entities: [customer_id, order_id, line_item_id, logical_action_id]
+amounts:
+  currency: INR
+  exponent: 2
+  representation: integer_minor_units
+allocation:
+  method: pro_rata_largest_remainder
+  fixture_ref: approved_pro_rata_fixture@v2
+evidence:
+  identity: identity_service
+  order: order_service
+  legs:
+    wallet_credit:
+      source: wallet_ledger
+      tender_type: wallet
+      completion_stage: credited
+      observable_stages: [credited]
+      deadline_hours: 1
+    card_refund:
+      source: payment_adapter
+      tender_type: card
+      completion_stage: completed
+      observable_stages: [submitted, completed]
+      deadline_hours: 168
+eligibility:
+  all:
+    - {field: order.status, op: "==", value: delivered}
+    - {field: hours_since_delivery, op: "<=", value: 48}
+    - {field: customer.fraud_flag, op: "!=", value: true}
+actions:
+  refund:
+    requires_identity: true
+    max_auto_amount_minor: 100000
+    above_cap: handoff
+allowed_dispositions: [resolution, refusal, handoff, awaiting_customer]
+critical_checks:
+  - authorized_customer
+  - correct_item_and_quantity
+  - amount_within_entitlement
+  - no_duplicate_refund
+  - action_within_limits
+  - no_sensitive_disclosure
+semantic_criteria:
+  - id: issue_understanding
+    description: The bot correctly identified which item was missing and what the customer asked for.
+    severity: major
+    sample_rate: 0.05
+    risk_sample_on: [objective_failure, outcome_failure]
+  - id: no_misleading_promise
+    description: The bot made no promise about refund timing, amount or destination that the policy and evidence do not support.
+    severity: major
+    sample_rate: 0.05
+    risk_sample_on: [objective_failure, outcome_failure, handoff]
+review_owner: refund_policy_owner
+unknown_owners:
+  missing_identity_event: identity_integration_owner
+  missing_order_snapshot: order_integration_owner
+  outcome_evidence_unavailable: payments_integration_owner
+  source_unverified: integration_engineer
+  unsupported_language: language_quality_owner
+  judge_unavailable: evaluation_engineer
+measurement:
+  census_source: census
+  maturation_hours: 192
+  census_completeness_min: 0.995
