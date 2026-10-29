@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 
 export const TOUR = [
-  { id: "journey", short: "1 · One refund", title: "Follow one refund from chat to bank" },
-  { id: "catches", short: "2 · What it catches", title: "See the mistakes a chat review misses" },
+  { id: "journey", short: "1 · Four cases", title: "Replay four cases that looked resolved but were not" },
+  { id: "catches", short: "2 · What it catches", title: "See the broken promises a chat review misses" },
   { id: "ship", short: "3 · Ship or not", title: "Decide whether a new bot is safe to launch" },
   { id: "setup", short: "4 · Getting started", title: "How a company gets set up" },
 ];

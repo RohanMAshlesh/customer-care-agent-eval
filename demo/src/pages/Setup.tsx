@@ -15,17 +15,17 @@ const CHECKS: [string, string, string][] = [
 const PHASES = [
   {
     n: 1, t: "Agree the scope", who: "Head of support, AI lead, security", snap: 1,
-    does: "Pick one workflow to start with (refunds for missing items), one region and one channel. Security approves what data may be shared and where it is processed.",
+    does: "Pick one workflow to start with (for example missing-item refunds or safety complaints), one region and one channel. Security approves what data may be shared and where it is processed.",
     checks: "The signed scope and data approval are recorded. Nothing is connected yet, so the checklist is empty.",
   },
   {
     n: 2, t: "Write down the rules", who: "Refund policy owner", snap: 2,
-    does: "The policy owner turns the refund policy into clear rules: who is eligible, the automatic refund limit, deadlines and how refunds are split across payment methods. A second person must approve it.",
+    does: "The policy owner turns each support policy into clear rules: what counts as resolved, which team a ticket must go to, how urgent it is, and the deadline. A second person must approve it.",
     checks: "Before approval, the rules are tested on four worked examples. If the rules cannot reproduce them, they cannot be approved.",
   },
   {
     n: 3, t: "Connect the systems", who: "Integration engineers", snap: 4,
-    does: "Engineers connect the order, identity, wallet and payment systems. Each connection is tested with tricky cases (failures, duplicates, delays, outages) before its data is trusted.",
+    does: "Engineers connect the systems where support work happens: orders, payments, ServiceNow, logistics and sign-in. Each connection is tested with tricky cases (failures, duplicates, delays, outages) before its data is trusted.",
     checks: "Until a connection passes, money outcomes are reported as “unverified”, never as done.",
   },
   {

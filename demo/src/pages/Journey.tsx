@@ -1,136 +1,150 @@
 import { useEffect, useMemo, useState } from "react";
 import { Chat, Chip, CriteriaList, EventList, Loading, Panel, VerdictHeader, useData } from "../components/ui";
 import { ChapterHead, NextStep, Takeaway } from "../components/tour";
-import { inr } from "../lib/format";
+import { CRITERIA, CRITERION_ORDER, inr, outcomeInfo, type Tone } from "../lib/format";
 
-type Moment = { key: string; clock: string; title: string; text: string; event_count: number; revision: number; result: any };
-type Journey = { events: any[]; moments: Moment[]; wrong_claim: { message: string; result: any } };
-
-const STORY: Record<string, { headline: string; what: string; old: string; oldTone: "ok" | "bad" | "none"; now: string }> = {
-  contact: {
-    headline: "Priya reports a missing item",
-    what: "Her INR 1,200 order arrived without the paneer tikka, worth INR 240. She paid INR 300 from her wallet and INR 900 by card.",
-    old: "Nothing to review yet.", oldTone: "none",
-    now: "Opens a case and links it to Priya’s order and payment records.",
-  },
-  decision: {
-    headline: "The bot offers a refund",
-    what: "The bot confirms it is really Priya and offers INR 240 back: INR 60 to her wallet and INR 180 to her card, in the same proportion she paid.",
-    old: "Polite and clear. Looks good.", oldTone: "ok",
-    now: "Checks her identity was verified before any money moved, and that the split follows the refund policy.",
-  },
-  action: {
-    headline: "The refund is issued, with a hiccup",
-    what: "The payment system times out on the first try, so the bot tries again.",
-    old: "Not visible in the chat at all.", oldTone: "none",
-    now: "Confirms the retry reused the same refund and did not pay Priya twice.",
-  },
-  response: {
-    headline: "The bot tells Priya where her money is",
-    what: "The wallet credit lands instantly. The card refund has only been sent to the bank. The bot says exactly that.",
-    old: "Accurate and helpful.", oldTone: "ok",
-    now: "Wallet: confirmed by the ledger. Card: sent, not yet arrived. The bot’s words match the records.",
-  },
-  leaves: {
-    headline: "Priya leaves happy. A typical review would close the case.",
-    what: "The chat ends with an honest estimate of up to 5 days for the card refund.",
-    old: "Resolved. Score 9/10. Case closed.", oldTone: "ok",
-    now: "Not closed. It keeps watching the card refund until its 7-day deadline.",
-  },
-  failure: {
-    headline: "Next day, the bank rejects the card refund",
-    what: "Priya has her INR 60 but not the INR 180. She has not been told.",
-    old: "Still says “resolved”. Nobody re-reads the chat.", oldTone: "bad",
-    now: "Updates the verdict to “only partly refunded” and routes it to the payments team.",
-  },
-  recovery: {
-    headline: "The payments team re-issues the refund",
-    what: "A new card refund is sent to the bank.",
-    old: "Still says “resolved”.", oldTone: "bad",
-    now: "Records the recovery and keeps watching for the money to land.",
-  },
-  settled: {
-    headline: "Priya’s INR 180 arrives",
-    what: "The payment provider confirms the re-issued refund completed.",
-    old: "Still says “resolved”. Right by luck, three days late.", oldTone: "bad",
-    now: "Fully refunded, confirmed by the payment provider’s own records.",
-  },
-  final: {
-    headline: "The deadline passes. The verdict is final.",
-    what: "Every earlier verdict is kept, so anyone can audit what was known and when.",
-    old: "One score, written on day one.", oldTone: "bad",
-    now: "Final verdict plus a full history of how it changed and why.",
-  },
+type Moment = {
+  key: string; clock: string; title: string; event_count: number; revision: number;
+  headline: string; what: string; old: string; old_tone: "ok" | "bad" | "none"; now: string;
+  money: { owed_minor: number; arrived_minor: number; in_transit_minor: number } | null;
+  result: any;
+};
+export type Story = {
+  id: string; customer: string; title: string; category: string; situation: string; lesson: string;
+  systems: string[]; takeaway: string; contract_ref: string; events: any[]; moments: Moment[];
+  wrong_claim?: { message: string; result: any };
 };
 
-const MONEY: Record<string, [string, "pass" | "pending" | "fail" | "neutral" | "unknown"]> = {
-  complete: ["Arrived", "pass"],
-  submitted: ["Sent to bank, not arrived", "pending"],
-  failed: ["Failed at the bank", "fail"],
-  not_started: ["Not sent yet", "neutral"],
+const WORK_STATUS: Record<string, [string, Tone]> = {
+  complete: ["Done, confirmed", "pass"],
+  submitted: ["In progress", "pending"],
+  not_started: ["Not started", "neutral"],
+  incomplete: ["Overdue, not done", "fail"],
+  failed: ["Failed", "fail"],
   unknown: ["No proof either way", "unknown"],
 };
 
-const OVERALL: Record<string, [string, "pass" | "pending" | "fail" | "neutral" | "warn"]> = {
-  verified_complete: ["Fully refunded, verified", "pass"],
-  partial: ["Only partly refunded", "warn"],
-  pending: ["Not finished, still watching", "pending"],
-  not_applicable: ["No refund yet", "neutral"],
-  failed: ["Refund failed", "fail"],
-};
+function ProofPanel({ story, m, result }: { story: Story; m: Moment; result: any }) {
+  const [label, tone] = outcomeInfo(result.business_outcome);
+  const headTone: Tone = result.critical_violation ? "fail" : tone;
+  const headLabel = result.critical_violation ? `Critical issue · ${label.toLowerCase()}` : label;
+  const said = story.events.slice(0, m.event_count).some((e) => e.event_type === "customer.feedback" && e.payload.resolved);
+  const failing = CRITERION_ORDER.filter((n) => result.axes.bot_behaviour[n]?.result === "fail");
 
-export default function JourneyPage() {
-  const data = useData<Journey>("journey");
+  return (
+    <div style={{ display: "grid", gap: 10 }}>
+      <div className="verdict-row">
+        <span className="label">Proof checked in {story.systems.join(", ")}</span>
+        <Chip tone={headTone}>{headLabel}</Chip>
+      </div>
+      {m.money ? (
+        <div className="money" style={{ gridTemplateColumns: "repeat(3, minmax(0, 1fr))" }}>
+          <div className="money-item"><span className="where">Owed to {story.customer}</span><span className="amt">{inr(m.money.owed_minor)}</span></div>
+          <div className="money-item"><span className="where">Arrived</span><span className="amt" style={{ color: "var(--pass)" }}>{inr(m.money.arrived_minor)}</span></div>
+          <div className="money-item"><span className="where">Sent, not arrived</span><span className="amt" style={{ color: "var(--pending)" }}>{inr(m.money.in_transit_minor)}</span></div>
+        </div>
+      ) : (
+        <div className="money">
+          {Object.entries(result.axes.obligations).map(([k, o]: [string, any]) => {
+            const [l, t] = WORK_STATUS[o.status] ?? [o.status, "neutral"];
+            return (
+              <div className="money-item" key={k}>
+                <span className="where">{k === "ticket" ? "Ticket in ServiceNow" : `Proof: ${o.label}`}</span>
+                <span className="amt" style={{ fontSize: 17 }}>{k === "ticket" ? (o.number ?? "None found") : o.source}</span>
+                {k === "ticket" && o.assignment_group && <span className="where">{o.assignment_group}</span>}
+                <Chip tone={t}>{l}</Chip>
+              </div>
+            );
+          })}
+          {Object.keys(result.axes.obligations).length === 0 && <p className="muted">Nothing to check yet.</p>}
+          {said && (
+            <div className="money-item">
+              <span className="where">What {story.customer} said</span>
+              <span className="amt" style={{ fontSize: 17 }}>“It’s fixed”</span>
+              <Chip tone={result.business_outcome === "verified_resolved" ? "pass" : "warn"}>
+                {result.business_outcome === "verified_resolved" ? "Now confirmed" : "Not confirmed by any system"}
+              </Chip>
+            </div>
+          )}
+        </div>
+      )}
+      {failing.length > 0 && (
+        <div className="callout fail">
+          <span className="label">Failed checks so far</span>
+          {failing.map((n) => (
+            <span key={n} style={{ fontSize: 14 }}><strong>{CRITERIA[n]}:</strong> {result.axes.bot_behaviour[n].reason}</span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function JourneyPage({ initial }: { initial?: string }) {
+  const stories = useData<Story[]>("stories");
+  const [sid, setSid] = useState(initial ?? "priya");
   const [i, setI] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [overPromise, setOverPromise] = useState(false);
 
+  useEffect(() => { if (initial) setSid(initial); }, [initial]);
+  useEffect(() => { setI(0); setPlaying(false); setOverPromise(false); }, [sid]);
+
+  const story = stories?.find((s) => s.id === sid) ?? stories?.[0];
   useEffect(() => {
-    if (!playing || !data) return;
-    if (i >= data.moments.length - 1) { setPlaying(false); return; }
-    const t = setTimeout(() => setI((x) => x + 1), 3600);
+    if (!playing || !story) return;
+    if (i >= story.moments.length - 1) { setPlaying(false); return; }
+    const t = setTimeout(() => setI((x) => x + 1), 3800);
     return () => clearTimeout(t);
-  }, [playing, i, data]);
+  }, [playing, i, story]);
 
   const view = useMemo(() => {
-    if (!data) return null;
-    const m = data.moments[i];
-    const start = data.events.find((e) => e.event_type === "task.opened")!.occurred_at;
-    const canTry = m.key === "response";
+    if (!story) return null;
+    const m = story.moments[Math.min(i, story.moments.length - 1)];
+    const start = story.events.find((e) => e.event_type === "task.opened")!.occurred_at;
+    const canTry = story.id === "priya" && m.key === "response" && !!story.wrong_claim;
     const wrong = overPromise && canTry;
-    let events = data.events.slice(0, m.event_count);
+    let events = story.events.slice(0, m.event_count);
     if (wrong) {
       events = events.map((e) => e.event_type === "conversation.message" && e.payload.text.startsWith("INR 60 is credited")
-        ? { ...e, payload: { ...e.payload, text: data.wrong_claim.message } } : e);
+        ? { ...e, payload: { ...e.payload, text: story.wrong_claim!.message } } : e);
     }
-    return { m, start, events, canTry, wrong, result: wrong ? data.wrong_claim.result : m.result };
-  }, [data, i, overPromise]);
+    return { m, start, events, canTry, wrong, result: wrong ? story.wrong_claim!.result : m.result };
+  }, [story, i, overPromise]);
 
-  if (!data || !view) return <Loading />;
+  if (!stories || !story || !view) return <Loading />;
   const { m, start, events, canTry, wrong, result } = view;
-  const s = STORY[m.key];
-  const obligations = result.axes.obligations;
-  const [overall, overallTone] = OVERALL[result.business_outcome] ?? [result.business_outcome, "neutral"];
 
   return (
     <>
-      <ChapterHead id="journey" title="A chat can look resolved while the customer is still out of pocket.">
-        Follow one real-world style refund. On the left is what a typical transcript review concludes; on the right,
-        what Evidence Desk concludes by checking the money. Press play, or step through at your own pace.
+      <ChapterHead id="journey" title="Four customers. Four chats that looked resolved. None of them were, when the chat ended.">
+        Pick a case. Each one is replayed moment by moment: what the customer saw, what a transcript-only review
+        would conclude, and what Evidence Desk concludes by checking the systems where the work actually happens.
       </ChapterHead>
+
+      <div className="case-picker" role="tablist" aria-label="Customer cases">
+        {stories.map((s) => (
+          <button key={s.id} role="tab" className="case-pick" aria-selected={s.id === story.id} onClick={() => setSid(s.id)}>
+            <span className="label">{s.category}</span>
+            <span className="t">{s.customer}: {s.title}</span>
+            <span className="d">{s.lesson}</span>
+          </button>
+        ))}
+      </div>
 
       <Panel>
         <div className="timeline">
+          <p style={{ fontSize: 15, color: "var(--ink-2)" }}><strong style={{ color: "var(--ink)" }}>The situation.</strong> {story.situation}</p>
           <div className="timeline-controls">
-            <button className="btn primary" onClick={() => { if (i >= data.moments.length - 1) setI(0); setPlaying((p) => !p); }}>
-              {playing ? "Pause" : i >= data.moments.length - 1 ? "Replay" : "▶ Play the story"}
+            <button className="btn primary" onClick={() => { if (i >= story.moments.length - 1) setI(0); setPlaying((p) => !p); }}>
+              {playing ? "Pause" : i >= story.moments.length - 1 ? "Replay" : "▶ Play the case"}
             </button>
             <button className="btn" onClick={() => setI((x) => Math.max(0, x - 1))} disabled={i === 0}>← Back</button>
-            <button className="btn" onClick={() => setI((x) => Math.min(data.moments.length - 1, x + 1))} disabled={i === data.moments.length - 1}>Next moment →</button>
-            <span className="muted" style={{ fontSize: 13 }}>Moment {i + 1} of {data.moments.length}</span>
+            <button className="btn" onClick={() => setI((x) => Math.min(story.moments.length - 1, x + 1))} disabled={i === story.moments.length - 1}>Next moment →</button>
+            <span className="muted" style={{ fontSize: 13 }}>Moment {i + 1} of {story.moments.length}</span>
           </div>
-          <div className="steps" role="tablist" aria-label="Moments">
-            {data.moments.map((mm, k) => (
+          <div className="steps" style={{ gridTemplateColumns: `repeat(${story.moments.length}, minmax(96px, 1fr))` }} role="tablist" aria-label="Moments">
+            {story.moments.map((mm, k) => (
               <button key={mm.key} role="tab" className={`step${k < i ? " done" : ""}`} aria-current={k === i ? "step" : undefined}
                 onClick={() => { setPlaying(false); setI(k); }}>
                 <span className="t">{mm.clock}</span>
@@ -145,85 +159,63 @@ export default function JourneyPage() {
         <Panel>
           <div className="narration">
             <span className="when">{m.clock}</span>
-            <h2>{s.headline}</h2>
-            <p>{s.what}</p>
-
+            <h2>{m.headline}</h2>
+            <p>{m.what}</p>
             <div className="compare">
               <div className="compare-col old">
                 <span className="label">A transcript-only review says</span>
-                <span className="say" style={{ color: s.oldTone === "bad" ? "var(--fail)" : undefined }}>{s.old}</span>
+                <span className="say" style={{ color: m.old_tone === "bad" ? "var(--fail)" : undefined }}>{wrong ? "Accurate and reassuring." : m.old}</span>
               </div>
               <div className="compare-col new">
                 <span className="label">Evidence Desk says</span>
-                <span className="say">{wrong ? "The bot over-promised." : s.now}</span>
+                <span className="say">{wrong ? "The bot over-promised: the card refund had not arrived." : m.now}</span>
               </div>
             </div>
-
             {canTry && (
               <div className={`callout ${wrong ? "fail" : ""}`}>
                 <label className="switch">
                   <input type="checkbox" checked={overPromise} onChange={(e) => setOverPromise(e.target.checked)} />
                   Try it: what if the bot had said “your entire refund has reached you”?
                 </label>
-                {wrong && (
-                  <span style={{ fontSize: 14 }}>
-                    Flagged. At that moment the card refund had only been sent to the bank, so the promise was false,
-                    even though the refund itself was correct. A transcript review would have scored this as helpful.
-                  </span>
-                )}
               </div>
             )}
-
-            <div style={{ display: "grid", gap: 8 }}>
-              <div className="verdict-row">
-                <span className="label">Where Priya’s INR 240 is</span>
-                <Chip tone={overallTone}>{overall}</Chip>
-              </div>
-              <div className="money">
-                {(["wallet", "card"] as const).map((t) => {
-                  const o = obligations[t];
-                  const [label, tone] = o ? MONEY[o.status] ?? [o.status, "neutral"] : ["Not sent yet", "neutral" as const];
-                  return (
-                    <div className="money-item" key={t}>
-                      <span className="where">{t === "wallet" ? "Back to wallet" : "Back to card"}</span>
-                      <span className="amt">{inr(t === "wallet" ? 6000 : 18000)}</span>
-                      <Chip tone={tone}>{label}</Chip>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+            <ProofPanel story={story} m={m} result={result} />
           </div>
         </Panel>
 
-        <Panel title="What Priya saw in the chat">
-          <Chat events={events} start={start} flagged={wrong ? data.wrong_claim.message : undefined} />
-        </Panel>
+        <div style={{ display: "grid", gap: 16 }}>
+          <Panel title={`What ${story.customer} saw`}>
+            <Chat events={events} start={start} flagged={wrong ? story.wrong_claim!.message : undefined} />
+          </Panel>
+          <Panel title="Behind the scenes" aside={<span className="label">records the customer never sees</span>}>
+            <EventList events={events.filter((e) => !["census.task_assigned", "customer.profile", "task.opened", "bot.claim"].includes(e.event_type))} start={start} limit={6} />
+          </Panel>
+        </div>
       </div>
 
-      <Takeaway>
-        The chat was perfect and a transcript review would have closed the case at 09:04. Priya was still owed INR 180
-        for three days. Evidence Desk caught it because it follows the money until it lands, not just the words.
-      </Takeaway>
+      <Takeaway>{story.takeaway}</Takeaway>
 
       <Panel>
         <details className="more">
-          <summary>For specialists: the 12 checks, the raw evidence and the verdict history</summary>
+          <summary>For specialists: every check, the full evidence and the verdict history for {story.customer}’s case</summary>
           <div className="journey-grid" style={{ padding: 16 }}>
-            <Panel title="Business evidence"><EventList events={events} start={start} /></Panel>
-            <Panel title="Engine verdict">
+            <Panel title="Engine verdict" aside={<span className="label">{story.contract_ref}</span>}>
               <VerdictHeader result={result} revision={wrong ? undefined : m.revision} />
-              <CriteriaList behaviour={result.axes.bot_behaviour} focus={wrong ? ["claims_supported_by_evidence"] : []} />
+              <CriteriaList behaviour={result.axes.bot_behaviour} />
             </Panel>
+            <Panel title="All evidence"><EventList events={events} start={start} /></Panel>
             <Panel title="Verdict history">
               <div className="rule-list">
-                {data.moments.filter((mm, k) => k === 0 || mm.revision !== data.moments[k - 1].revision).map((mm) => (
-                  <div className="rule" key={mm.key}>
-                    <span className="mono muted" style={{ fontSize: 11 }}>v{mm.revision}</span>
-                    <span>{mm.clock} · {mm.title}</span>
-                    <Chip tone={(OVERALL[mm.result.business_outcome] ?? ["", "neutral"])[1]}>{(OVERALL[mm.result.business_outcome] ?? [mm.result.business_outcome])[0]}</Chip>
-                  </div>
-                ))}
+                {story.moments.filter((mm, k) => k === 0 || mm.revision !== story.moments[k - 1].revision).map((mm) => {
+                  const [l, t] = outcomeInfo(mm.result.business_outcome);
+                  return (
+                    <div className="rule" key={mm.key}>
+                      <span className="mono muted" style={{ fontSize: 11 }}>v{mm.revision}</span>
+                      <span>{mm.clock} · {mm.title}</span>
+                      <Chip tone={mm.result.critical_violation ? "fail" : t}>{mm.result.critical_violation ? "Critical" : l}</Chip>
+                    </div>
+                  );
+                })}
               </div>
             </Panel>
           </div>

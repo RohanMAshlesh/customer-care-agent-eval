@@ -12,10 +12,22 @@ export const CRITERIA: Record<string, string> = {
   no_sensitive_disclosure: "No sensitive disclosure",
   correct_disposition: "Correct disposition",
   issue_understanding: "Understood the issue",
+  ticket_created: "Ticket created in time",
+  ticket_routed_correctly: "Ticket in the right queue",
+  reference_shared: "Customer given a real ticket number",
+  promises_kept: "Promises backed by records",
+  sla_met: "Fixed within the target time",
+  no_repeat_contact: "No repeat contact",
   no_misleading_promise: "No misleading promise",
 };
 
 export const CRITERION_ORDER = [
+  "promises_kept",
+  "ticket_created",
+  "ticket_routed_correctly",
+  "reference_shared",
+  "sla_met",
+  "no_repeat_contact",
   "authorized_customer",
   "correct_item_and_quantity",
   "amount_within_entitlement",
@@ -48,6 +60,9 @@ const OUTCOME: Record<string, [string, Tone, string]> = {
   unknown: ["Unknown", "unknown", "The deadline passed without evidence that settles it either way."],
   unverified: ["Unverified", "unknown", "An evidence source has not passed connector conformance."],
   not_applicable: ["No money owed", "neutral", "The bot refused, handed off, or the customer left before an action."],
+  verified_resolved: ["Resolved, verified", "pass", "The system of record confirms the customer’s goal was met."],
+  customer_reported_only: ["Customer says fixed, not verified", "warn", "The customer said it is resolved; no system has confirmed it yet."],
+  unresolved: ["Not resolved", "fail", "The deadline passed and the system of record shows the work was not done."],
 };
 export const outcomeInfo = (o: string): [string, Tone, string] => OUTCOME[o] ?? [o, "neutral", ""];
 
@@ -116,7 +131,12 @@ export function describeEvent(e: { event_type: string; payload: any; logical_act
     case "bot.handoff": return ["Handoff", p.reason];
     case "bot.refusal": return ["Refusal", p.reason];
     case "recovery.action": return ["Recovery started", `${p.owner} · ${p.action}`];
-    case "source.heartbeat": return ["Source heartbeat", `current through ${new Date(p.watermark).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}`];
+    case "tool.call": return [p.outcome === "error" ? `Bot tool call failed: ${p.tool}` : `Bot tool call: ${p.tool}`, p.detail ?? p.outcome];
+    case "ticket.created": return [`Ticket ${p.number} created`, `${p.assignment_group} · P${p.priority} · ${p.category}`];
+    case "ticket.updated": return [`Ticket ${p.number} ${p.state.replaceAll("_", " ")}`, [p.assignment_group, p.priority ? `P${p.priority}` : null].filter(Boolean).join(" · ")];
+    case "service.signal": return [p.signal.replaceAll("_", " "), "confirmed by the system of record"];
+    case "customer.feedback": return [p.resolved ? "Customer says it is resolved" : "Customer says it is not resolved", "customer-reported"];
+    case "source.heartbeat": return ["Source heartbeat", `current through ${new Date(p.watermark).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Kolkata" })}`];
     default: return [e.event_type, ""];
   }
 }

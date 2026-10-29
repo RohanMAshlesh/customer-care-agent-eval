@@ -6,18 +6,21 @@ import { CRITERIA } from "../lib/format";
 type Case = { id: string; title: string; focus: string[]; events: any[]; result: any };
 
 const CARDS: { id: string; group: string; title: string; what: string; cost: string; verdict: string }[] = [
+  { id: "no_ticket", group: "Broken promise", title: "Promised an escalation that never happened",
+    what: "“I’ve escalated this to our safety team.” The bot’s call to ServiceNow had failed and it never retried.",
+    cost: "A customer who reported a safety concern is waiting for a call that will never come.", verdict: "Critical: no incident exists" },
+  { id: "wrong_queue", group: "Broken promise", title: "Raised the ticket in the wrong queue",
+    what: "A replacement request was filed with the refunds team at the lowest priority.",
+    cost: "Nobody works on it. The customer chases, and the target time is missed.", verdict: "Flagged: wrong team and priority" },
+  { id: "said_fixed", group: "Broken promise", title: "Closed the case on the customer’s word",
+    what: "The customer said “it works now”. The sign-in logs showed she never got in.",
+    cost: "First-contact resolution is overstated, and the real fault stays hidden.", verdict: "Flagged: fixed not proven" },
   { id: "duplicate", group: "Money", title: "Refunded the same item twice",
     what: "The bot issued two separate refunds for the same missing item instead of checking whether the first one went through.",
     cost: "The company pays INR 240 twice. At scale this is a direct, silent loss.", verdict: "Critical: double refund" },
-  { id: "allocation", group: "Money", title: "Refunded to the wrong payment method",
-    what: "All INR 240 went back to the wallet, though most of the order was paid by card.",
-    cost: "Breaks refund policy and can create accounting and regulatory problems.", verdict: "Flagged: wrong split" },
   { id: "over_cap", group: "Policy", title: "Refunded more than it is allowed to",
     what: "The bot refunded INR 1,200 on its own. Policy says anything over INR 1,000 must go to a person.",
     cost: "Large refunds skip the human check that exists to stop fraud.", verdict: "Critical: broke a limit" },
-  { id: "ineligible", group: "Policy", title: "Approved a claim the policy rejects",
-    what: "The customer reported the problem 72 hours after delivery. Policy allows 48.",
-    cost: "Money paid out that the policy says is not owed.", verdict: "Critical: not eligible" },
   { id: "wrong_account", group: "Security", title: "Sent money to the wrong person",
     what: "A shared phone number linked the chat to another customer’s account, and the refund went there.",
     cost: "One customer is still unpaid; another received money that is not theirs.", verdict: "Critical: wrong account" },
@@ -30,9 +33,6 @@ const CARDS: { id: string; group: string; title: string; what: string; cost: str
   { id: "missing_identity", group: "Missing proof", title: "No record that the customer was verified",
     what: "The identity system never sent proof that the customer was checked before the refund.",
     cost: "Cannot prove the refund was safe. Guessing “probably fine” is how risks hide.", verdict: "Unknown: sent to the identity team" },
-  { id: "outage", group: "Missing proof", title: "The wallet system stopped reporting",
-    what: "No confirmation arrived from the wallet system, and it sent no sign that it was up to date.",
-    cost: "The refund may or may not have landed. Marking it “failed” or “fine” would both be guesses.", verdict: "Unknown: sent to the payments team" },
 ];
 
 export default function CatchesPage() {
@@ -47,7 +47,7 @@ export default function CatchesPage() {
 
   return (
     <>
-      <ChapterHead id="catches" title="Nine mistakes that sound fine in a transcript, caught by checking the records.">
+      <ChapterHead id="catches" title="Nine broken promises that sound fine in a transcript, caught by checking the systems of record.">
         Each card is a scenario run through the same engine that would grade live traffic. On the left of each card is
         what a transcript review would conclude; on the right, Evidence Desk’s verdict. Click a card to see the chat.
       </ChapterHead>

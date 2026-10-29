@@ -1,13 +1,27 @@
+const CASES = [
+  { id: "priya", category: "Money", who: "Priya: the refund that bounced",
+    what: "Refund promised in chat. The card refund failed at the bank the next day.",
+    old: "Resolved · 9/10", truth: "INR 180 still owed for 3 days" },
+  { id: "kavya", category: "Safety", who: "Kavya: the escalation that never happened",
+    what: "“I’ve escalated this to our safety team.” The ServiceNow call had failed silently.",
+    old: "Empathetic escalation · 10/10", truth: "No incident existed" },
+  { id: "rohit", category: "Service request", who: "Rohit: the ticket in the wrong queue",
+    what: "Replacement ticket raised, but with the refunds team at low priority.",
+    old: "Ticket raised · 9/10", truth: "Nothing moved for 2 days; target missed" },
+  { id: "neha", category: "Account access", who: "Neha: “It works now, thanks!”",
+    what: "The customer said sign-in worked. The sign-in logs said she never got in.",
+    old: "First-contact resolution · 10/10", truth: "Still locked out; came back that evening" },
+];
+
 export default function OverviewPage() {
   return (
     <>
       <section className="hero">
         <span className="eyebrow">Customer support · AI quality</span>
-        <h1>Your AI support agent can say “refund done” when the customer never got their money.</h1>
+        <h1>AI support is graded on how conversations sound. Customers judge it on whether their problem was fixed.</h1>
         <p className="lede">
-          Evidence Desk checks every conversation against the systems that actually move money: the order system,
-          the wallet and the payment provider. It tells you whether each customer’s problem was really fixed, and
-          whether a new version of the bot is safe to launch.
+          Evidence Desk measures resolution, not conversation. It checks every support case in the systems where the
+          work actually happens (payments, ServiceNow, logistics, sign-in) and follows it until the outcome is proven.
         </p>
         <div className="hero-actions">
           <a className="btn primary xl" href="#journey">Start the 3-minute tour →</a>
@@ -17,67 +31,81 @@ export default function OverviewPage() {
 
       <div className="scr">
         <div className="panel scr-card">
-          <span className="label">Today</span>
-          <h3>Support bots now move real money</h3>
-          <p>Delivery and shopping apps let AI agents issue refunds, cancel orders and change accounts without a human.</p>
+          <span className="label">Situation</span>
+          <h3>AI agents now close support cases on their own</h3>
+          <p>Refunds, safety complaints, replacements and account problems are increasingly handled end to end by a bot.</p>
         </div>
         <div className="panel scr-card">
-          <span className="label">The problem</span>
-          <h3>Teams judge the chat, not the outcome</h3>
+          <span className="label">Complication</span>
+          <h3>The transcript only holds the promise</h3>
           <p>
-            Quality reviews read the transcript and ask “did it sound helpful?”. A polite chat can hide a refund that
-            failed at the bank, a double refund, or money sent to the wrong account.
+            Quality reviews read the chat. But the work happens elsewhere: the refund at the bank, the ticket in
+            ServiceNow, the parcel with logistics, the sign-in. Nobody checks that the promise was kept.
           </p>
         </div>
         <div className="panel scr-card resolution">
-          <span className="label">The answer</span>
-          <h3>Judge each request by the evidence</h3>
+          <span className="label">Resolution</span>
+          <h3>Score every case on proven outcomes</h3>
           <p>
-            Join the chat with order, wallet and payment records. Follow the money until it lands. Say “we don’t know
-            yet” when proof is missing, instead of guessing.
+            Join each chat to the systems of record. Check the right action happened, in the right place, on time.
+            Report “unknown” when proof is missing, and name the team that must fix it.
           </p>
         </div>
       </div>
 
       <div className="section-title">
-        <h2>Three questions it answers</h2>
-        <p>Each one is a step in the tour. Every result shown was produced by the real evaluation engine.</p>
+        <h2>Four cases, one pattern</h2>
+        <p>Every case below would score highly in a transcript review. In all four, the customer’s problem was not solved when the chat ended.</p>
       </div>
-      <div className="questions">
+      <div className="cases4">
+        {CASES.map((c) => (
+          <a key={c.id} className="panel case-card" href={`#journey-${c.id}`}>
+            <span className="label">{c.category}</span>
+            <span className="who">{c.who}</span>
+            <p>{c.what}</p>
+            <div className="vs">
+              <div className="o"><span className="label">Transcript review</span>{c.old}</div>
+              <div className="n"><span className="label">What actually happened</span>{c.truth}</div>
+            </div>
+            <span className="go" style={{ fontWeight: 600, fontSize: 14, color: "var(--accent)" }}>Replay this case →</span>
+          </a>
+        ))}
+      </div>
+
+      <div className="section-title">
+        <h2>What a support leader gets</h2>
+        <p>Three answers that a transcript score cannot give.</p>
+      </div>
+      <div className="outcomes3">
         <a className="panel question" href="#journey">
-          <span className="label">Step 1</span>
-          <span className="q">Did this customer actually get their money back?</span>
-          <p>Follow one refund through chat, a bank failure and the fix, and see where a transcript review goes wrong.</p>
-          <span className="go">See one refund →</span>
+          <span className="label">1 · Truth</span>
+          <span className="q">A resolution rate you can defend</span>
+          <p>The share of cases where the customer’s goal is confirmed by a system of record, not by the tone of a chat.</p>
         </a>
         <a className="panel question" href="#catches">
-          <span className="label">Step 2</span>
-          <span className="q">Did the bot follow the rules?</span>
-          <p>Nine real mistakes, from double refunds to leaking a card number, that sound fine in a transcript.</p>
-          <span className="go">See what it catches →</span>
+          <span className="label">2 · Accountability</span>
+          <span className="q">A list of broken promises, each with an owner</span>
+          <p>Missing tickets, wrong queues, false “it’s fixed” claims and money errors, routed to the team that can fix them.</p>
         </a>
         <a className="panel question" href="#ship">
-          <span className="label">Step 3</span>
-          <span className="q">Is the new bot version safe to launch?</span>
-          <p>A clear yes, no, or “not enough proof yet” before a new version reaches customers.</p>
-          <span className="go">Try the launch check →</span>
+          <span className="label">3 · Control</span>
+          <span className="q">A clear launch decision for every new bot version</span>
+          <p>Yes, no, or “not enough proof yet”, before customers are exposed to a change.</p>
         </a>
       </div>
 
       <div className="panel panel-body cols-2">
         <div style={{ display: "grid", gap: 8 }}>
-          <span className="label">Who it is for</span>
-          <p style={{ fontSize: 16 }}>
-            Heads of customer support and AI teams at high-volume businesses, starting with refunds for missing items
-            in food and grocery delivery.
-          </p>
+          <span className="label">Where to start</span>
+          <p className="big-claim">One workflow, one region, one channel. Prove it there, then expand.</p>
         </div>
         <div style={{ display: "grid", gap: 8 }}>
           <span className="label">What makes it different</span>
           <ul className="plain-list">
-            <li><span className="b">✓</span>Checks the money, not just the words</li>
-            <li><span className="b">✓</span>Keeps watching after the chat ends</li>
-            <li><span className="b">✓</span>Says “unknown” and names who must fix it, instead of guessing</li>
+            <li><span className="b">✓</span>Checks the work in the systems of record, not just the words</li>
+            <li><span className="b">✓</span>Keeps watching after the chat ends, until the deadline</li>
+            <li><span className="b">✓</span>Separates “the customer says fixed” from “proven fixed”</li>
+            <li><span className="b">✓</span>Says “unknown” and names an owner, instead of guessing</li>
           </ul>
         </div>
       </div>

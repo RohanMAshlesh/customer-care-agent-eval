@@ -9,14 +9,18 @@ import SetupPage from "./pages/Setup";
 
 const ROUTES = [
   { id: "overview", label: "Overview", page: OverviewPage },
-  { id: "journey", label: "1 · One refund", page: JourneyPage },
+  { id: "journey", label: "1 · Four cases", page: JourneyPage },
   { id: "catches", label: "2 · What it catches", page: CatchesPage },
   { id: "ship", label: "3 · Ship or not", page: ShipPage },
   { id: "setup", label: "4 · Getting started", page: SetupPage },
 ];
 
 function useRoute() {
-  const read = () => ROUTES.find((r) => `#${r.id}` === window.location.hash)?.id ?? "overview";
+  const read = () => {
+    const h = window.location.hash.replace("#", "");
+    if (h.startsWith("journey-")) return h;
+    return ROUTES.find((r) => r.id === h)?.id ?? "overview";
+  };
   const [route, setRoute] = useState(read);
   useEffect(() => {
     const on = () => { setRoute(read()); window.scrollTo({ top: 0 }); };
@@ -45,7 +49,9 @@ function ThemeToggle() {
 
 function App() {
   const route = useRoute();
-  const Page = ROUTES.find((r) => r.id === route)!.page;
+  const base = route.startsWith("journey-") ? "journey" : route;
+  const Page = ROUTES.find((r) => r.id === base)!.page as (p: { initial?: string }) => JSX.Element;
+  const initial = route.startsWith("journey-") ? route.slice("journey-".length) : undefined;
   return (
     <>
       <header className="topbar">
@@ -56,22 +62,22 @@ function App() {
             </span>
             <span>
               <span className="brand-name">Evidence Desk</span>
-              <span className="brand-sub">Did the AI agent really fix it?</span>
+              <span className="brand-sub">Resolution, not conversation</span>
             </span>
           </a>
           <nav className="nav" aria-label="Sections">
             {ROUTES.map((r) => (
-              <a key={r.id} href={`#${r.id}`} aria-current={route === r.id ? "page" : undefined}>{r.label}</a>
+              <a key={r.id} href={`#${r.id}`} aria-current={base === r.id ? "page" : undefined}>{r.label}</a>
             ))}
           </nav>
           <ThemeToggle />
         </div>
       </header>
       <main className="page">
-        <Page />
+        <Page initial={initial} />
         <footer className="footer">
           <span>Interactive prototype. Every verdict shown was produced by the real evaluation engine and saved as data.</span>
-          <span>Customer, amounts and policies are illustrative, not any company’s real data or rules.</span>
+          <span>Customers, tickets, amounts and policies are illustrative, not any company’s real data or rules.</span>
         </footer>
       </main>
     </>
