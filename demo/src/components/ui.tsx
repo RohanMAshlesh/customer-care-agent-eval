@@ -1,16 +1,30 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { Component, useEffect, useState, type ReactNode } from "react";
 import {
   CRITERIA, CRITERION_ORDER, DISPOSITION, UNKNOWN_REASON, clock, describeEvent, inr, legInfo, outcomeInfo,
   resultChip, timeliness, type Tone,
 } from "../lib/format";
 
+// Data ships inside the bundle (code-split per file), so pages never depend on a runtime fetch.
+const LOADERS: Record<string, () => Promise<{ default: unknown }>> = {
+  stories: () => import("../data/stories.json"),
+  lab: () => import("../data/lab.json"),
+  gate: () => import("../data/gate.json"),
+  onboarding: () => import("../data/onboarding.json"),
+};
+
 export function useData<T>(name: string): T | null {
   const [data, setData] = useState<T | null>(null);
+  const [failed, setFailed] = useState(false);
   useEffect(() => {
     let live = true;
-    fetch(`/data/${name}.json`).then((r) => r.json()).then((d) => live && setData(d));
+    const load = LOADERS[name];
+    if (!load) { setFailed(true); return; }
+    load()
+      .then((mod) => { if (live) setData(mod.default as T); })
+      .catch(() => { if (live) setFailed(true); });
     return () => { live = false; };
   }, [name]);
+  if (failed) throw new Error(`Could not load the ${name} data.`);
   return data;
 }
 
@@ -39,6 +53,24 @@ export function Panel({ title, aside, children, className }: { title?: ReactNode
 
 export function Loading() {
   return <div className="loading">Loading evaluation data…</div>;
+}
+
+export class PageBoundary extends Component<{ children: ReactNode }, { error: string | null }> {
+  state = { error: null as string | null };
+  static getDerivedStateFromError(error: Error) {
+    return { error: error.message };
+  }
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="callout fail" role="alert">
+          <strong>This page could not load.</strong>
+          <span style={{ fontSize: 14 }}>{this.state.error} Refresh the page to try again.</span>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
 }
 
 type Crit = { result: string; severity: string; kind: string; reason: string; source?: string; detail?: any };

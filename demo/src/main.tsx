@@ -1,6 +1,7 @@
 import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./styles.css";
+import { PageBoundary } from "./components/ui";
 import OverviewPage from "./pages/Overview";
 import JourneyPage from "./pages/Journey";
 import CatchesPage from "./pages/Catches";
@@ -74,7 +75,7 @@ function App() {
         </div>
       </header>
       <main className="page">
-        <Page initial={initial} />
+        <PageBoundary key={route}><Page initial={initial} /></PageBoundary>
         <footer className="footer">
           <span>Interactive prototype. Every verdict shown was produced by the real evaluation engine and saved as data.</span>
           <span>Customers, tickets, amounts and policies are illustrative, not any company’s real data or rules.</span>

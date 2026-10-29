@@ -11,7 +11,7 @@ It implements the first vertical slice of the *Enterprise Customer Care Evals Bl
 
 ## Interactive demo
 
-`demo/` is a static web app (Vite + React) that walks through the refund journey, the edge cases, the release gate and client onboarding, using data exported from this engine. To host it on Vercel, import the repository and set the root directory to `demo`. See [demo/README.md](demo/README.md).
+`demo/` is a static web app (Vite + React), a 3-minute guided tour built on one message: measure resolution, not conversation. It replays four customer cases (a refund that bounced, a safety escalation that was never created in ServiceNow, a ticket in the wrong queue, and a sign-in the customer said worked but did not), then shows what the engine catches, the launch check and client onboarding. All results come from this engine. To host it on Vercel, import the repository and set the root directory to `demo`. See [demo/README.md](demo/README.md).
 
 ## What it does
 
@@ -129,7 +129,7 @@ pytest
 CCEVALS_TEST_DATABASE_URL=postgresql+psycopg://user:pass@localhost:5432/ccevals_test pytest
 ```
 
-The suite covers the blueprint's reference journey end to end, the money and fulfilment edge cases from section 8, the policy and conversation edge cases from section 9, metamorphic invariants, contract governance, release gates, judge safety, onboarding, conformance, calibration, metrics and tenant isolation. CI runs it on SQLite and on PostgreSQL.
+The suite covers the blueprint's reference journey end to end, the money and fulfilment edge cases from section 8, the policy and conversation edge cases from section 9, metamorphic invariants, the service-resolution pack (missing escalations, misrouted tickets, missed targets, repeat contact, verified versus customer-reported resolution), contract governance, release gates, judge safety, onboarding, conformance, calibration, metrics and tenant isolation. CI runs it on SQLite and on PostgreSQL.
 
 ## What "production ready" means here
 

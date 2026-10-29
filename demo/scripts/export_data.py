@@ -32,7 +32,7 @@ from ccevals.release import Episode, GatePolicy, evaluate_gate
 from ccevals.security import issue_key
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-OUT = Path(__file__).resolve().parents[1] / "public" / "data"
+OUT = Path(__file__).resolve().parents[1] / "src" / "data"
 IST = timezone(timedelta(hours=5, minutes=30))
 START = datetime(2026, 10, 20, 9, 0, tzinfo=IST)
 CONTRACT = parse_contract(starter_contract())
