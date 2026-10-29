@@ -1,0 +1,16 @@
+# Illustrative service contract: a customer cannot sign in; resolution is a real successful sign-in.
+pack: service_resolution
+name: login_issue
+version: 1
+intent: login_issue
+effective_from: "2026-10-01T00:00:00+05:30"
+scope: {market: demo_in, channel: chat, languages: [en, hi, hi-en]}
+policy: {document: account_access_guide@v2, effective_from: "2026-10-01T00:00:00+05:30"}
+expected_dispositions: [resolution]
+resolution: {source: auth_service, signal: login_succeeded, within_hours: 24}
+repeat_contact_window_hours: 48
+critical_checks: [no_sensitive_disclosure]
+review_owner: account_support_lead
+unknown_owners:
+  resolution_evidence_unavailable: identity_integration_owner
+measurement: {census_source: census, maturation_hours: 48}

@@ -1,0 +1,25 @@
+# Illustrative service contract: a damaged appliance must be replaced through logistics.
+pack: service_resolution
+name: damaged_item_replacement
+version: 1
+intent: damaged_item_replacement
+effective_from: "2026-10-01T00:00:00+05:30"
+scope: {market: demo_in, channel: chat, languages: [en, hi, hi-en]}
+policy: {document: replacement_policy@v3, effective_from: "2026-10-01T00:00:00+05:30"}
+expected_dispositions: [resolution]
+ticket:
+  system: servicenow
+  category: replacement
+  assignment_group: Logistics - Replacements
+  max_priority: 3
+  create_within_minutes: 30
+  resolve_within_hours: 72
+  share_reference: true
+resolution: {source: logistics, signal: replacement_delivered, within_hours: 96}
+repeat_contact_window_hours: 96
+critical_checks: [promises_kept, no_sensitive_disclosure]
+review_owner: replacements_ops_lead
+unknown_owners:
+  ticket_evidence_unavailable: itsm_integration_owner
+  resolution_evidence_unavailable: logistics_integration_owner
+measurement: {census_source: census, maturation_hours: 120}

@@ -145,7 +145,8 @@ class ScenarioBuilder:
                          {"attempt": attempt, "outcome": outcome}, action_id=action_id)
 
     def claim(self, minutes: float, claim_type: str, scope: str | list[str] = "all", stage: str | None = None,
-              amount: int | None = None, days: int | None = None, extracted_by: str = "tool") -> dict:
+              amount: int | None = None, days: int | None = None, extracted_by: str = "tool",
+              reference: str | None = None) -> dict:
         payload: dict[str, Any] = {"claim_type": claim_type, "scope": scope, "extracted_by": extracted_by}
         if stage:
             payload["stage"] = stage
@@ -153,6 +154,8 @@ class ScenarioBuilder:
             payload["amount_minor"] = amount
         if days is not None:
             payload["days"] = days
+        if reference is not None:
+            payload["reference"] = reference
         return self.emit("bot.claim", self.sources["chat"], minutes, payload)
 
     def handoff(self, minutes: float, reason: str = "policy_requires_agent") -> dict:
@@ -183,6 +186,41 @@ class ScenarioBuilder:
     def heartbeat(self, minutes: float, source: str, watermark_minutes: float) -> dict:
         return self.emit("source.heartbeat", source, minutes, {"watermark": self.at(watermark_minutes).isoformat()},
                          task=False, entity_refs={})
+
+    # -- service work (tickets, logistics, sign-in) ----------------------------------
+
+    def open_service(self, minutes: float, topic: str, language: str = "en") -> dict:
+        return self.emit("task.opened", self.sources["chat"], minutes,
+                         {"intent": self.intent, "market": self.market, "language": language, "topic": topic},
+                         entity_refs={"customer_id": self.customer_id})
+
+    def tool_call(self, minutes: float, tool: str, outcome: str, detail: str | None = None) -> dict:
+        payload: dict[str, Any] = {"tool": tool, "outcome": outcome}
+        if detail:
+            payload["detail"] = detail
+        return self.emit("tool.call", self.sources["chat"], minutes, payload)
+
+    def ticket(self, minutes: float, number: str, category: str, group: str, priority: int,
+               source: str = "servicenow") -> dict:
+        return self.emit("ticket.created", source, minutes, {"number": number, "table": "incident", "category": category,
+                                                             "assignment_group": group, "priority": priority, "state": "new"},
+                         version=1, entity_refs={"customer_id": self.customer_id})
+
+    def ticket_update(self, minutes: float, number: str, state: str, version: int, group: str | None = None,
+                      priority: int | None = None, source: str = "servicenow") -> dict:
+        payload: dict[str, Any] = {"number": number, "state": state}
+        if group:
+            payload["assignment_group"] = group
+        if priority:
+            payload["priority"] = priority
+        return self.emit("ticket.updated", source, minutes, payload, version=version,
+                         entity_refs={"customer_id": self.customer_id})
+
+    def signal(self, minutes: float, source: str, signal: str) -> dict:
+        return self.emit("service.signal", source, minutes, {"signal": signal}, entity_refs={"customer_id": self.customer_id})
+
+    def feedback(self, minutes: float, resolved: bool) -> dict:
+        return self.emit("customer.feedback", self.sources["chat"], minutes, {"resolved": resolved})
 
     def expected(self, dispositions: list[str], slice_: dict[str, str] | None = None) -> dict:
         return self.emit("scenario.expected", "scenario_registry", 0,

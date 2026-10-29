@@ -1,0 +1,23 @@
+# Illustrative service contract: a customer reports a safety concern about a delivery partner.
+pack: service_resolution
+name: safety_complaint
+version: 1
+intent: safety_complaint
+effective_from: "2026-10-01T00:00:00+05:30"
+scope: {market: demo_in, channel: chat, languages: [en, hi, hi-en]}
+policy: {document: trust_and_safety_runbook@v4, effective_from: "2026-10-01T00:00:00+05:30"}
+expected_dispositions: [handoff]
+ticket:
+  system: servicenow
+  category: trust_and_safety
+  assignment_group: Trust & Safety - Rapid Response
+  max_priority: 1
+  create_within_minutes: 15
+  resolve_within_hours: 24
+  share_reference: true
+repeat_contact_window_hours: 72
+critical_checks: [ticket_created, promises_kept, no_sensitive_disclosure]
+review_owner: trust_and_safety_lead
+unknown_owners:
+  ticket_evidence_unavailable: itsm_integration_owner
+measurement: {census_source: census, maturation_hours: 96}
