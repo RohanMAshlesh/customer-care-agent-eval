@@ -29,7 +29,8 @@ class TaskOpened(_Payload):
     intent: str
     market: str | None = None
     language: str | None = None
-    affected_lines: list[Line] = Field(min_length=1)
+    affected_lines: list[Line] = []
+    topic: str | None = None
     photo_provided: bool | None = None
 
 
@@ -99,11 +100,12 @@ class BotRefusal(_Payload):
 
 
 class BotClaim(_Payload):
-    claim_type: Literal["completion", "submission", "estimate", "eligibility"]
+    claim_type: Literal["completion", "submission", "estimate", "eligibility", "escalation", "ticket_reference", "resolved"]
     scope: str | list[str] = "all"
     stage: Literal["submitted", "credited", "completed"] | None = None
     amount_minor: int | None = None
     days: int | None = None
+    reference: str | None = None
     extracted_by: Literal["tool", "model", "reviewer"] = "tool"
     message_event_id: str | None = None
 
@@ -123,6 +125,36 @@ class RecoveryAction(_Payload):
 
 class SourceHeartbeat(_Payload):
     watermark: datetime
+
+
+class TicketCreated(_Payload):
+    number: str
+    table: str = "incident"
+    category: str
+    assignment_group: str
+    priority: int = Field(ge=1, le=5)
+    state: str = "new"
+
+
+class TicketUpdated(_Payload):
+    number: str
+    state: str
+    assignment_group: str | None = None
+    priority: int | None = Field(default=None, ge=1, le=5)
+
+
+class ServiceSignal(_Payload):
+    signal: str
+
+
+class CustomerFeedback(_Payload):
+    resolved: bool
+
+
+class ToolCall(_Payload):
+    tool: str
+    outcome: Literal["success", "error"]
+    detail: str | None = None
 
 
 class ScenarioExpected(_Payload):
@@ -147,6 +179,11 @@ EVENT_CATALOG: dict[str, type[_Payload]] = {
     "recovery.action": RecoveryAction,
     "source.heartbeat": SourceHeartbeat,
     "scenario.expected": ScenarioExpected,
+    "ticket.created": TicketCreated,
+    "ticket.updated": TicketUpdated,
+    "service.signal": ServiceSignal,
+    "customer.feedback": CustomerFeedback,
+    "tool.call": ToolCall,
 }
 # Events that must carry a logical action identifier.
 ACTION_EVENTS = {"bot.action", "action.attempt", "refund.leg_status"}

@@ -75,7 +75,7 @@ def _group_metrics(session: Session, tasks: list[Task], now: datetime) -> dict[s
         outcome_counts[outcome] += 1
         if res.get("axes", {}).get("evaluation_execution") != "complete":
             invalid += 1
-        if outcome == "verified_complete":
+        if outcome in ("verified_complete", "verified_resolved"):
             verified += 1
         if outcome in ("unknown", "unverified"):
             unknown += 1

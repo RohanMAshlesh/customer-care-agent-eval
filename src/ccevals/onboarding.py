@@ -15,7 +15,7 @@ from typing import Any
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from ccevals.contracts.registry import dry_run
+from ccevals.contracts.registry import dry_run, load_contract
 from ccevals.contracts.schema import Contract
 from ccevals.models import (
     Attestation,
@@ -45,6 +45,8 @@ ATTESTED_STAGES = {
 
 
 def source_roles(contract: Contract) -> dict[str, dict[str, Any]]:
+    if not isinstance(contract, Contract):
+        return {}  # service-pack sources (ticketing, sign-in) use their own conformance kits
     roles: dict[str, dict[str, Any]] = {
         contract.evidence.identity: {"role": "identity"},
         contract.evidence.order: {"role": "order"},
@@ -291,7 +293,7 @@ def calibration_report(items: list[dict[str, Any]], split: str, min_items: int =
 def _approved_contracts(session: Session, tenant_id: str) -> list[tuple[ContractRow, Contract]]:
     rows = session.scalars(select(ContractRow).where(ContractRow.tenant_id == tenant_id, ContractRow.status == "approved")
                            .order_by(ContractRow.effective_from.desc()))
-    return [(r, Contract.model_validate(r.body)) for r in rows]
+    return [(r, load_contract(r.body)) for r in rows]
 
 
 def readiness(session: Session, tenant_id: str, now: datetime, judge_bundle: str) -> dict[str, Any]:
@@ -331,7 +333,7 @@ def readiness(session: Session, tenant_id: str, now: datetime, judge_bundle: str
                                .order_by(ConformanceRun.created_at)):
         latest[run.source] = run
     missing = []
-    for _, contract in contracts[:1]:
+    for _, contract in [c for c in contracts if isinstance(c[1], Contract)][:1]:
         for source, role in source_roles(contract).items():
             run = latest.get(source)
             if run is None or not run.passed:

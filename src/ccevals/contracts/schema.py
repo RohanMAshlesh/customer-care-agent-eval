@@ -27,6 +27,8 @@ UNKNOWN_REASONS = {
     "judge_unavailable",
     "outcome_evidence_unavailable",
     "ambiguous_correlation",
+    "ticket_evidence_unavailable",
+    "resolution_evidence_unavailable",
 }
 
 

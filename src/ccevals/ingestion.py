@@ -29,7 +29,7 @@ REQUIRED_ENTITY_KEYS = {
     "identity.verified": ("customer_id",),
     "order.snapshot": ("order_id", "customer_id"),
     "customer.profile": ("customer_id",),
-    "task.opened": ("customer_id", "order_id"),
+    "task.opened": ("customer_id",),
     "bot.action": ("customer_id", "order_id"),
 }
 

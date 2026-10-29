@@ -83,7 +83,7 @@ def task_facts(task: Task, events: list[Event]) -> TaskFacts | None:
         opened_at=first.occurred_at,
         customer_token=task.customer_token,
         order_token=task.order_token,
-        affected_lines={line["line_item_id"]: int(line["quantity"]) for line in first.payload["affected_lines"]},
+        affected_lines={line["line_item_id"]: int(line["quantity"]) for line in first.payload.get("affected_lines", [])},
         environment=task.environment,
         market=task.market,
     )

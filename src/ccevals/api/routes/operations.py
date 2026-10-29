@@ -12,6 +12,7 @@ from sqlalchemy.orm import Session
 
 from ccevals.api.deps import any_role, get_session, require
 from ccevals.audit import audit
+from ccevals.contracts.registry import load_contract
 from ccevals.contracts.schema import Contract
 from ccevals.metrics import cohort_metrics
 from ccevals.models import Attestation, AuditRecord, CalibrationReport, ConformanceRun, utcnow
@@ -34,7 +35,7 @@ def _current_contract(session: Session, tenant_id: str) -> Contract:
                          .order_by(ContractRow.effective_from.desc(), ContractRow.version.desc()).limit(1))
     if row is None:
         raise HTTPException(409, "approve a contract first; it names the evidence sources to test")
-    return Contract.model_validate(row.body)
+    return load_contract(row.body)
 
 
 @router.get("/readiness", tags=["journey"])

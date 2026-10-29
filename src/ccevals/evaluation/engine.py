@@ -9,10 +9,13 @@ from datetime import datetime
 from typing import Any
 
 from ccevals.contracts.schema import Contract
+from ccevals.contracts.service import SERVICE_PACK_ID, ServiceContract
 from ccevals.evaluation.criteria import CriterionResult, passed
 from ccevals.evaluation.evidence import EventView, SourceStatus, TaskFacts, of_type, usable
 from ccevals.evaluation.refund import PACK_ID, PACK_VERSION, evaluate_refund_task
 from ccevals.evaluation.semantic import Judge, NullJudge, evaluate_semantic
+from ccevals.evaluation.service import PACK_VERSION as SERVICE_PACK_VERSION
+from ccevals.evaluation.service import evaluate_service_task
 
 
 @dataclass(frozen=True)
@@ -56,12 +59,17 @@ def _apply_adjudications(criteria: dict[str, CriterionResult], adjudications: li
         )
 
 
-def evaluate(contract: Contract, tenant_id: str, task: TaskFacts, events: list[EventView], sources: SourceStatus,
+def evaluate(contract: Contract | ServiceContract, tenant_id: str, task: TaskFacts, events: list[EventView], sources: SourceStatus,
              now: datetime, judge: Judge, adjudications: list[AdjudicationView] | None = None) -> TaskResult:
-    if contract.intent != PACK_ID:
-        raise ValueError(f"no intent pack for {contract.intent!r}")
     good = usable(events)
-    refund = evaluate_refund_task(contract, task, good, sources, now)
+    if isinstance(contract, ServiceContract):
+        pack = f"{SERVICE_PACK_ID}@{SERVICE_PACK_VERSION}"
+        refund = evaluate_service_task(contract, task, good, sources, now)
+    elif contract.intent == PACK_ID:
+        pack = f"{PACK_ID}@{PACK_VERSION}"
+        refund = evaluate_refund_task(contract, task, good, sources, now)
+    else:
+        raise ValueError(f"no intent pack for {contract.intent!r}")
     criteria = dict(refund.criteria)
 
     languages = {m.payload.get("language") for m in of_type(good, "conversation.message") if m.payload.get("language")}
@@ -96,7 +104,7 @@ def evaluate(contract: Contract, tenant_id: str, task: TaskFacts, events: list[E
     required_results = {name: criteria[name].result for name in sorted(required) if name in criteria}
     all_required_pass = all(passed(criteria[name]) for name in required_results)
     disposition_ok = criteria["correct_disposition"].result == "pass"
-    outcome_ok = refund.business_outcome in ("verified_complete", "not_applicable")
+    outcome_ok = refund.business_outcome in ("verified_complete", "verified_resolved", "not_applicable")
     fully_verified = all_required_pass and disposition_ok and outcome_ok and not unknowns
 
     lifecycle = "closed" if of_type(good, "conversation.ended") else "open"
@@ -107,10 +115,10 @@ def evaluate(contract: Contract, tenant_id: str, task: TaskFacts, events: list[E
     any_invalid = any(e.quarantined for e in events)
 
     result: dict[str, Any] = {
-        "pack": f"{PACK_ID}@{PACK_VERSION}",
+        "pack": pack,
         "contract_ref": contract.ref,
         "policy_ref": contract.policy.document,
-        "evaluator_bundle": f"{PACK_ID}@{PACK_VERSION}+{judge.bundle_id}",
+        "evaluator_bundle": f"{pack}+{judge.bundle_id}",
         "evaluated_at": now.isoformat(),
         "evidence_cutoff": cutoff.isoformat() if cutoff else None,
         "provisional": provisional,
