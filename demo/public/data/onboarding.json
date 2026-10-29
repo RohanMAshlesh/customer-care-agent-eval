@@ -5,7 +5,7 @@
    "actor": "Platform admin",
    "did": "A tenant and role-scoped API keys exist. Nothing is connected yet.",
    "readiness": {
-    "as_of": "2026-10-28T15:18:34.261143+00:00",
+    "as_of": "2026-10-29T04:36:45.319837+00:00",
     "indicators": {
      "conversations_connected": {
       "complete": false,
@@ -70,7 +70,7 @@
     "note": "Indicators are reported separately on purpose; there is no combined readiness score."
    },
    "onboarding": {
-    "as_of": "2026-10-28T15:18:34.280715+00:00",
+    "as_of": "2026-10-29T04:36:45.343597+00:00",
     "current_stage": 1,
     "stages": [
      {
@@ -197,7 +197,7 @@
    "actor": "Support, AI and security leads",
    "did": "One workflow, region and channel are signed off; the data flow and model endpoints are approved.",
    "readiness": {
-    "as_of": "2026-10-28T15:18:34.323191+00:00",
+    "as_of": "2026-10-29T04:36:45.392715+00:00",
     "indicators": {
      "conversations_connected": {
       "complete": false,
@@ -262,7 +262,7 @@
     "note": "Indicators are reported separately on purpose; there is no combined readiness score."
    },
    "onboarding": {
-    "as_of": "2026-10-28T15:18:34.335460+00:00",
+    "as_of": "2026-10-29T04:36:45.403804+00:00",
     "current_stage": 3,
     "stages": [
      {
@@ -389,7 +389,7 @@
    "actor": "Refund policy owner",
    "did": "The policy author drafts the contract; a different policy owner approves it after reviewing four executable examples.",
    "readiness": {
-    "as_of": "2026-10-28T15:18:34.402775+00:00",
+    "as_of": "2026-10-29T04:36:45.513477+00:00",
     "indicators": {
      "conversations_connected": {
       "complete": false,
@@ -490,7 +490,7 @@
     "note": "Indicators are reported separately on purpose; there is no combined readiness score."
    },
    "onboarding": {
-    "as_of": "2026-10-28T15:18:34.413213+00:00",
+    "as_of": "2026-10-29T04:36:45.525093+00:00",
     "current_stage": 3,
     "stages": [
      {
@@ -767,7 +767,7 @@
    "actor": "Integration engineer",
    "did": "The first payment adapter maps a provider failure to 'completed'. Conformance fails and says exactly where.",
    "readiness": {
-    "as_of": "2026-10-28T15:18:34.462523+00:00",
+    "as_of": "2026-10-29T04:36:45.592857+00:00",
     "indicators": {
      "conversations_connected": {
       "complete": false,
@@ -868,7 +868,7 @@
     "note": "Indicators are reported separately on purpose; there is no combined readiness score."
    },
    "onboarding": {
-    "as_of": "2026-10-28T15:18:34.471924+00:00",
+    "as_of": "2026-10-29T04:36:45.608842+00:00",
     "current_stage": 3,
     "stages": [
      {
@@ -1076,7 +1076,7 @@
    "actor": "Integration engineer",
    "did": "All four evidence sources pass conformance. Verified-outcome claims switch on.",
    "readiness": {
-    "as_of": "2026-10-28T15:18:34.699132+00:00",
+    "as_of": "2026-10-29T04:36:45.747533+00:00",
     "indicators": {
      "conversations_connected": {
       "complete": false,
@@ -1161,7 +1161,7 @@
     "note": "Indicators are reported separately on purpose; there is no combined readiness score."
    },
    "onboarding": {
-    "as_of": "2026-10-28T15:18:34.710312+00:00",
+    "as_of": "2026-10-29T04:36:45.758196+00:00",
     "current_stage": 3,
     "stages": [
      {
@@ -1308,7 +1308,7 @@
    "actor": "Operations reviewer",
    "did": "Production traffic is evaluated silently. Metrics reconcile against the census; unknowns and critical failures land in owned queues.",
    "readiness": {
-    "as_of": "2026-10-28T15:18:37.099946+00:00",
+    "as_of": "2026-10-29T04:36:47.762998+00:00",
     "indicators": {
      "conversations_connected": {
       "complete": false,
@@ -1388,7 +1388,7 @@
     "note": "Indicators are reported separately on purpose; there is no combined readiness score."
    },
    "onboarding": {
-    "as_of": "2026-10-28T15:18:37.113015+00:00",
+    "as_of": "2026-10-29T04:36:47.773948+00:00",
     "current_stage": 3,
     "stages": [
      {
@@ -1521,10 +1521,10 @@
    "metrics": {
     "intent": "missing_item_refund",
     "cohort": {
-     "opened_from": "2026-09-28T15:18:37.052589+00:00",
-     "opened_before": "2026-10-28T15:18:37.052589+00:00"
+     "opened_from": "2026-09-29T04:36:47.720057+00:00",
+     "opened_before": "2026-10-29T04:36:47.720057+00:00"
     },
-    "as_of": "2026-10-28T15:18:37.052589+00:00",
+    "as_of": "2026-10-29T04:36:47.720057+00:00",
     "slice_by": null,
     "slices": {
      "all": {
@@ -1740,7 +1740,7 @@
    },
    "review_items": [
     {
-     "id": "ba94688d220640b18e07b34c6216e8c8",
+     "id": "602692cc05fe4ea6871a39d43237b6dc",
      "task_key": "prod4-task",
      "kind": "critical",
      "reason_code": "critical_violation",
@@ -1750,14 +1750,14 @@
      "detail": {
       "reason": "item li-1 refunded by two logical actions",
       "evidence": [
-       "3d95d20e17ec4b2e901c93d3b2330b4b",
-       "0a85a7d61cfa40c2af3d9818fe9e5fb5"
+       "cf72ddf7b67741deb23a935b4d9ec1da",
+       "d405480dccbd4667868f6e05c22db780"
       ]
      },
      "status": "open"
     },
     {
-     "id": "8aceb8ddee01413a9b114e8afffaa458",
+     "id": "7ce61088c2f14c16a4e9942e66182dd8",
      "task_key": "prod13-task",
      "kind": "critical",
      "reason_code": "critical_violation",
@@ -1767,14 +1767,14 @@
      "detail": {
       "reason": "item li-1 refunded by two logical actions",
       "evidence": [
-       "f14b6991e8d84ecdb3418bce04425b16",
-       "9d17c2d4b7aa40c7b58ff2876d5b1138"
+       "c0b5b6d743fc46caa21a2f62b5937c8e",
+       "2ef51a710b594e958a39856e81be97f7"
       ]
      },
      "status": "open"
     },
     {
-     "id": "7e174e02ecf0482a8f009ffac4d5fca6",
+     "id": "7cb777a1aaf0432b8d28bf3b7c91c566",
      "task_key": "prod22-task",
      "kind": "critical",
      "reason_code": "critical_violation",
@@ -1784,14 +1784,14 @@
      "detail": {
       "reason": "item li-1 refunded by two logical actions",
       "evidence": [
-       "68b0d80f1128435db1d19b7732ff1ddb",
-       "984dc7a53b884e6db22c9d2a69418099"
+       "a336df8d96d142719b7546f363853aeb",
+       "1bd349fbf4aa444e85e83659bdf9bf96"
       ]
      },
      "status": "open"
     },
     {
-     "id": "67bacc5bd5f94ffdaf61d83659625dc9",
+     "id": "9858b72b88cd44e8a59b0e797d0fa4d3",
      "task_key": "prod31-task",
      "kind": "critical",
      "reason_code": "critical_violation",
@@ -1801,14 +1801,14 @@
      "detail": {
       "reason": "item li-1 refunded by two logical actions",
       "evidence": [
-       "7f053311d2bb412fbbb6b3eccfc5f436",
-       "a43c3d4b2c1f4ec0a8fcfdcf701f2208"
+       "0947f0a845fb4ec18cb08c961e81970d",
+       "f64d6646036e4ed19f8bcaf804c3022c"
       ]
      },
      "status": "open"
     },
     {
-     "id": "66e4e326bfff4d26944c8bab6bdabc5e",
+     "id": "5728ff6fd85b448796bd688d7877becb",
      "task_key": "prod6-task",
      "kind": "unknown",
      "reason_code": "missing_identity_event",
@@ -1821,7 +1821,7 @@
      "status": "open"
     },
     {
-     "id": "b01c646642e847c9a04896de57b1275d",
+     "id": "77befaa32c104f71bcd7e08384cc24e3",
      "task_key": "prod6-task",
      "kind": "unknown",
      "reason_code": "outcome_evidence_unavailable",
@@ -1834,7 +1834,7 @@
      "status": "open"
     },
     {
-     "id": "8e45e92ff261480298fb1b8a1dc2e969",
+     "id": "592cb7f87031440e9dc6a0409131485f",
      "task_key": "prod16-task",
      "kind": "unknown",
      "reason_code": "outcome_evidence_unavailable",
@@ -1847,7 +1847,7 @@
      "status": "open"
     },
     {
-     "id": "35f5a2a2294740ea90bf064a47d5ed80",
+     "id": "196bfc505966427ba67e1d50e520853a",
      "task_key": "prod19-task",
      "kind": "unknown",
      "reason_code": "missing_identity_event",
@@ -1866,7 +1866,7 @@
    "actor": "Integration engineer",
    "did": "Two census tasks had no conversation. The chat export is fixed and backfilled, so every bot-assigned task is observed.",
    "readiness": {
-    "as_of": "2026-10-28T15:18:37.227547+00:00",
+    "as_of": "2026-10-29T04:36:47.873853+00:00",
     "indicators": {
      "conversations_connected": {
       "complete": true,
@@ -1940,7 +1940,7 @@
     "note": "Indicators are reported separately on purpose; there is no combined readiness score."
    },
    "onboarding": {
-    "as_of": "2026-10-28T15:18:37.241598+00:00",
+    "as_of": "2026-10-29T04:36:47.885135+00:00",
     "current_stage": 6,
     "stages": [
      {
@@ -2067,10 +2067,10 @@
    "metrics": {
     "intent": "missing_item_refund",
     "cohort": {
-     "opened_from": "2026-09-28T15:18:37.192354+00:00",
-     "opened_before": "2026-10-28T15:18:37.192354+00:00"
+     "opened_from": "2026-09-29T04:36:47.838988+00:00",
+     "opened_before": "2026-10-29T04:36:47.838988+00:00"
     },
-    "as_of": "2026-10-28T15:18:37.192354+00:00",
+    "as_of": "2026-10-29T04:36:47.838988+00:00",
     "slice_by": null,
     "slices": {
      "all": {
@@ -2290,7 +2290,7 @@
    "actor": "Evaluation engineer",
    "did": "For each criterion and language, two reviewers label 40 held-out cases; the judge's false-pass and false-alarm rates are measured against adjudicated truth.",
    "readiness": {
-    "as_of": "2026-10-28T15:18:37.336665+00:00",
+    "as_of": "2026-10-29T04:36:47.952312+00:00",
     "indicators": {
      "conversations_connected": {
       "complete": true,
@@ -2333,7 +2333,7 @@
     "note": "Indicators are reported separately on purpose; there is no combined readiness score."
    },
    "onboarding": {
-    "as_of": "2026-10-28T15:18:37.353094+00:00",
+    "as_of": "2026-10-29T04:36:47.963905+00:00",
     "current_stage": 8,
     "stages": [
      {
@@ -2455,7 +2455,7 @@
    "actor": "Release owner",
    "did": "A first gate runs. Six episodes are far below the coverage floor, so the honest answer is 'insufficient evidence'. The override path is practised.",
    "readiness": {
-    "as_of": "2026-10-28T15:18:38.047631+00:00",
+    "as_of": "2026-10-29T04:36:48.573686+00:00",
     "indicators": {
      "conversations_connected": {
       "complete": true,
@@ -2498,7 +2498,7 @@
     "note": "Indicators are reported separately on purpose; there is no combined readiness score."
    },
    "onboarding": {
-    "as_of": "2026-10-28T15:18:38.062526+00:00",
+    "as_of": "2026-10-29T04:36:48.587680+00:00",
     "current_stage": 9,
     "stages": [
      {
@@ -2592,7 +2592,7 @@
     "note": "Verified-outcome claims stay disabled until business mappings pass conformance."
    },
    "decision": {
-    "id": "rd_8d09f6bf4c30479c9c89e053a3c27d24",
+    "id": "rd_b0bf872ab2824d1b95c09f47eab5f3d6",
     "decision": "insufficient_evidence",
     "status": "active",
     "reasons": [
@@ -2631,8 +2631,8 @@
      ],
      "dataset_ref": "refund-suite@2026-10",
      "evidence_snapshot": {
-      "candidate": "da66e778d4ff571102b6fb72d84bed4810fc0e8fdf135e544db32ee1a46ecbd1",
-      "baseline": "ea7ab79237e5a59b00b86a2859b98a660f04fb85bf647c71c7bec3953166d945",
+      "candidate": "d06e280b5f2048ce5b9f9d8a50d8ebd226e903ec27d06470e530f119e943a6b5",
+      "baseline": "a526186a18ab73b61a97237f43d8d459224e320e04562a31ee558c934dc62e62",
       "latest_evidence_cutoff": "2026-10-22T03:30:01+00:00"
      },
      "source_census": {
@@ -2676,8 +2676,8 @@
      }
     },
     "accountable_owner": "key:all",
-    "created_at": "2026-10-28T15:18:38.003455+00:00",
-    "valid_until": "2026-11-04T15:18:38.003455+00:00",
+    "created_at": "2026-10-29T04:36:48.528307+00:00",
+    "valid_until": "2026-11-05T04:36:48.528307+00:00",
     "superseded_reason": null,
     "exceptions": []
    }
@@ -2687,7 +2687,7 @@
    "actor": "Joint product team",
    "did": "The next intent is agreed. It must pass the same gates before it is trusted.",
    "readiness": {
-    "as_of": "2026-10-28T15:18:38.100567+00:00",
+    "as_of": "2026-10-29T04:36:48.612270+00:00",
     "indicators": {
      "conversations_connected": {
       "complete": true,
@@ -2730,7 +2730,7 @@
     "note": "Indicators are reported separately on purpose; there is no combined readiness score."
    },
    "onboarding": {
-    "as_of": "2026-10-28T15:18:38.114719+00:00",
+    "as_of": "2026-10-29T04:36:48.624143+00:00",
     "current_stage": null,
     "stages": [
      {

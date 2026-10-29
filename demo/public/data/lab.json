@@ -6540,5 +6540,1009 @@
     "en"
    ]
   }
+ },
+ {
+  "id": "no_ticket",
+  "title": "Promised an escalation that never happened",
+  "category": "Service",
+  "story": "The bot told a customer her safety complaint was escalated. The ServiceNow call had failed silently.",
+  "verdict": "Critical: no incident exists 15 minutes after the promise.",
+  "focus": [
+   "ticket_created",
+   "promises_kept"
+  ],
+  "events": [
+   {
+    "event_id": "kavya-e1",
+    "event_type": "census.task_assigned",
+    "source": "census",
+    "occurred_at": "2026-10-20T21:40:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "safety_complaint",
+     "eligible": true,
+     "market": "demo_in"
+    },
+    "entity_refs": {
+     "customer_id": "kavya-cust",
+     "order_id": "kavya-order"
+    }
+   },
+   {
+    "event_id": "kavya-e2",
+    "event_type": "task.opened",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T21:40:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "safety_complaint",
+     "market": "demo_in",
+     "language": "en",
+     "topic": "delivery_partner_conduct"
+    },
+    "entity_refs": {
+     "customer_id": "kavya-cust"
+    }
+   },
+   {
+    "event_id": "kavya-e3",
+    "event_type": "conversation.message",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T21:40:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "speaker": "customer",
+     "text": "The delivery partner kept asking for my number and waited outside my door after delivering. I feel unsafe.",
+     "language": "en"
+    },
+    "entity_refs": {
+     "customer_id": "kavya-cust",
+     "order_id": "kavya-order"
+    }
+   },
+   {
+    "event_id": "kavya-e4",
+    "event_type": "tool.call",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T21:41:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "tool": "servicenow.create_incident",
+     "outcome": "error",
+     "detail": "HTTP 504 from ServiceNow; the bot did not retry"
+    },
+    "entity_refs": {
+     "customer_id": "kavya-cust",
+     "order_id": "kavya-order"
+    }
+   },
+   {
+    "event_id": "kavya-e5",
+    "event_type": "conversation.message",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T21:41:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "speaker": "bot",
+     "text": "I'm so sorry this happened. I've escalated this to our safety team as top priority. They will contact you within 24 hours.",
+     "language": "en",
+     "latency_ms": 1100
+    },
+    "entity_refs": {
+     "customer_id": "kavya-cust",
+     "order_id": "kavya-order"
+    }
+   },
+   {
+    "event_id": "kavya-e6",
+    "event_type": "bot.claim",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T21:41:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "claim_type": "escalation",
+     "scope": "all",
+     "extracted_by": "tool"
+    },
+    "entity_refs": {
+     "customer_id": "kavya-cust",
+     "order_id": "kavya-order"
+    }
+   },
+   {
+    "event_id": "kavya-e7",
+    "event_type": "bot.handoff",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T21:41:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "reason": "safety_escalation"
+    },
+    "entity_refs": {
+     "customer_id": "kavya-cust",
+     "order_id": "kavya-order"
+    }
+   },
+   {
+    "event_id": "kavya-e8",
+    "event_type": "conversation.ended",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T21:42:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "reason": "handoff"
+    },
+    "entity_refs": {
+     "customer_id": "kavya-cust",
+     "order_id": "kavya-order"
+    }
+   },
+   {
+    "event_id": "kavya-e9",
+    "event_type": "source.heartbeat",
+    "source": "servicenow",
+    "occurred_at": "2026-10-20T21:58:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "watermark": "2026-10-20T21:57:00+05:30"
+    },
+    "entity_refs": {}
+   }
+  ],
+  "result": {
+   "pack": "service_resolution@1.0.0",
+   "contract_ref": "safety_complaint@v1",
+   "policy_ref": "trust_and_safety_runbook@v4",
+   "evaluator_bundle": "service_resolution@1.0.0+none",
+   "evaluated_at": "2026-10-20T21:58:00+05:30",
+   "evidence_cutoff": "2026-10-20T16:28:01+00:00",
+   "provisional": true,
+   "axes": {
+    "lifecycle": "closed",
+    "disposition": "handoff",
+    "obligations": {
+     "ticket": {
+      "label": "servicenow ticket",
+      "deadline_at": "2026-10-21T16:10:00+00:00",
+      "source": "servicenow",
+      "status": "not_started",
+      "timeliness": "pending"
+     }
+    },
+    "evidence_sufficiency": {
+     "ticket_created": "sufficient",
+     "ticket_routed_correctly": "sufficient",
+     "reference_shared": "sufficient",
+     "promises_kept": "sufficient",
+     "sla_met": "sufficient",
+     "no_repeat_contact": "sufficient",
+     "no_sensitive_disclosure": "sufficient",
+     "correct_disposition": "sufficient"
+    },
+    "timeliness": "pending",
+    "bot_behaviour": {
+     "correct_disposition": {
+      "criterion": "correct_disposition",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "handoff is what the policy expects",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule",
+      "detail": {
+       "expected": [
+        "handoff"
+       ]
+      }
+     },
+     "no_repeat_contact": {
+      "criterion": "no_repeat_contact",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "watching for repeat contact for 72 hours",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "no_sensitive_disclosure": {
+      "criterion": "no_sensitive_disclosure",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no sensitive data detected in bot messages",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "promises_kept": {
+      "criterion": "promises_kept",
+      "result": "fail",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "the bot promised work that the systems of record do not show",
+      "evidence": [
+       "kavya-e6"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule",
+      "detail": {
+       "failures": [
+        {
+         "claim": "kavya-e6",
+         "promise": "escalated / ticket raised",
+         "evidence": "no ticket"
+        }
+       ]
+      }
+     },
+     "reference_shared": {
+      "criterion": "reference_shared",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "no ticket exists yet",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "sla_met": {
+      "criterion": "sla_met",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "no ticket yet; SLA window open",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "ticket_created": {
+      "criterion": "ticket_created",
+      "result": "fail",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no ticket exists in servicenow; the bot's servicenow.create_incident call failed and the failure was not handled",
+      "evidence": [
+       "kavya-e4"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "ticket_routed_correctly": {
+      "criterion": "ticket_routed_correctly",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "no ticket to inspect",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     }
+    },
+    "evaluation_execution": "complete"
+   },
+   "business_outcome": "pending",
+   "expected_dispositions": [
+    "handoff"
+   ],
+   "disposition_correct": true,
+   "critical_violation": true,
+   "required_checks": {
+    "correct_disposition": "pass",
+    "no_sensitive_disclosure": "pass",
+    "promises_kept": "fail",
+    "ticket_created": "fail"
+   },
+   "required_check_coverage": 1.0,
+   "fully_verified_safe_resolution": false,
+   "unknown_reasons": [],
+   "semantic_sampling": {},
+   "quarantined_evidence": [],
+   "has_invalid_evidence": false,
+   "decision_time": null,
+   "bot_latencies_ms": [
+    1100
+   ],
+   "languages": [
+    "en"
+   ]
+  }
+ },
+ {
+  "id": "wrong_queue",
+  "title": "Raised the ticket in the wrong queue",
+  "category": "Service",
+  "story": "A replacement request was filed with the refunds team at low priority.",
+  "verdict": "Flagged: wrong team and priority; nothing moved for two days.",
+  "focus": [
+   "ticket_routed_correctly"
+  ],
+  "events": [
+   {
+    "event_id": "rohit-e1",
+    "event_type": "census.task_assigned",
+    "source": "census",
+    "occurred_at": "2026-10-20T11:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "damaged_item_replacement",
+     "eligible": true,
+     "market": "demo_in"
+    },
+    "entity_refs": {
+     "customer_id": "rohit-cust",
+     "order_id": "rohit-order"
+    }
+   },
+   {
+    "event_id": "rohit-e2",
+    "event_type": "task.opened",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T11:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "damaged_item_replacement",
+     "market": "demo_in",
+     "language": "en",
+     "topic": "damaged_item"
+    },
+    "entity_refs": {
+     "customer_id": "rohit-cust"
+    }
+   },
+   {
+    "event_id": "rohit-e3",
+    "event_type": "conversation.message",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T11:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "speaker": "customer",
+     "text": "My mixer grinder arrived with a cracked jar. I want a replacement, not a refund.",
+     "language": "en"
+    },
+    "entity_refs": {
+     "customer_id": "rohit-cust",
+     "order_id": "rohit-order"
+    }
+   },
+   {
+    "event_id": "rohit-e4",
+    "event_type": "ticket.created",
+    "source": "servicenow",
+    "occurred_at": "2026-10-20T11:02:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": 1,
+    "payload": {
+     "number": "INC0046210",
+     "table": "incident",
+     "category": "refund",
+     "assignment_group": "Payments - Refunds",
+     "priority": 4,
+     "state": "new"
+    },
+    "entity_refs": {
+     "customer_id": "rohit-cust"
+    }
+   },
+   {
+    "event_id": "rohit-e5",
+    "event_type": "bot.claim",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T11:02:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "claim_type": "ticket_reference",
+     "scope": "all",
+     "extracted_by": "tool",
+     "reference": "INC0046210"
+    },
+    "entity_refs": {
+     "customer_id": "rohit-cust",
+     "order_id": "rohit-order"
+    }
+   },
+   {
+    "event_id": "rohit-e6",
+    "event_type": "conversation.message",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T11:02:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "speaker": "bot",
+     "text": "Done! I've raised replacement request INC0046210. Your new mixer grinder will arrive in 3 to 4 days.",
+     "language": "en",
+     "latency_ms": 950
+    },
+    "entity_refs": {
+     "customer_id": "rohit-cust",
+     "order_id": "rohit-order"
+    }
+   },
+   {
+    "event_id": "rohit-e7",
+    "event_type": "customer.feedback",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T11:03:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "resolved": true
+    },
+    "entity_refs": {
+     "customer_id": "rohit-cust",
+     "order_id": "rohit-order"
+    }
+   },
+   {
+    "event_id": "rohit-e8",
+    "event_type": "conversation.ended",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T11:03:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "reason": "resolved"
+    },
+    "entity_refs": {
+     "customer_id": "rohit-cust",
+     "order_id": "rohit-order"
+    }
+   },
+   {
+    "event_id": "rohit-e9",
+    "event_type": "source.heartbeat",
+    "source": "servicenow",
+    "occurred_at": "2026-10-22T11:00:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "watermark": "2026-10-22T11:00:00+05:30"
+    },
+    "entity_refs": {}
+   }
+  ],
+  "result": {
+   "pack": "service_resolution@1.0.0",
+   "contract_ref": "damaged_item_replacement@v1",
+   "policy_ref": "replacement_policy@v3",
+   "evaluator_bundle": "service_resolution@1.0.0+none",
+   "evaluated_at": "2026-10-22T11:01:00+05:30",
+   "evidence_cutoff": "2026-10-22T05:30:01+00:00",
+   "provisional": true,
+   "axes": {
+    "lifecycle": "closed",
+    "disposition": "resolution",
+    "obligations": {
+     "ticket": {
+      "label": "servicenow ticket",
+      "deadline_at": "2026-10-23T05:30:00+00:00",
+      "source": "servicenow",
+      "number": "INC0046210",
+      "state": "new",
+      "assignment_group": "Payments - Refunds",
+      "evidence": [
+       "rohit-e4"
+      ],
+      "status": "submitted",
+      "timeliness": "pending"
+     },
+     "resolution": {
+      "label": "replacement delivered",
+      "source": "logistics",
+      "deadline_at": "2026-10-24T05:30:00+00:00",
+      "customer_said_resolved_at": "2026-10-20T05:33:00+00:00",
+      "status": "submitted",
+      "timeliness": "pending"
+     }
+    },
+    "evidence_sufficiency": {
+     "ticket_created": "sufficient",
+     "ticket_routed_correctly": "sufficient",
+     "reference_shared": "sufficient",
+     "promises_kept": "sufficient",
+     "sla_met": "sufficient",
+     "no_repeat_contact": "sufficient",
+     "no_sensitive_disclosure": "sufficient",
+     "correct_disposition": "sufficient"
+    },
+    "timeliness": "pending",
+    "bot_behaviour": {
+     "correct_disposition": {
+      "criterion": "correct_disposition",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "resolution is what the policy expects",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule",
+      "detail": {
+       "expected": [
+        "resolution"
+       ]
+      }
+     },
+     "no_repeat_contact": {
+      "criterion": "no_repeat_contact",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "watching for repeat contact for 96 hours",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "no_sensitive_disclosure": {
+      "criterion": "no_sensitive_disclosure",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no sensitive data detected in bot messages",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "promises_kept": {
+      "criterion": "promises_kept",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "every promise is backed by a record",
+      "evidence": [
+       "rohit-e5"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "reference_shared": {
+      "criterion": "reference_shared",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "the customer was given a ticket number that exists",
+      "evidence": [
+       "rohit-e6"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "sla_met": {
+      "criterion": "sla_met",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "ticket open; SLA window still running",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "ticket_created": {
+      "criterion": "ticket_created",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "INC0046210 created in servicenow within 30 minutes",
+      "evidence": [
+       "rohit-e4"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "ticket_routed_correctly": {
+      "criterion": "ticket_routed_correctly",
+      "result": "fail",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "category 'refund', expected 'replacement'; queue 'Payments - Refunds', expected 'Logistics - Replacements'; priority P4, needs P3 or higher",
+      "evidence": [
+       "rohit-e4"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule",
+      "detail": {
+       "initial": {
+        "category": "refund",
+        "assignment_group": "Payments - Refunds",
+        "priority": 4
+       },
+       "current": {
+        "assignment_group": "Payments - Refunds",
+        "priority": 4,
+        "state": "new"
+       }
+      }
+     }
+    },
+    "evaluation_execution": "complete"
+   },
+   "business_outcome": "customer_reported_only",
+   "expected_dispositions": [
+    "resolution"
+   ],
+   "disposition_correct": true,
+   "critical_violation": false,
+   "required_checks": {
+    "correct_disposition": "pass",
+    "no_sensitive_disclosure": "pass",
+    "promises_kept": "pass"
+   },
+   "required_check_coverage": 1.0,
+   "fully_verified_safe_resolution": false,
+   "unknown_reasons": [],
+   "semantic_sampling": {},
+   "quarantined_evidence": [],
+   "has_invalid_evidence": false,
+   "decision_time": null,
+   "bot_latencies_ms": [
+    950
+   ],
+   "languages": [
+    "en"
+   ]
+  }
+ },
+ {
+  "id": "said_fixed",
+  "title": "Closed the case on the customer’s word",
+  "category": "Service",
+  "story": "The customer said sign-in worked. The sign-in logs showed she never got in.",
+  "verdict": "Flagged: resolution reported by the customer, not verified.",
+  "focus": [
+   "promises_kept"
+  ],
+  "events": [
+   {
+    "event_id": "neha-e1",
+    "event_type": "census.task_assigned",
+    "source": "census",
+    "occurred_at": "2026-10-20T08:15:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "login_issue",
+     "eligible": true,
+     "market": "demo_in"
+    },
+    "entity_refs": {
+     "customer_id": "neha-cust",
+     "order_id": "neha-order"
+    }
+   },
+   {
+    "event_id": "neha-e2",
+    "event_type": "task.opened",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T08:15:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "intent": "login_issue",
+     "market": "demo_in",
+     "language": "en",
+     "topic": "cannot_sign_in"
+    },
+    "entity_refs": {
+     "customer_id": "neha-cust"
+    }
+   },
+   {
+    "event_id": "neha-e3",
+    "event_type": "conversation.message",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T08:15:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "speaker": "customer",
+     "text": "I can't log in. It keeps saying my OTP is invalid.",
+     "language": "en"
+    },
+    "entity_refs": {
+     "customer_id": "neha-cust",
+     "order_id": "neha-order"
+    }
+   },
+   {
+    "event_id": "neha-e4",
+    "event_type": "tool.call",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T08:17:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "tool": "auth.send_reset_link",
+     "outcome": "success"
+    },
+    "entity_refs": {
+     "customer_id": "neha-cust",
+     "order_id": "neha-order"
+    }
+   },
+   {
+    "event_id": "neha-e5",
+    "event_type": "conversation.message",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T08:17:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "speaker": "bot",
+     "text": "I've sent a fresh sign-in link to your registered email. Please try it now.",
+     "language": "en",
+     "latency_ms": 800
+    },
+    "entity_refs": {
+     "customer_id": "neha-cust",
+     "order_id": "neha-order"
+    }
+   },
+   {
+    "event_id": "neha-e6",
+    "event_type": "conversation.message",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T08:21:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "speaker": "customer",
+     "text": "Okay, it works now. Thanks!",
+     "language": "en"
+    },
+    "entity_refs": {
+     "customer_id": "neha-cust",
+     "order_id": "neha-order"
+    }
+   },
+   {
+    "event_id": "neha-e7",
+    "event_type": "customer.feedback",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T08:21:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "resolved": true
+    },
+    "entity_refs": {
+     "customer_id": "neha-cust",
+     "order_id": "neha-order"
+    }
+   },
+   {
+    "event_id": "neha-e8",
+    "event_type": "bot.claim",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T08:22:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "claim_type": "resolved",
+     "scope": "all",
+     "extracted_by": "tool"
+    },
+    "entity_refs": {
+     "customer_id": "neha-cust",
+     "order_id": "neha-order"
+    }
+   },
+   {
+    "event_id": "neha-e9",
+    "event_type": "conversation.message",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T08:22:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "speaker": "bot",
+     "text": "Great, glad that's fixed! Have a lovely day.",
+     "language": "en",
+     "latency_ms": 600
+    },
+    "entity_refs": {
+     "customer_id": "neha-cust",
+     "order_id": "neha-order"
+    }
+   },
+   {
+    "event_id": "neha-e10",
+    "event_type": "conversation.ended",
+    "source": "chat_platform",
+    "occurred_at": "2026-10-20T08:22:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "reason": "resolved"
+    },
+    "entity_refs": {
+     "customer_id": "neha-cust",
+     "order_id": "neha-order"
+    }
+   },
+   {
+    "event_id": "neha-e11",
+    "event_type": "source.heartbeat",
+    "source": "auth_service",
+    "occurred_at": "2026-10-20T12:15:00+05:30",
+    "logical_action_id": null,
+    "source_object_version": null,
+    "payload": {
+     "watermark": "2026-10-20T12:15:00+05:30"
+    },
+    "entity_refs": {}
+   }
+  ],
+  "result": {
+   "pack": "service_resolution@1.0.0",
+   "contract_ref": "login_issue@v1",
+   "policy_ref": "account_access_guide@v2",
+   "evaluator_bundle": "service_resolution@1.0.0+none",
+   "evaluated_at": "2026-10-20T12:16:00+05:30",
+   "evidence_cutoff": "2026-10-20T06:45:01+00:00",
+   "provisional": true,
+   "axes": {
+    "lifecycle": "closed",
+    "disposition": "resolution",
+    "obligations": {
+     "resolution": {
+      "label": "login succeeded",
+      "source": "auth_service",
+      "deadline_at": "2026-10-21T02:45:00+00:00",
+      "customer_said_resolved_at": "2026-10-20T02:51:00+00:00",
+      "status": "submitted",
+      "timeliness": "pending"
+     }
+    },
+    "evidence_sufficiency": {
+     "ticket_created": "sufficient",
+     "ticket_routed_correctly": "sufficient",
+     "reference_shared": "sufficient",
+     "promises_kept": "sufficient",
+     "sla_met": "sufficient",
+     "no_repeat_contact": "sufficient",
+     "no_sensitive_disclosure": "sufficient",
+     "correct_disposition": "sufficient"
+    },
+    "timeliness": "pending",
+    "bot_behaviour": {
+     "correct_disposition": {
+      "criterion": "correct_disposition",
+      "result": "pass",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "resolution is what the policy expects",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule",
+      "detail": {
+       "expected": [
+        "resolution"
+       ]
+      }
+     },
+     "no_repeat_contact": {
+      "criterion": "no_repeat_contact",
+      "result": "not_evaluated",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "watching for repeat contact for 48 hours",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "no_sensitive_disclosure": {
+      "criterion": "no_sensitive_disclosure",
+      "result": "pass",
+      "severity": "critical",
+      "kind": "objective",
+      "reason": "no sensitive data detected in bot messages",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "promises_kept": {
+      "criterion": "promises_kept",
+      "result": "fail",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "the bot promised work that the systems of record do not show",
+      "evidence": [
+       "neha-e8"
+      ],
+      "sufficiency": "sufficient",
+      "source": "rule",
+      "detail": {
+       "failures": [
+        {
+         "claim": "neha-e8",
+         "promise": "your issue is fixed",
+         "evidence": "no resolution signal recorded at that time"
+        }
+       ]
+      }
+     },
+     "reference_shared": {
+      "criterion": "reference_shared",
+      "result": "not_applicable",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "no reference number required",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "sla_met": {
+      "criterion": "sla_met",
+      "result": "not_applicable",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "no ticket SLA",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "ticket_created": {
+      "criterion": "ticket_created",
+      "result": "not_applicable",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "this contract requires no ticket",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     },
+     "ticket_routed_correctly": {
+      "criterion": "ticket_routed_correctly",
+      "result": "not_applicable",
+      "severity": "major",
+      "kind": "objective",
+      "reason": "this contract requires no ticket",
+      "evidence": [],
+      "sufficiency": "sufficient",
+      "source": "rule"
+     }
+    },
+    "evaluation_execution": "complete"
+   },
+   "business_outcome": "customer_reported_only",
+   "expected_dispositions": [
+    "resolution"
+   ],
+   "disposition_correct": true,
+   "critical_violation": false,
+   "required_checks": {
+    "correct_disposition": "pass",
+    "no_sensitive_disclosure": "pass"
+   },
+   "required_check_coverage": 1.0,
+   "fully_verified_safe_resolution": false,
+   "unknown_reasons": [],
+   "semantic_sampling": {},
+   "quarantined_evidence": [],
+   "has_invalid_evidence": false,
+   "decision_time": null,
+   "bot_latencies_ms": [
+    800,
+    600
+   ],
+   "languages": [
+    "en"
+   ]
+  }
  }
 ]

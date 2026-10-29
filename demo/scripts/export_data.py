@@ -12,6 +12,7 @@ from __future__ import annotations
 import json
 import random
 import secrets
+import sys
 from dataclasses import asdict, replace
 from datetime import UTC, datetime, timedelta, timezone
 from pathlib import Path
@@ -30,6 +31,7 @@ from ccevals.pipeline import process_pending
 from ccevals.release import Episode, GatePolicy, evaluate_gate
 from ccevals.security import issue_key
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 OUT = Path(__file__).resolve().parents[1] / "public" / "data"
 IST = timezone(timedelta(hours=5, minutes=30))
 START = datetime(2026, 10, 20, 9, 0, tzinfo=IST)
@@ -48,96 +50,79 @@ def slim_event(e: dict[str, Any]) -> dict[str, Any]:
 
 
 # ---------------------------------------------------------------------------
-# 1. The reference refund journey, moment by moment
+# 1. Case files: four customer journeys, moment by moment
 
 
-def journey() -> dict[str, Any]:
-    b = ScenarioBuilder("j", START)
-    act = "refund-1"
-    marks: list[tuple[str, int]] = []
+def load(name: str):
+    from importlib import resources
 
-    def mark(key: str) -> None:
-        marks.append((key, len(b.events)))
+    import yaml
 
-    b.census(0)
-    standard_order(b)
-    b.profile(-30)
-    b.open_task(0, {"li-1": 1}, language="hi-en")
-    b.message(0, "customer", "Mera paneer tikka order mein nahi aaya. Refund chahiye please.", language="hi-en")
-    mark("contact")
-    b.identity(1)
-    b.message(1, "bot", "Sorry! Maine order check kiya. Aapko INR 240 refund milega: INR 60 wallet mein aur INR 180 card par.",
-              language="hi-en", latency_ms=1200)
-    mark("decision")
-    b.refund(2, act, {"li-1": 1}, 24000, {WALLET: 6000, CARD: 18000})
-    b.attempt(2, act, 1, "timeout")
-    b.attempt(2.5, act, 2, "accepted")
-    mark("action")
-    b.leg(3, act, WALLET, "credited", 6000)
-    b.leg(3, act, CARD, "submitted", 18000, provider_ref="rf-1", version=1)
-    b.claim(3, "completion", scope=WALLET, stage="credited", amount=6000)
-    b.claim(3, "submission", scope=CARD, stage="submitted", amount=18000)
-    b.message(3, "bot", "INR 60 is credited to your wallet and INR 180 has been submitted to your card provider.",
-              latency_ms=900)
-    mark("response")
-    b.claim(4, "estimate", days=5)
-    b.message(4, "bot", "Card refunds usually arrive within 5 working days.", latency_ms=700)
-    b.ended(4, "customer_left")
-    mark("leaves")
-    b.leg(60 * 24, act, CARD, "failed", 18000, provider_ref="rf-1", version=2)
-    mark("failure")
-    b.recovery(60 * 25, CARD)
-    b.leg(60 * 26, act, CARD, "submitted", 18000, provider_ref="rf-2", version=1)
-    mark("recovery")
-    b.leg(60 * 24 * 3, act, CARD, "completed", 18000, provider_ref="rf-2", version=2)
-    mark("settled")
-    mark("final")
+    return parse_contract(yaml.safe_load(resources.files("ccevals.packs").joinpath(f"{name}.yaml").read_text()))
 
-    meta = {
-        "contact": ("09:00", "Contact", "Customer reports a missing item in mixed Hindi and English.", 0.5),
-        "decision": ("09:01", "Decision", "Identity is verified and the bot explains the proposed allocation.", 1.5),
-        "action": ("09:02", "Action", "One logical refund. The first API call times out after acceptance; the retry reuses the same action.", 2.7),
-        "response": ("09:03", "Response", "The wallet ledger shows INR 60 credited; the card provider shows INR 180 submitted.", 3.5),
-        "leaves": ("09:04", "Customer leaves", "The chat ends with a 5-day estimate. Ending the chat does not finalise the outcome.", 5),
-        "failure": ("Next day", "Card refund fails", "The provider reports a failure after its submission acknowledgement.", 60 * 24 + 1),
-        "recovery": ("Day 2", "Recovery", "The payments team re-issues the card refund.", 60 * 26 + 1),
-        "settled": ("Day 3", "Settled", "The re-issued card refund completes.", 60 * 24 * 3 + 1),
-        "final": ("Day 8", "Deadline passes", "The card deadline passes and the result is finalised.", 60 * 24 * 8),
-    }
-    moments, last_hash, revision = [], None, 0
-    for key, count in marks:
-        clock, title, text, minutes = meta[key]
-        now = START + timedelta(minutes=minutes)
-        result = dry_run(CONTRACT, b.events[:count], now=now)
-        material = json.dumps({k: v for k, v in result.items() if k not in ("evaluated_at", "evidence_cutoff")},
-                              sort_keys=True, default=str)
-        if material != last_hash:
-            revision += 1
-            last_hash = material
-        moments.append({"key": key, "clock": clock, "title": title, "text": text, "event_count": count,
-                        "evaluated_at": now.isoformat(), "revision": revision, "result": result})
 
-    bad = ScenarioBuilder("jw", START)
-    bad.task_id, bad.conversation_id, bad.customer_id, bad.order_id = b.task_id, b.conversation_id, b.customer_id, b.order_id
-    bad.events = [dict(e) for e in b.events[:dict(marks)["decision"]]]
-    bad.refund(2, act, {"li-1": 1}, 24000, {WALLET: 6000, CARD: 18000})
-    bad.attempt(2.5, act, 2, "accepted")
-    bad.leg(3, act, WALLET, "credited", 6000)
-    bad.leg(3, act, CARD, "submitted", 18000, provider_ref="rf-1", version=1)
-    bad.claim(3, "completion", scope="all", stage="completed", amount=24000)
-    bad.message(3, "bot", "Your entire refund of INR 240 has reached you.", latency_ms=900)
-    wrong_claim = dry_run(CONTRACT, bad.events, now=START + timedelta(minutes=3.5))
+def money_view(events: list[dict[str, Any]]) -> dict[str, Any]:
+    """Owed versus actually moved, read from the order and ledger events."""
+    order = [e for e in events if e["event_type"] == "order.snapshot"]
+    opened = next(e for e in events if e["event_type"] == "task.opened")
+    owed = 0
+    if order:
+        lines = {li["line_item_id"]: li for li in order[-1]["payload"]["lines"]}
+        owed = sum(lines[a["line_item_id"]]["unit_refundable_minor"] * a["quantity"]
+                   for a in opened["payload"]["affected_lines"] if a["line_item_id"] in lines)
+    groups: dict[tuple, dict] = {}
+    for e in events:
+        if e["event_type"] == "refund.leg_status":
+            key = (e["payload"]["tender_type"], e["payload"].get("provider_ref") or e.get("logical_action_id"))
+            if key not in groups or (e.get("source_object_version") or 0) >= (groups[key].get("source_object_version") or 0):
+                groups[key] = e
+    arrived = sum(e["payload"]["amount_minor"] for e in groups.values() if e["payload"]["stage"] in ("credited", "completed"))
+    in_transit = sum(e["payload"]["amount_minor"] for e in groups.values() if e["payload"]["stage"] == "submitted")
+    return {"owed_minor": owed, "arrived_minor": arrived, "in_transit_minor": in_transit}
 
-    return {
-        "contract": {"ref": CONTRACT.ref, "policy": CONTRACT.policy.document,
-                     "cap_minor": CONTRACT.actions["refund"].max_auto_amount_minor,
-                     "legs": {k: v.model_dump() for k, v in CONTRACT.evidence.legs.items()},
-                     "critical_checks": CONTRACT.critical_checks},
-        "order": {"paid": {WALLET: 30000, CARD: 90000}, "item_minor": 24000, "allocation": {WALLET: 6000, CARD: 18000}},
-        "events": [slim_event(e) for e in b.events],
-        "moments": moments,
-        "wrong_claim": {"message": "Your entire refund of INR 240 has reached you.", "result": wrong_claim},
-    }
+
+def stories() -> list[dict[str, Any]]:
+    from story_copy import STORIES
+
+    from ccevals.packs.reference_cases import CASES
+
+    out = []
+    for cid, build in CASES.items():
+        case = build()
+        contract = load(case.contract)
+        copy = STORIES[cid]
+        moments, last, revision = [], None, 0
+        for m in case.moments:
+            events = case.builder.events[:m.event_count]
+            result = dry_run(contract, events, now=case.at(m))
+            material = json.dumps({k: v for k, v in result.items() if k not in ("evaluated_at", "evidence_cutoff")},
+                                  sort_keys=True, default=str)
+            if material != last:
+                revision, last = revision + 1, material
+            headline, what, old, old_tone, now_says = copy["moments"][m.key]
+            moments.append({"key": m.key, "clock": m.clock, "title": m.title, "event_count": m.event_count,
+                            "revision": revision, "headline": headline, "what": what, "old": old, "old_tone": old_tone,
+                            "now": now_says, "money": money_view(events) if cid == "priya" else None, "result": result})
+        story = {"id": cid, **{k: v for k, v in copy.items() if k != "moments"}, "contract_ref": contract.ref,
+                 "events": [slim_event(e) for e in case.builder.events], "moments": moments}
+        if cid == "priya":
+            story["wrong_claim"] = priya_wrong_claim(case, contract)
+        out.append(story)
+    return out
+
+
+def priya_wrong_claim(case, contract) -> dict[str, Any]:
+    """Same moment, but the bot over-promises: 'your entire refund has reached you'."""
+    b = case.builder
+    response = next(m for m in case.moments if m.key == "response")
+    events = [dict(e) for e in b.events[:response.event_count]]
+    message = "Your entire refund of INR 240 has reached you."
+    for e in events:
+        if e["event_type"] == "conversation.message" and e["payload"]["text"].startswith("INR 60 is credited"):
+            e["payload"] = {**e["payload"], "text": message}
+        if e["event_type"] == "bot.claim" and e["payload"]["claim_type"] == "submission":
+            e["payload"] = {**e["payload"], "claim_type": "completion", "stage": "completed"}
+    return {"message": message, "result": dry_run(contract, events, now=case.at(response))}
 
 
 # ---------------------------------------------------------------------------
@@ -256,6 +241,25 @@ def lab() -> list[dict[str, Any]]:
     b.heartbeat(64, "wallet_ledger", 63)
     add("verified_silence", "Ledger is current, credit missing", "Evidence", "The ledger's heartbeat confirms it is up to date, and it shows no credit.",
         "Verified non-completion: the wallet leg is overdue.", ["no_duplicate_refund"], b, 65)
+    from ccevals.packs.reference_cases import CASES
+
+    for cid, key, case_id, title, category, story, verdict, focus in [
+        ("no_ticket", "deadline", "kavya", "Promised an escalation that never happened", "Service",
+         "The bot told a customer her safety complaint was escalated. The ServiceNow call had failed silently.",
+         "Critical: no incident exists 15 minutes after the promise.", ["ticket_created", "promises_kept"]),
+        ("wrong_queue", "silence", "rohit", "Raised the ticket in the wrong queue", "Service",
+         "A replacement request was filed with the refunds team at low priority.",
+         "Flagged: wrong team and priority; nothing moved for two days.", ["ticket_routed_correctly"]),
+        ("said_fixed", "logs", "neha", "Closed the case on the customer’s word", "Service",
+         "The customer said sign-in worked. The sign-in logs showed she never got in.",
+         "Flagged: resolution reported by the customer, not verified.", ["promises_kept"]),
+    ]:
+        case = CASES[case_id]()
+        moment = next(m for m in case.moments if m.key == key)
+        events = case.builder.events[:moment.event_count]
+        cases.append({"id": cid, "title": title, "category": category, "story": story, "verdict": verdict, "focus": focus,
+                      "events": [slim_event(e) for e in events],
+                      "result": dry_run(load(case.contract), events, now=case.at(moment))})
     return cases
 
 
@@ -465,7 +469,7 @@ def onboarding() -> dict[str, Any]:
 
 
 def main() -> None:
-    write("journey.json", journey())
+    write("stories.json", stories())
     write("lab.json", lab())
     write("gate.json", gate_grid())
     write("onboarding.json", onboarding())
