@@ -2,7 +2,10 @@
 
 This service decides whether a customer-care AI agent handled a request correctly, what happened afterwards, and whether a proposed release is acceptable. The unit it judges is a **customer task backed by evidence**, not a chat transcript with a score.
 
-It implements the first vertical slice of the *Enterprise Customer Care Evals Blueprint*. The workflow is missing-item refunds and refund-status enquiries for one market and one channel. That workflow exercises money movement, asynchronous outcomes, partial completion, policy exceptions and repeat contact.
+It implements the first vertical slice of the *Enterprise Customer Care Evals Blueprint* with two intent packs:
+
+- **Missing-item refunds** (`missing_item_refund`): money movement across wallet and card, asynchronous outcomes, partial completion and policy exceptions.
+- **Service resolution** (`service_resolution`): support work that is not money. It checks whether the right ticket was raised in ServiceNow, in the right queue and at the right priority, whether it was fixed within its target time, whether the customer had to come back, and whether resolution is confirmed by a system of record (for example a logistics delivery or a successful sign-in) rather than only by the customer saying so. Starter contracts cover safety complaints, damaged-item replacements and sign-in problems.
 
 > Every amount, rule, deadline and threshold in the starter contract and the release policy is an illustrative example. None of them describes any real marketplace's policy or systems. The client's policy owner must approve real values.
 
@@ -21,6 +24,8 @@ It implements the first vertical slice of the *Enterprise Customer Care Evals Bl
 | Contract wizard checks: built-in positive, forbidden, boundary and missing-evidence fixtures; separate author and approver | `contracts/registry.py` |
 | Independent money oracle using integer minor units and largest-remainder allocation | `money.py` |
 | Deterministic refund evaluators: identity, items, amounts, allocation, duplicates, limits, claims vs evidence at the time, disclosure, disposition | `evaluation/refund.py` |
+| Service-resolution evaluators: ticket created in time, routing, reference shared, promises backed by records, SLA, repeat contact, verified vs customer-reported resolution | `evaluation/service.py`, `contracts/service.py` |
+| Reference customer cases (refund, safety complaint, replacement, sign-in) reused by tests and the demo | `packs/reference_cases.py` |
 | Independent state axes (lifecycle, obligation completion per tender leg, evidence sufficiency, timeliness, bot behaviour, execution) | `evaluation/engine.py` |
 | Append-only verdict revisions: provisional, finalised at deadline, late events, adjudications | `pipeline.py` |
 | Sampled, cited semantic judges that may abstain; judge outages never pass | `evaluation/semantic.py` |

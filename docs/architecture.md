@@ -60,7 +60,7 @@ The blueprint's illustrative envelope is 250M events a day, with peaks around 29
 
 ## Known limits of this release
 
-- One intent pack: missing-item refund and refund status. Account recovery, cancellation, troubleshooting and billing disputes follow the same contract and evaluator shape but are not implemented.
+- Two intent packs: missing-item refunds and service resolution (tickets, routing, SLAs, verified resolution). Account recovery with identity-takeover checks, cancellation races and billing disputes are not implemented. Connector conformance kits exist for the refund pack's sources only; ticketing and sign-in sources still need their own kits.
 - Payload deletion and retention jobs, SSO, and a client-hosted data plane are not implemented.
 - The baseline migration creates the schema from ORM metadata. Later migrations must be explicit and reviewed.
 - Load, failover and restore targets in the blueprint are proposals to measure, not achieved guarantees.

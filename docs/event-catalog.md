@@ -45,6 +45,11 @@ Every event uses the same envelope. The authenticated API key decides the tenant
 | `refund.leg_status` | `tender_type`, `stage` (`submitted`, `credited`, `completed`, `failed`, `reversed`), `amount_minor`, `provider_ref` | Needs `logical_action_id`. Two provider references reaching a positive stage on one leg are a duplicate effect. |
 | `recovery.action` | `tender_type`, `owner`, `action` | Recovery is measured separately from the original outcome. |
 | `source.heartbeat` | `watermark` | The source asserts it has delivered everything that happened before the watermark. |
+| `ticket.created` | `number`, `category`, `assignment_group`, `priority` (1 is most urgent), `state` | From the ticketing system, for example ServiceNow. |
+| `ticket.updated` | `number`, `state`, optional `assignment_group`, `priority` | Versioned; `resolved` or `closed` ends the ticket. |
+| `service.signal` | `signal` | Proof that the customer's goal was met, for example `replacement_delivered` or `login_succeeded`. |
+| `customer.feedback` | `resolved` | What the customer said. Recorded separately from verified resolution. |
+| `tool.call` | `tool`, `outcome` (`success`, `error`), `detail` | The bot's own calls to other systems, so silent failures are visible. |
 | `scenario.expected` | `expected_dispositions[]`, `slice{}` | Sandbox only: the scenario author's expected outcome, kept separate from the bot under test. |
 
 Rejection codes: `invalid_envelope`, `tenant_mismatch`, `missing_entity_key`, `missing_logical_action_id`, `unknown_event_type`, `unsupported_schema_version`, `environment_not_permitted`.
